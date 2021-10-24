@@ -7,7 +7,7 @@
 ```
 
 ```shell
- ./target/jfx/bin/launch 
+ ./target/contact-list/bin/launch 
 ```
 
 - E-mail: chalkmaster@gmail.com
