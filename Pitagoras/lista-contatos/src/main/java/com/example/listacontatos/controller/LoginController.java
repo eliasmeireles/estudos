@@ -1,22 +1,20 @@
 package com.example.listacontatos.controller;
 
+import static com.example.listacontatos.ContactListApplication.CONTACT_LIST_MANAGER;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
 import javafx.scene.control.Alert;
-import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
 import java.io.IOException;
 
-import com.example.listacontatos.ContactListApplication;
+import com.example.listacontatos.util.SceneUtil;
 
 public class LoginController {
 
-	private static final String USERNAME = "elias";
-	private static final String PASSWORD = "password";
+	private static final String FIXED_USERNAME = "admin";
+	private static final String FIXED_PASSWORD = "admin";
 
 	@FXML
 	private TextField username;
@@ -26,7 +24,7 @@ public class LoginController {
 
 	@FXML
 	protected void login() {
-		if (USERNAME.equals(username.getText()) && PASSWORD.equals(password.getText())) {
+		if (FIXED_USERNAME.equals(username.getText()) && FIXED_PASSWORD.equals(password.getText())) {
 			try {
 				showUserContactList();
 			} catch (IOException e) {
@@ -44,11 +42,8 @@ public class LoginController {
 	}
 
 	private void showUserContactList() throws IOException {
-		Stage stage = new Stage();
-		FXMLLoader contactListView = new FXMLLoader(ContactListApplication.class.getResource("contact-list-view.fxml"));
-		Scene scene = new Scene(contactListView.load(), 500, 350);
-		stage.setTitle("Contact List");
-		stage.setScene(scene);
+		Stage stage = SceneUtil.stage("contact-list-view.fxml");
+		stage.setTitle(CONTACT_LIST_MANAGER);
 		stage.show();
 
 		password.getScene()

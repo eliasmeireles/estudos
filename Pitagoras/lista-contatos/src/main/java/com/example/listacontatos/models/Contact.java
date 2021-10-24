@@ -2,19 +2,26 @@ package com.example.listacontatos.models;
 
 public class Contact {
 
+	private final Long contactId;
 	private String name;
 	private String phoneNumber;
 	private String email;
 	private String linkedin;
 
 	public Contact() {
+		this.contactId = System.currentTimeMillis();
 	}
 
 	public Contact(String name, String phoneNumber, String email, String linkedin) {
+		this.contactId = System.currentTimeMillis();
 		this.name = name;
 		this.phoneNumber = phoneNumber;
 		this.email = email;
 		this.linkedin = linkedin;
+	}
+
+	public Long getContactId() {
+		return contactId;
 	}
 
 	public String getName() {

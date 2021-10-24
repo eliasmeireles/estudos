@@ -4,6 +4,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.VBox;
 
 import com.example.listacontatos.component.ContactComponent;
 import com.example.listacontatos.models.Contact;
@@ -17,13 +18,24 @@ public class ContactListController {
 	private ListView<ContactComponent> contactListView;
 
 	@FXML
+	private VBox emptyContactListAlert;
+
+	@FXML
+	private VBox contactListViewRoot;
+
+	@FXML
 	private TextField name;
+
 	@FXML
 	private TextField phoneNumber;
+
 	@FXML
 	private TextField email;
+
 	@FXML
 	private TextField linkedin;
+
+	private Contact contact;
 
 	@FXML
 	protected void createNewContact() {
@@ -35,20 +47,39 @@ public class ContactListController {
 	}
 
 	private void createContact() {
-		Contact contact = new Contact(getText(name), getText(phoneNumber), getText(email), getText(linkedin));
-		repository.add(contact);
+		if (contact != null) {
+			updateContactInfo();
+		} else {
+			contact = new Contact();
+			updateContactInfo();
+			repository.add(contact);
+		}
+		resetController();
+	}
+
+	@FXML
+	protected void resetController() {
+		contact = null;
 		refreshContactListView();
-		clear();
+		clearTextFields();
+	}
+
+	private void updateContactInfo() {
+		contact.setName(getText(name));
+		contact.setPhoneNumber(getText(phoneNumber));
+		contact.setEmail(getText(email));
+		contact.setLinkedin(getText(linkedin));
 	}
 
 	private void refreshContactListView() {
 		contactListView.getItems().clear();
-		for (Contact contact : repository.getAll()) {
-			contactListView.getItems().add(new ContactComponent(contact));
+		for (Contact c : repository.getAll()) {
+			contactListViewRoot.getChildren().remove(emptyContactListAlert);
+			contactListView.getItems().add(new ContactComponent(c));
 		}
 	}
 
-	private void clear() {
+	protected void clearTextFields() {
 		name.clear();
 		phoneNumber.clear();
 		linkedin.clear();
@@ -72,12 +103,16 @@ public class ContactListController {
 
 	@FXML
 	protected void selectedContact() {
-		Contact contact = contactListView.getSelectionModel().getSelectedItem().getContact();
-		if (contact != null) {
-			name.setText(contact.getName());
-			phoneNumber.setText(contact.getPhoneNumber());
-			email.setText(contact.getEmail());
-			linkedin.setText(contact.getLinkedin());
+		try {
+			contact = contactListView.getSelectionModel().getSelectedItem().getContact();
+			if (contact != null) {
+				name.setText(contact.getName());
+				phoneNumber.setText(contact.getPhoneNumber());
+				email.setText(contact.getEmail());
+				linkedin.setText(contact.getLinkedin());
+			}
+		} catch (Exception e) {
+			// Ignore error
 		}
 	}
 }
