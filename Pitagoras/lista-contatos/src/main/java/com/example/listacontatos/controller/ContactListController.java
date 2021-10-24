@@ -5,6 +5,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 
+import com.example.listacontatos.component.ContactComponent;
 import com.example.listacontatos.models.Contact;
 import com.example.listacontatos.repository.ContactRepository;
 
@@ -13,7 +14,7 @@ public class ContactListController {
 	private final ContactRepository repository = ContactRepository.getInstance();
 
 	@FXML
-	private ListView<Contact> contactListView;
+	private ListView<ContactComponent> contactListView;
 
 	@FXML
 	private TextField name;
@@ -43,7 +44,7 @@ public class ContactListController {
 	private void refreshContactListView() {
 		contactListView.getItems().clear();
 		for (Contact contact : repository.getAll()) {
-			contactListView.getItems().add(contact);
+			contactListView.getItems().add(new ContactComponent(contact));
 		}
 	}
 
@@ -71,7 +72,7 @@ public class ContactListController {
 
 	@FXML
 	protected void selectedContact() {
-		Contact contact = contactListView.getSelectionModel().getSelectedItem();
+		Contact contact = contactListView.getSelectionModel().getSelectedItem().getContact();
 		if (contact != null) {
 			name.setText(contact.getName());
 			phoneNumber.setText(contact.getPhoneNumber());
