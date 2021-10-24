@@ -71,13 +71,12 @@
                     <mainClass>com.example.listacontatos/com.example.listacontatos.ContactListApplication</mainClass>
                     <launcher>launch</launcher>
                     <compress>2</compress>
-                    <jlinkZipName>jfx</jlinkZipName>
-                    <jlinkImageName>jfx</jlinkImageName>
+                    <jlinkZipName>contact-list</jlinkZipName>
+                    <jlinkImageName>contact-list</jlinkImageName>
                     <noManPages>true</noManPages>
                     <noHeaderFiles>true</noHeaderFiles>
                 </configuration>
             </plugin>
-
         </plugins>
     </build>
 </project>
