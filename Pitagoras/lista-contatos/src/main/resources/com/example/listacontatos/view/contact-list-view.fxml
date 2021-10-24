@@ -8,6 +8,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
+<?import com.example.listacontatos.component.MaskedTextField?>
 <HBox xmlns:fx="http://javafx.com/fxml/1" alignment="CENTER" spacing="12.0" xmlns="http://javafx.com/javafx/11.0.2"
       fx:controller="com.example.listacontatos.controller.ContactListController">
     <padding>
@@ -25,7 +26,7 @@
         </VBox>
         <VBox spacing="5">
             <Label text="Phone number"/>
-            <TextField fx:id="phoneNumber" promptText="99999-9999"/>
+            <MaskedTextField fx:id="phoneNumber" mask="(DD)DDDDD-DDDD" placeholder="(__)_____-____"/>
         </VBox>
         <VBox spacing="5">
             <Label text="E-mail"/>

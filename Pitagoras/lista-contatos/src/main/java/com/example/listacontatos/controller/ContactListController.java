@@ -7,6 +7,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 
 import com.example.listacontatos.component.ContactComponent;
+import com.example.listacontatos.component.MaskedTextField;
 import com.example.listacontatos.models.Contact;
 import com.example.listacontatos.repository.ContactRepository;
 
@@ -27,7 +28,7 @@ public class ContactListController {
 	private TextField name;
 
 	@FXML
-	private TextField phoneNumber;
+	private MaskedTextField phoneNumber;
 
 	@FXML
 	private TextField email;

@@ -7,4 +7,6 @@ module com.example.listacontatos {
 	exports com.example.listacontatos;
 	exports com.example.listacontatos.controller;
 	opens com.example.listacontatos.controller to javafx.fxml;
+	exports com.example.listacontatos.component;
+	opens com.example.listacontatos.component to javafx.fxml;
 }
