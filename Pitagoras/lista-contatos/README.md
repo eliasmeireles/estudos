@@ -2,13 +2,22 @@
 
 ### Assunto: `POO1-2021-2` Lista de contatos
 
+```shell
+ mvn clean javafx:jlink
+```
+
+```shell
+ ./target/jfx/bin/launch 
+```
+
 - E-mail: chalkmaster@gmail.com
 
 Data: 27/10/2021
 
 ---
 
-Você deve criar uma aplicação JavaFX como a criada na aula de hoje para o estoque. Esta Aplicação deve gerenciar uma lista de contatos pessoais, contendo o Nome, Telefone, Email, Linkedin (pode ficar em branco quando não souber).
+Você deve criar uma aplicação JavaFX como a criada na aula de hoje para o estoque. Esta Aplicação deve gerenciar uma lista de contatos pessoais, contendo o
+Nome, Telefone, Email, Linkedin (pode ficar em branco quando não souber).
 
 A aplicação deve possuir uma tela de Login validando usuário e senha (podem estar hardcode como no exemplo de hoje do estoque).
 
