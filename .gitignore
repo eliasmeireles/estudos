@@ -39,4 +39,4 @@ build/
 /out
 /docker/data
 
-*/cmake-build-debug
+cmake-build-debug
