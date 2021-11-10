@@ -64,6 +64,7 @@ public class TabelaHelper {
 
 		if (property != null) {
 			type = property.type().isBlank() ? type : property.type();
+			type = property.primaryKey() ? "INT PRIMARY KEY AUTO_INCREMENT" : type;
 			tableQuery.addFieldQuery(property.name(), type);
 		} else {
 			tableQuery.addFieldQuery(StringUitl.toSnakeCase(field.getName()), type);
@@ -98,7 +99,7 @@ public class TabelaHelper {
 				+ foreignKey.foreignKeyName()
 				+ ")");
 	}
-	
+
 	private static class TableQuery {
 		private final String tableName;
 		private final List<FieldQuery> fieldQueries = new ArrayList<>();

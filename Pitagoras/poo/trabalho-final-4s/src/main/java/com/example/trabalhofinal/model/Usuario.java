@@ -6,7 +6,7 @@ import com.example.trabalhofinal.db.annotation.Table;
 @Table(name = "user")
 public class Usuario {
 
-	@Property(name = "user_id", type = "INT PRIMARY KEY AUTO_INCREMENT")
+	@Property(name = "user_id", primaryKey = true)
 	private int userId;
 
 	@Property(name = "username", type = "VARCHAR(100) NOT NULL UNIQUE")

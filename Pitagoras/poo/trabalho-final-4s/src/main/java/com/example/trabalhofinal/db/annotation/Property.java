@@ -11,5 +11,7 @@ public @interface Property {
 
 	String name();
 
+	boolean primaryKey() default false;
+
 	String type() default "";
 }
