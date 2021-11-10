@@ -6,7 +6,6 @@ import javafx.scene.control.TextField;
 
 public class LoginController {
 
-
 	@FXML
 	private TextField username;
 
@@ -15,6 +14,5 @@ public class LoginController {
 
 	@FXML
 	protected void login() {
-
 	}
 }

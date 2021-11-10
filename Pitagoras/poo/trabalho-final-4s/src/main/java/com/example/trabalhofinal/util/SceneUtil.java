@@ -1,10 +1,13 @@
 package com.example.trabalhofinal.util;
 
+import static com.example.trabalhofinal.config.ResourceConfig.bundle;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.net.URL;
 
 import com.example.trabalhofinal.App;
 
@@ -23,10 +26,16 @@ public class SceneUtil {
 	}
 
 	public static void stage(Stage stage, String xmlView) throws IOException {
-		FXMLLoader contactListView = new FXMLLoader(App.class.getResource(String.format("view/%s", xmlView)));
-		Scene scene = new Scene(contactListView.load(), DEFAULT_SCENE_WIDTH, DEFAULT_SCENE_HEIGHT);
-		stage.setScene(scene);
-		stage.setMinHeight(DEFAULT_SCENE_HEIGHT);
-		stage.setMinWidth(DEFAULT_SCENE_WIDTH);
+		String xmlFile = String.format("view/%s", xmlView);
+		URL resource = App.class.getResource(xmlFile);
+		if (resource != null) {
+			Parent contactListView = FXMLLoader.load(resource, bundle);
+			Scene scene = new Scene(contactListView, DEFAULT_SCENE_WIDTH, DEFAULT_SCENE_HEIGHT);
+			stage.setScene(scene);
+			stage.setMinHeight(DEFAULT_SCENE_HEIGHT);
+			stage.setMinWidth(DEFAULT_SCENE_WIDTH);
+		} else  {
+			throw new IOException(String.format("Resource (%s) não foi encontrado", xmlFile));
+		}
 	}
 }
