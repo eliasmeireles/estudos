@@ -1,0 +1,8 @@
+#home-login {
+    -fx-background-image: url('../image/login_background.jpg');
+}
+
+#login-content {
+    -fx-background-color: rgba(244,244,244,0.5);
+}
+
