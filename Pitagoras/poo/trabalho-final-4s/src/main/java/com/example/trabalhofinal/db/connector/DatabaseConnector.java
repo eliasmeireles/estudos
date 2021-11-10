@@ -1,4 +1,4 @@
-package com.example.trabalhofinal.db;
+package com.example.trabalhofinal.db.connector;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

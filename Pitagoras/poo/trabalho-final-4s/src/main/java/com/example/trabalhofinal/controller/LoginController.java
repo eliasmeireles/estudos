@@ -5,9 +5,8 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 
 import java.sql.Connection;
-import java.sql.SQLException;
 
-import com.example.trabalhofinal.db.DatabaseConnector;
+import com.example.trabalhofinal.db.connector.DatabaseConnector;
 
 public class LoginController {
 

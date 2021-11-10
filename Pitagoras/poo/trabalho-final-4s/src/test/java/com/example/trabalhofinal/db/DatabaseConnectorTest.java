@@ -10,6 +10,8 @@ import java.sql.SQLException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import com.example.trabalhofinal.db.connector.DatabaseConnector;
+
 class DatabaseConnectorTest {
 
 	private Connection connection;

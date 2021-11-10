@@ -11,7 +11,7 @@ import java.util.logging.Logger;
 import com.example.trabalhofinal.db.annotation.ForeignKey;
 import com.example.trabalhofinal.db.annotation.Property;
 import com.example.trabalhofinal.db.annotation.Table;
-import com.example.trabalhofinal.db.DatabaseConnector;
+import com.example.trabalhofinal.db.connector.DatabaseConnector;
 import com.example.trabalhofinal.util.StringUitl;
 
 public class TabelaHelper {
