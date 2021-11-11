@@ -9,11 +9,12 @@ import java.lang.annotation.Target;
 @Target(ElementType.FIELD)
 public @interface ForeignKey {
 
-	String foreignKeyName();
+	String foreignKeyName() default "";
 
 	String columnName() default "";
 
 	boolean unique() default false;
 
 	boolean required() default false;
+
 }

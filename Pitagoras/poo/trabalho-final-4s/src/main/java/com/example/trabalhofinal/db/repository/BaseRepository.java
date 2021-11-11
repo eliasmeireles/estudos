@@ -2,17 +2,11 @@ package com.example.trabalhofinal.db.repository;
 
 import static com.example.trabalhofinal.util.GenericsClassUtil.getGenericTypeClass;
 
-import java.lang.reflect.Field;
-import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.example.trabalhofinal.db.annotation.Property;
 import com.example.trabalhofinal.db.annotation.Table;
-import com.example.trabalhofinal.util.StringUitl;
 
 public abstract class BaseRepository<T> {
 
@@ -27,7 +21,6 @@ public abstract class BaseRepository<T> {
 		new CreateTableRepository(tClass);
 		nomeTable = getNomeTable();
 		this.selectAllQuery = new QueryBuilder(tClass, nomeTable).build();
-		logger.log(Level.INFO, selectAllQuery);
 	}
 
 	public List<T> findAll() {

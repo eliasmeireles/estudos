@@ -49,10 +49,6 @@ class CreateTableRepository {
 		return criarTabela(tClass, validaClass());
 	}
 
-	private boolean criarTabela(Class<?> tClass) throws SQLException, ClassNotFoundException {
-		return criarTabela(tClass, validaClass());
-	}
-
 	private Boolean criarTabela(Class<?> tClass, Table annotation) throws SQLException, ClassNotFoundException {
 		final TableQuery tableQuery = new TableQuery(annotation.name());
 
@@ -111,7 +107,8 @@ class CreateTableRepository {
 			foreignProperties.append(" UNIQUE");
 		}
 
-		String foreignColumnName = foreignKey.columnName().isBlank() ? StringUitl.toSnakeCase(field.getName()) + "_id" : foreignKey.columnName();
+		final String foreignKeyRefer = StringUitl.toSnakeCase(field.getName()) + "_id";
+		String foreignColumnName = foreignKey.columnName().isBlank() ? foreignKeyRefer : foreignKey.columnName();
 
 		tableQuery.addFieldQuery(foreignColumnName, foreignProperties.toString());
 
@@ -119,7 +116,7 @@ class CreateTableRepository {
 				+ foreignColumnName + ") REFERENCES "
 				+ relationShip.name()
 				+ "("
-				+ foreignKey.foreignKeyName()
+				+ (foreignKey.foreignKeyName().isBlank() ? foreignKeyRefer : foreignKey.foreignKeyName())
 				+ ")");
 	}
 

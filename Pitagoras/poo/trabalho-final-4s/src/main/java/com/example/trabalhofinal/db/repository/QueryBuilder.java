@@ -60,7 +60,7 @@ public class QueryBuilder {
 				.append(" = ")
 				.append(table.name())
 				.append(".")
-				.append(relationShip.foreignKeyName())
+				.append(relationShip.foreignKeyName().isBlank() ? StringUitl.toSnakeCase(table.name()) + "_id": relationShip.foreignKeyName())
 				.append(" ");
 
 		selectQuery.joins.add(join.toString());
