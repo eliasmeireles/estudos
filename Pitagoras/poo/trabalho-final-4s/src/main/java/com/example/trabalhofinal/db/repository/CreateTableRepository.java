@@ -1,4 +1,4 @@
-package com.example.trabalhofinal.db.helper;
+package com.example.trabalhofinal.db.repository;
 
 import java.lang.reflect.Field;
 import java.sql.SQLException;
@@ -14,23 +14,46 @@ import com.example.trabalhofinal.db.annotation.Table;
 import com.example.trabalhofinal.db.connector.DatabaseConnector;
 import com.example.trabalhofinal.util.StringUitl;
 
-public class TabelaHelper {
+class CreateTableRepository {
+	private final Logger logger = Logger.getAnonymousLogger();
 
-	private static final Logger logger = Logger.getAnonymousLogger();
+	private final Class<?> tClass;
 
-	private TabelaHelper() {
-
+	CreateTableRepository(Class<?> tClass) {
+		this.tClass = tClass;
+		validaClass();
+		tentarCriarTabela();
 	}
 
-	public static boolean createTable(Class<?> tClass) throws SQLException, ClassNotFoundException {
+	private void tentarCriarTabela() {
+		try {
+			criarTabela();
+		} catch (Exception exception) {
+			logger.log(Level.WARNING, exception.getMessage());
+		}
+	}
+
+	private Table validaClass() {
+		return validaClass(this.tClass);
+	}
+
+	private Table validaClass(Class<?> tClass) {
 		Table annotation = tClass.getAnnotation(Table.class);
 		if (annotation != null) {
-			return createTable(tClass, annotation);
+			return annotation;
 		}
 		throw new IllegalArgumentException("Classe informada não possui a anotação de " + Table.class.getName());
 	}
 
-	private static Boolean createTable(Class<?> tClass, Table annotation) throws SQLException, ClassNotFoundException {
+	public boolean criarTabela() throws SQLException, ClassNotFoundException {
+		return criarTabela(tClass, validaClass());
+	}
+
+	private boolean criarTabela(Class<?> tClass) throws SQLException, ClassNotFoundException {
+		return criarTabela(tClass, validaClass());
+	}
+
+	private Boolean criarTabela(Class<?> tClass, Table annotation) throws SQLException, ClassNotFoundException {
 		final TableQuery tableQuery = new TableQuery(annotation.name());
 
 		for (Field field : tClass.getDeclaredFields()) {
@@ -46,7 +69,7 @@ public class TabelaHelper {
 		}
 	}
 
-	private static void gerarQueryDeAtributo(TableQuery tableQuery, Field field) throws SQLException, ClassNotFoundException {
+	private void gerarQueryDeAtributo(TableQuery tableQuery, Field field) throws SQLException, ClassNotFoundException {
 		final Property property = field.getAnnotation(Property.class);
 		final Table relationShip = field.getType().getAnnotation(Table.class);
 
@@ -57,7 +80,7 @@ public class TabelaHelper {
 		}
 	}
 
-	private static void configuraQueryDeAtributo(TableQuery tableQuery, Field field, Property property) {
+	private void configuraQueryDeAtributo(TableQuery tableQuery, Field field, Property property) {
 		String type = StringUitl.toSnakeCase(field.getType().getSimpleName())
 				.toUpperCase()
 				.replace("STRING", "VARCHAR(255)");
@@ -71,12 +94,12 @@ public class TabelaHelper {
 		}
 	}
 
-	private static void configuraModeloDeRelacionamento(TableQuery tableQuery, Field field, Table relationShip) throws SQLException, ClassNotFoundException {
+	private void configuraModeloDeRelacionamento(TableQuery tableQuery, Field field, Table relationShip) throws SQLException, ClassNotFoundException {
 		final ForeignKey foreignKey = field.getAnnotation(ForeignKey.class);
 		if (foreignKey == null) {
 			throw new IllegalCallerException("Uma relação entre classes deve possuir a anotação " + ForeignKey.class.getName());
 		}
-		createTable(field.getType());
+		criarTabela(field.getType(), relationShip);
 
 		final StringBuilder foreignProperties = new StringBuilder("INT");
 
@@ -88,7 +111,7 @@ public class TabelaHelper {
 			foreignProperties.append(" UNIQUE");
 		}
 
-		String foreignColumnName = foreignKey.columnName().isBlank() ? StringUitl.toSnakeCase(field.getName()) : foreignKey.columnName();
+		String foreignColumnName = foreignKey.columnName().isBlank() ? StringUitl.toSnakeCase(field.getName()) + "_id" : foreignKey.columnName();
 
 		tableQuery.addFieldQuery(foreignColumnName, foreignProperties.toString());
 

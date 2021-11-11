@@ -1,4 +1,4 @@
-package com.example.trabalhofinal.db.helper;
+package com.example.trabalhofinal.db.repository;
 
 import java.sql.SQLException;
 
@@ -10,6 +10,10 @@ class TabelasSqlTest {
 
 	@Test
 	void deve_GerarAQueryParaCriarUmaTabela_QuandoAClasseEstaConfiguradaCorretamente() throws SQLException, ClassNotFoundException {
-		TabelaHelper.createTable(Usuario.class);
+		new UserRepository().findAll();
+	}
+
+	class UserRepository extends BaseRepository<Usuario> {
+
 	}
 }
