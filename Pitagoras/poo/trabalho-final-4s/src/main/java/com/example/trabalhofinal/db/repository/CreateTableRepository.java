@@ -1,5 +1,8 @@
 package com.example.trabalhofinal.db.repository;
 
+import static com.example.trabalhofinal.db.repository.util.QueryUtil.foreingKeyQuery;
+import static com.example.trabalhofinal.db.repository.util.QueryUtil.validaQueryTabelaCollection;
+
 import java.lang.reflect.Field;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -18,6 +21,7 @@ class CreateTableRepository {
 	private final Logger logger = Logger.getAnonymousLogger();
 
 	private final Class<?> tClass;
+	private final List<String> queries = new ArrayList<>();
 
 	CreateTableRepository(Class<?> tClass) {
 		this.tClass = tClass;
@@ -27,7 +31,7 @@ class CreateTableRepository {
 
 	private void tentarCriarTabela() {
 		try {
-			criarTabela();
+			criarQueryTabelasTabela();
 		} catch (Exception exception) {
 			logger.log(Level.WARNING, exception.getMessage());
 		}
@@ -45,24 +49,45 @@ class CreateTableRepository {
 		throw new IllegalArgumentException("Classe informada não possui a anotação de " + Table.class.getName());
 	}
 
-	public boolean criarTabela() throws SQLException, ClassNotFoundException {
-		return criarTabela(tClass, validaClass());
+	public boolean criarQueryTabelasTabela() throws SQLException, ClassNotFoundException {
+		criarQueryTabelasTabela(tClass, validaClass());
+		try (final Statement statement = DatabaseConnector.connector
+				.getConnection()
+				.createStatement()) {
+
+			for (String query : queries) {
+				statement.execute(query);
+				System.out.println(query);
+			}
+		}
+		return true;
 	}
 
-	private Boolean criarTabela(Class<?> tClass, Table annotation) throws SQLException, ClassNotFoundException {
+	private void criarQueryTabelasTabela(Class<?> tClass, Table annotation) throws SQLException, ClassNotFoundException {
 		final TableQuery tableQuery = new TableQuery(annotation.name());
+		criarQueryAtributos(tClass, tableQuery);
+		criarTabelaCollections(tClass);
+	}
 
+	private void criarTabelaCollections(Class<?> tClass) {
+		try {
+			for (Field field : tClass.getDeclaredFields()) {
+				final String query = validaQueryTabelaCollection(tClass, field);
+				if (query != null) {
+					queries.add(query);
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	private void criarQueryAtributos(Class<?> tClass, TableQuery tableQuery) throws SQLException, ClassNotFoundException {
 		for (Field field : tClass.getDeclaredFields()) {
 			gerarQueryDeAtributo(tableQuery, field);
 		}
 
-		try (final Statement statement = DatabaseConnector.connector
-				.getConnection()
-				.createStatement()) {
-			final String sql = tableQuery.asQuery();
-			logger.log(Level.INFO, sql);
-			return statement.execute(sql);
-		}
+		queries.add(tableQuery.asQuery());
 	}
 
 	private void gerarQueryDeAtributo(TableQuery tableQuery, Field field) throws SQLException, ClassNotFoundException {
@@ -71,7 +96,7 @@ class CreateTableRepository {
 
 		if (relationShip != null) {
 			configuraModeloDeRelacionamento(tableQuery, field, relationShip);
-		} else {
+		} else if (property != null) {
 			configuraQueryDeAtributo(tableQuery, field, property);
 		}
 	}
@@ -95,7 +120,7 @@ class CreateTableRepository {
 		if (foreignKey == null) {
 			throw new IllegalCallerException("Uma relação entre classes deve possuir a anotação " + ForeignKey.class.getName());
 		}
-		criarTabela(field.getType(), relationShip);
+		criarQueryTabelasTabela(field.getType(), relationShip);
 
 		final StringBuilder foreignProperties = new StringBuilder("INT");
 
@@ -112,12 +137,9 @@ class CreateTableRepository {
 
 		tableQuery.addFieldQuery(foreignColumnName, foreignProperties.toString());
 
-		tableQuery.addConstraint("FOREIGN KEY ("
-				+ foreignColumnName + ") REFERENCES "
-				+ relationShip.name()
-				+ "("
-				+ (foreignKey.foreignKeyName().isBlank() ? foreignKeyRefer : foreignKey.foreignKeyName())
-				+ ")");
+		final String targetFk = foreignKey.foreignKeyName().isBlank() ? foreignKeyRefer : foreignKey.foreignKeyName();
+
+		tableQuery.addConstraint(foreingKeyQuery(foreignColumnName, relationShip.name(), targetFk));
 	}
 
 	private static class TableQuery {
