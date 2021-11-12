@@ -1,5 +1,6 @@
 package com.example.trabalhofinal.db.repository;
 
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,6 +15,7 @@ import com.example.trabalhofinal.model.UsuarioTest;
 
 class BaseRepositoryTest {
 
+	@BeforeEach
 	void clear() throws SQLException, ClassNotFoundException {
 		List<String> queries = new ArrayList<>();
 		queries.add("SET FOREIGN_KEY_CHECKS = 0");
@@ -32,8 +34,14 @@ class BaseRepositoryTest {
 	}
 
 	@Test
-	void deve_GerarAQueryParaCriarUmaTabela_QuandoAClasseEstaConfiguradaCorretamente() {
-		new UsuarioTestRepository().findAll();
+	void deve_GerarAQueryParaCriarUmaTabela_QuandoAClasseEstaConfiguradaCorretamente() throws SQLException, ClassNotFoundException {
+		UsuarioTestRepository repository = new UsuarioTestRepository();
+		System.out.println(repository.selectAllQuery);
+//		ResultSet resultSet = DatabaseConnector.connector.getConnection()
+//				.createStatement()
+//				.executeQuery(repository.selectAllQuery);
+//
+//		repository.montarObjeto(resultSet);
 	}
 
 	class UsuarioTestRepository extends BaseRepository<UsuarioTest> {

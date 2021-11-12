@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import com.example.trabalhofinal.db.annotation.Collection;
 import com.example.trabalhofinal.db.annotation.ForeignKey;
 import com.example.trabalhofinal.db.annotation.Property;
 import com.example.trabalhofinal.db.annotation.Table;
@@ -93,10 +94,11 @@ class CreateTableRepository {
 	private void gerarQueryDeAtributo(TableQuery tableQuery, Field field) throws SQLException, ClassNotFoundException {
 		final Property property = field.getAnnotation(Property.class);
 		final Table relationShip = field.getType().getAnnotation(Table.class);
+		final Collection collections = field.getType().getAnnotation(Collection.class);
 
 		if (relationShip != null) {
 			configuraModeloDeRelacionamento(tableQuery, field, relationShip);
-		} else if (property != null) {
+		} else if (collections == null) {
 			configuraQueryDeAtributo(tableQuery, field, property);
 		}
 	}
