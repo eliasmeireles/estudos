@@ -9,11 +9,14 @@ public class Usuario {
 	@Property(name = "user_id", primaryKey = true)
 	private int userId;
 
-	@Property(name = "username", type = "VARCHAR(100) NOT NULL UNIQUE")
-	private String username;
+	@Property(name = "nome", type = "VARCHAR(100) NOT NULL")
+	private String nome;
 
-	@Property(name = "password", type = "VARCHAR(16) NOT NULL")
-	private String password;
+	@Property(name = "senha", type = "VARCHAR(16) NOT NULL")
+	private String senha;
+
+	@Property(name = "login", type = "VARCHAR(20) NOT NULL UNIQUE")
+	private String login;
 
 	public int getUserId() {
 		return userId;
@@ -23,19 +26,36 @@ public class Usuario {
 		this.userId = userId;
 	}
 
-	public String getUsername() {
-		return username;
+	public String getNome() {
+		return nome;
 	}
 
-	public void setUsername(String username) {
-		this.username = username;
+	public void setNome(String nome) {
+		this.nome = nome;
 	}
 
-	public String getPassword() {
-		return password;
+	public String getSenha() {
+		return senha;
 	}
 
-	public void setPassword(String password) {
-		this.password = password;
+	public void setSenha(String senha) {
+		this.senha = senha;
+	}
+
+	public String getLogin() {
+		return login;
+	}
+
+	public void setLogin(String login) {
+		this.login = login;
+	}
+
+	@Override public String toString() {
+		return "Usuario{" +
+				"userId=" + userId +
+				", nome='" + nome + '\'' +
+				", senha='" + senha + '\'' +
+				", login='" + login + '\'' +
+				'}';
 	}
 }

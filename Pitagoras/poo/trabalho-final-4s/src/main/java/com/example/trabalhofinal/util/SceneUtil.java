@@ -22,11 +22,10 @@ public class SceneUtil {
 		Stage stage = new Stage();
 		stage(stage, xmlView);
 		return stage;
-
 	}
 
 	public static void stage(Stage stage, String xmlView) throws IOException {
-		String xmlFile = String.format("view/%s", xmlView);
+		String xmlFile = String.format("view/%s-view.fxml", xmlView);
 		URL resource = App.class.getResource(xmlFile);
 		if (resource != null) {
 			Parent contactListView = FXMLLoader.load(resource, bundle);
