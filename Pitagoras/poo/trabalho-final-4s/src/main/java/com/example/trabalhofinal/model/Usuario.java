@@ -18,6 +18,15 @@ public class Usuario {
 	@Property(name = "login", type = "VARCHAR(20) NOT NULL UNIQUE")
 	private String login;
 
+	public Usuario() {
+	}
+
+	public Usuario(String nome, String senha, String login) {
+		this.nome = nome;
+		this.senha = senha;
+		this.login = login;
+	}
+
 	public int getUserId() {
 		return userId;
 	}

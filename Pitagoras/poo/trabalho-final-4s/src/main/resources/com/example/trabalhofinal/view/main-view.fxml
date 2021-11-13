@@ -5,7 +5,6 @@
 <?import javafx.scene.layout.VBox?>
 <VBox id="root-view" stylesheets="@../style/app.css" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/11.0.2"
       fx:controller="com.example.trabalhofinal.controller.MainController">
-    <MenuBar fx:id="mainMenus" />
-    <TabPane fx:id="tabPane" tabClosingPolicy="ALL_TABS">
-    </TabPane>
+    <MenuBar fx:id="mainMenus"/>
+    <TabPane fx:id="tabPane" tabClosingPolicy="UNAVAILABLE"/>
 </VBox>

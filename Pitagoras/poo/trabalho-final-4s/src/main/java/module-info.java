@@ -11,10 +11,12 @@ module com.example.trabalhofinal {
 	requires java.sql;
 	requires mysql.connector.java;
 
+	exports com.example.trabalhofinal.controller.delegate;
 	opens com.example.trabalhofinal to javafx.fxml;
 	exports com.example.trabalhofinal;
 	exports com.example.trabalhofinal.controller;
 	opens com.example.trabalhofinal.controller to javafx.fxml;
 	exports com.example.trabalhofinal.util;
+	exports com.example.trabalhofinal.view;
 
 }
