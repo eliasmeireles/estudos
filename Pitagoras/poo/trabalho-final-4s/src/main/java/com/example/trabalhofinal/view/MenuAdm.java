@@ -2,6 +2,7 @@ package com.example.trabalhofinal.view;
 
 import static com.example.trabalhofinal.config.ResourceConfig.bundle;
 import static com.example.trabalhofinal.util.ResourceUtil.resource;
+import static com.example.trabalhofinal.view.ViewBuilder.novoMenuItem;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
 
@@ -15,10 +16,7 @@ public class MenuAdm extends Menu {
 	}
 
 	private void init() throws IOException {
-		getItems().add(novoMenuItem(bundle.getString("label.usuarios"), "exit"));
-	}
-
-	private MenuItem novoMenuItem(String nome, String icone) throws IOException {
-		return new MenuItem(nome, resource.icon(icone));
+		MenuItem users = novoMenuItem(bundle.getString("label.usuarios"), "users");
+		getItems().add(users);
 	}
 }

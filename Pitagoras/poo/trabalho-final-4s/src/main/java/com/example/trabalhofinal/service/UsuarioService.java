@@ -5,13 +5,17 @@ import com.example.trabalhofinal.repository.UsuarioRepository;
 
 public class UsuarioService {
 
-	public final UsuarioRepository repository;
-
-	public UsuarioService() {
-		this.repository = new UsuarioRepository();
-	}
+//	public final UsuarioRepository repository;
+//
+//	public UsuarioService() {
+//		this.repository = new UsuarioRepository();
+//	}
+//
+//	public Usuario login(String login, String senha) {
+//		return repository.findByLoginAndPassword(login, senha);
+//	}
 
 	public Usuario login(String login, String senha) {
-		return repository.findByLoginAndPassword(login, senha);
+		return new Usuario();
 	}
 }

@@ -10,6 +10,7 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 import com.example.trabalhofinal.view.MenuAdm;
+import com.example.trabalhofinal.view.MenuCardapio;
 
 public class MainController implements Initializable {
 
@@ -37,6 +38,7 @@ public class MainController implements Initializable {
 	@Override public void initialize(URL url, ResourceBundle resourceBundle) {
 		try {
 			mainMenus.getMenus().add(new MenuAdm());
+			mainMenus.getMenus().add(new MenuCardapio());
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

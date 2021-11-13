@@ -1,0 +1,44 @@
+/*#root-view {*/
+/*    -fx-background-color: #efefef;*/
+/*}*/
+
+/*.menu-bar {*/
+/*    -fx-background-color: #8f8f8d;*/
+/*}*/
+
+
+.menu-item > .label, .menu > .label {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+}
+
+#title-label {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #333030;
+}
+
+#login-failed {
+    -fx-font-weight: bold;
+    -fx-text-fill: #a22f2f;
+}
+
+.label {
+    -fx-font-size: 16px;
+    -fx-text-fill: #333030;
+}
+
+.button {
+    -fx-min-width: 125px;
+    -fx-min-height: 40px;
+    -fx-font-size: 16px;
+    -fx-text-fill: #333030;
+}
+
+#menu-sair > .label {
+    -fx-graphic: url("../icons/exit.png");
+}
+
+#mniOpen .accelerator-text {
+    -fx-graphic: none;
+}
