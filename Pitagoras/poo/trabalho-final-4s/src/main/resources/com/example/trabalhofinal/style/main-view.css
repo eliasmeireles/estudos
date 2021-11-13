@@ -1,0 +1,7 @@
+#menu-sair > .label {
+    -fx-graphic: url("../icons/exit.png");
+}
+
+#mniOpen .accelerator-text {
+    -fx-graphic: none;
+}
