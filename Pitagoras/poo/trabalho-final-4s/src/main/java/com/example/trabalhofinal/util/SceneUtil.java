@@ -12,10 +12,17 @@ import java.net.URL;
 import com.example.trabalhofinal.App;
 
 public class SceneUtil {
-	public static final int DEFAULT_SCENE_WIDTH = 650;
-	public static final int DEFAULT_SCENE_HEIGHT = 500;
+	public static final int DEFAULT_SCENE_WIDTH = 1336;
+	public static final int DEFAULT_SCENE_HEIGHT = 980;
 
 	private SceneUtil() {
+	}
+
+	public static void setScene(String xmlView) throws IOException {
+		final Stage stage = stage(xmlView);
+		stage.setMaximized(true);
+		App.mainStage.setScene(stage.getScene());
+		App.mainStage.setMaximized(true);
 	}
 
 	public static Stage stage(String xmlView) throws IOException {
@@ -33,7 +40,7 @@ public class SceneUtil {
 			stage.setScene(scene);
 			stage.setMinHeight(DEFAULT_SCENE_HEIGHT);
 			stage.setMinWidth(DEFAULT_SCENE_WIDTH);
-		} else  {
+		} else {
 			throw new IOException(String.format("Resource (%s) não foi encontrado", xmlFile));
 		}
 	}

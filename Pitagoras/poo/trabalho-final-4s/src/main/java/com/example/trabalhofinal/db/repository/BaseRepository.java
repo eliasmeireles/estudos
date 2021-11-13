@@ -78,16 +78,16 @@ public abstract class BaseRepository<T> {
 							.append(", ");
 					params.append("?, ");
 
-					valores.add(obterValorToField(field, objeto));
+					valores.add(obterValorDoField(field, objeto));
 				}
 			}
 
 			final String queryKeys = insertQuery.substring(0, insertQuery.length() - 2);
-			final String paramsValues = params.substring(0, params.length() - 2) + ")";
+			final String query = queryKeys +  params.substring(0, params.length() - 2) + ")";
 
-			logger.log(Level.INFO, queryKeys + paramsValues);
+			logger.log(Level.INFO, query);
 
-			try (PreparedStatement statement = connector.getConnection().prepareStatement(queryKeys + paramsValues)) {
+			try (PreparedStatement statement = connector.getConnection().prepareStatement(query)) {
 				for (Object valor : valores) {
 					statement.setObject(valores.indexOf(valor) + 1, valor);
 				}
@@ -118,11 +118,11 @@ public abstract class BaseRepository<T> {
 					updateSql.append(keyName)
 							.append(" = ?, ");
 
-					valores.add(obterValorToField(field, objeto));
+					valores.add(obterValorDoField(field, objeto));
 				}
 
 				if (property != null && property.primaryKey()) {
-					pk = obterValorToField(field, objeto);
+					pk = obterValorDoField(field, objeto);
 					nomePk = property.name();
 				}
 			}
@@ -144,7 +144,7 @@ public abstract class BaseRepository<T> {
 		return false;
 	}
 
-	private Object obterValorToField(Field field, Object objeto) throws IllegalAccessException {
+	private Object obterValorDoField(Field field, Object objeto) throws IllegalAccessException {
 		if (field.canAccess(objeto)) {
 			return field.get(objeto);
 		} else {

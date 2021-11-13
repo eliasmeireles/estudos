@@ -6,14 +6,14 @@
 <?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.VBox?>
-<VBox alignment="CENTER" spacing="20.0" xmlns:fx="http://javafx.com/fxml"
+<VBox alignment="CENTER" stylesheets="@../style/title-label.css" spacing="20.0" xmlns:fx="http://javafx.com/fxml"
       fx:controller="com.example.trabalhofinal.controller.LoginController">
     <padding>
         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
     </padding>
-    <Label stylesheets="@../style/title-label.css" text="%label.login"/>
+    <Label id="title-label" text="%label.login"/>
 
-    <VBox alignment="CENTER" maxWidth="185" spacing="12">
+    <VBox alignment="CENTER" maxWidth="215" spacing="12">
         <VBox spacing="5">
             <Label text="%label.usuario"/>
             <TextField fx:id="username"/>
@@ -22,6 +22,7 @@
             <Label text="%label.senha"/>
             <PasswordField fx:id="password"/>
         </VBox>
+        <Label text="%label.mensagem.falha" visible="false" fx:id="loginFailed" id="login-failed"/>
         <Button text="%label.login" onAction="#login"/>
     </VBox>
 </VBox>

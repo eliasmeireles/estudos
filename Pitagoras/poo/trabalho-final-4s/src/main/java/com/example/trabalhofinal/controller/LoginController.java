@@ -1,15 +1,18 @@
 package com.example.trabalhofinal.controller;
 
 import javafx.fxml.FXML;
+import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 
-import java.util.List;
+import java.io.IOException;
 
-import com.example.trabalhofinal.model.Usuario;
-import com.example.trabalhofinal.repository.UsuarioRepository;
+import com.example.trabalhofinal.interator.LoginInteractor;
+import com.example.trabalhofinal.util.SceneUtil;
 
-public class LoginController {
+public class LoginController implements LoginInteractor.LoginDelegate {
+
+	private final LoginInteractor interactor;
 
 	@FXML
 	private TextField username;
@@ -18,15 +21,29 @@ public class LoginController {
 	private PasswordField password;
 
 	@FXML
-	protected void login() throws Exception {
-		final UsuarioRepository usuarioRepository = new UsuarioRepository();
-		final List<Usuario> usuarios = usuarioRepository.findAll();
-		final Usuario byLoginAndPassword = usuarioRepository.findByLoginAndPassword(username.getText(), password.getText());
-		byLoginAndPassword.setNome("Elias Ferreira");
-		System.out.println(byLoginAndPassword);
-		usuarioRepository.atualizar(byLoginAndPassword);
-		//		mainStage.setScene(SceneUtil.stage("main").getScene());
-		//		mainStage.setMaximized(true);
-		System.out.println(usuarios);
+	private Label loginFailed;
+
+	public LoginController() {
+		this.interactor = new LoginInteractor(this);
+	}
+
+	@FXML protected void login() {
+		interactor.login(username.getText(), password.getText());
+	}
+
+	@Override public void sucesso() {
+		try {
+			loginFailed.setVisible(true);
+			SceneUtil.setScene("main");
+		} catch (IOException e) {
+			e.printStackTrace();
+			falha();
+		}
+	}
+
+	@Override public void falha() {
+		username.setText(null);
+		password.setText(null);
+		loginFailed.setVisible(true);
 	}
 }
