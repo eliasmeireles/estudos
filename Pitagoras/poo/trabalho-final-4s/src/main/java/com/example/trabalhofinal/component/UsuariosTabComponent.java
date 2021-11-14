@@ -1,4 +1,4 @@
-package com.example.trabalhofinal.view;
+package com.example.trabalhofinal.component;
 
 import static com.example.trabalhofinal.config.ResourceConfig.bundle;
 import javafx.geometry.Insets;
@@ -11,33 +11,33 @@ import java.util.List;
 import com.example.trabalhofinal.App;
 import com.example.trabalhofinal.model.Usuario;
 
-public class UsuariosTab extends AppTab {
+public class UsuariosTabComponent extends AppTabComponent {
 
 	private final HBox content;
-	private final UsuarioForm usuarioForm;
-	private final ListaUsuarios listaUsuarios;
+	private final UsuarioFormComponent usuarioFormComponent;
+	private final ListaUsuariosComponent listaUsuariosComponent;
 	private final UsuarioTabDelegate delegate;
 
-	public UsuariosTab(UsuarioTabDelegate delegate) {
+	public UsuariosTabComponent(UsuarioTabDelegate delegate) {
 		super(String.format("%s -> %s", bundle.getString("label.administracao"), bundle.getString("label.usuarios")));
 		this.delegate = delegate;
 		this.content = new HBox();
-		this.listaUsuarios = new ListaUsuarios();
-		this.usuarioForm = new UsuarioForm(delegate);
+		this.listaUsuariosComponent = new ListaUsuariosComponent();
+		this.usuarioFormComponent = new UsuarioFormComponent(delegate);
 		setRoot(content);
 		configuraContent();
 	}
 
 	private void configuraContent() {
-		this.usuarioForm.setMinWidth(185);
-		this.listaUsuarios.setPrefHeight(App.mainStage.getWidth());
+		this.usuarioFormComponent.setMinWidth(185);
+		this.listaUsuariosComponent.setPrefHeight(App.mainStage.getWidth());
 		this.content.setFillHeight(true);
 		this.content.setSpacing(25);
 		this.content.setPadding(new Insets(18));
 		this.content.setAlignment(Pos.TOP_LEFT);
-		this.content.getChildren().add(this.usuarioForm);
+		this.content.getChildren().add(this.usuarioFormComponent);
 
-		final ScrollPane scrollPane = new ScrollPane(listaUsuarios);
+		final ScrollPane scrollPane = new ScrollPane(listaUsuariosComponent);
 		scrollPane.setPrefHeight(App.mainStage.getWidth());
 		scrollPane.setPrefHeight(App.mainStage.getHeight());
 		scrollPane.setId("transparent-background");
@@ -47,14 +47,14 @@ public class UsuariosTab extends AppTab {
 	}
 
 	public void setUsuarios(List<Usuario> usuarios) {
-		listaUsuarios.setUsuarios(usuarios);
+		listaUsuariosComponent.setUsuarios(usuarios);
 	}
 
 	public void limparUsuarioForm() {
-		usuarioForm.clear();
+		usuarioFormComponent.clear();
 	}
 
-	public interface UsuarioTabDelegate extends UsuarioForm.UsuarioFormDelegate {
+	public interface UsuarioTabDelegate extends UsuarioFormComponent.UsuarioFormDelegate {
 		void onUsuarioSelecionado(Usuario usuario);
 	}
 }

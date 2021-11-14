@@ -1,4 +1,4 @@
-package com.example.trabalhofinal.view;
+package com.example.trabalhofinal.component;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -6,13 +6,13 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 
-public class AppAlert extends HBox {
+public class AppAlertComponent extends HBox {
 
 	private final Label mensagemAlert;
 	private final Label removerAlert;
 	private final OnCloseClick handle;
 
-	public AppAlert(OnCloseClick handle) {
+	public AppAlertComponent(OnCloseClick handle) {
 		this.handle = handle;
 		this.mensagemAlert = new Label();
 		this.removerAlert = new Label("X");

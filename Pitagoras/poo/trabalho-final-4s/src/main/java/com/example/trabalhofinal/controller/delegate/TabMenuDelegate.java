@@ -1,7 +1,7 @@
 package com.example.trabalhofinal.controller.delegate;
 
-import com.example.trabalhofinal.view.AppTab;
+import com.example.trabalhofinal.component.AppTabComponent;
 
 public interface TabMenuDelegate {
-	void trocarConteudo(AppTab tabContent);
+	void trocarConteudo(AppTabComponent tabContent);
 }

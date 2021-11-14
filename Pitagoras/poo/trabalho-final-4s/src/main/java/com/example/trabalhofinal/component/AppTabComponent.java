@@ -1,19 +1,19 @@
-package com.example.trabalhofinal.view;
+package com.example.trabalhofinal.component;
 
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Tab;
 import javafx.scene.layout.VBox;
 
-public abstract class AppTab extends Tab {
+public abstract class AppTabComponent extends Tab {
 
 	private final VBox containter;
-	private final AppAlert appAlert;
+	private final AppAlertComponent appAlertComponent;
 
-	protected AppTab(String s) {
+	protected AppTabComponent(String s) {
 		super(s);
 		this.containter = new VBox();
-		this.appAlert = new AppAlert(this::dismisAlert);
+		this.appAlertComponent = new AppAlertComponent(this::dismisAlert);
 		configurarContainer();
 	}
 
@@ -23,17 +23,17 @@ public abstract class AppTab extends Tab {
 	}
 
 	public void showErrorAlert(String mensagem) {
-		appAlert.setErrorMessage(mensagem);
-		containter.getChildren().add(0, appAlert);
+		appAlertComponent.setErrorMessage(mensagem);
+		containter.getChildren().add(0, appAlertComponent);
 	}
 
 	public void showSuccessAlert(String mensagem) {
-		appAlert.setSuccessMensage(mensagem);
-		containter.getChildren().add(0, appAlert);
+		appAlertComponent.setSuccessMensage(mensagem);
+		containter.getChildren().add(0, appAlertComponent);
 	}
 
 	public void dismisAlert() {
-		containter.getChildren().remove(appAlert);
+		containter.getChildren().remove(appAlertComponent);
 	}
 
 	private void configurarContainer() {

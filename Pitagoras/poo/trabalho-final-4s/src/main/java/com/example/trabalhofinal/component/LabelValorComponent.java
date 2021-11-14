@@ -1,4 +1,4 @@
-package com.example.trabalhofinal.view.component;
+package com.example.trabalhofinal.component;
 
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;

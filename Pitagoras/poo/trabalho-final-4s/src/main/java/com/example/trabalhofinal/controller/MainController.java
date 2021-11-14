@@ -10,16 +10,16 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import com.example.trabalhofinal.component.AppTabComponent;
+import com.example.trabalhofinal.component.MenuAdmComponent;
+import com.example.trabalhofinal.component.MenuCardapioComponent;
 import com.example.trabalhofinal.controller.delegate.TabMenuDelegate;
-import com.example.trabalhofinal.view.AppTab;
-import com.example.trabalhofinal.view.MenuAdm;
-import com.example.trabalhofinal.view.MenuCardapio;
 
 public class MainController implements Initializable, TabMenuDelegate {
 
 	private String lastLoaded;
-	private final MenuAdm menuAdm;
-	private final MenuCardapio menuCardapio;
+	private final MenuAdmComponent menuAdmComponent;
+	private final MenuCardapioComponent menuCardapioComponent;
 
 	@FXML
 	protected VBox rootView;
@@ -31,17 +31,17 @@ public class MainController implements Initializable, TabMenuDelegate {
 	protected TabPane tabPane;
 
 	public MainController() throws IOException {
-		this.menuAdm = new MenuAdm(this);
-		this.menuCardapio = new MenuCardapio(this);
+		this.menuAdmComponent = new MenuAdmComponent(this);
+		this.menuCardapioComponent = new MenuCardapioComponent(this);
 	}
 
 	@Override public void initialize(URL url, ResourceBundle resourceBundle) {
-		mainMenus.getMenus().add(menuAdm);
-		mainMenus.getMenus().add(menuCardapio);
-		trocarConteudo(menuAdm.getUsuariosController().getUsuariosTab());
+		mainMenus.getMenus().add(menuAdmComponent);
+		mainMenus.getMenus().add(menuCardapioComponent);
+		trocarConteudo(menuAdmComponent.getUsuariosController().getUsuariosTab());
 	}
 
-	@Override public void trocarConteudo(AppTab tabContent) {
+	@Override public void trocarConteudo(AppTabComponent tabContent) {
 		String tabName = tabContent.getClass().getName();
 		if (!tabName.equals(lastLoaded)) {
 			lastLoaded = tabName;

@@ -1,4 +1,4 @@
-package com.example.trabalhofinal.view.component;
+package com.example.trabalhofinal.component;
 
 import static com.example.trabalhofinal.config.ResourceConfig.bundle;
 import javafx.geometry.Pos;

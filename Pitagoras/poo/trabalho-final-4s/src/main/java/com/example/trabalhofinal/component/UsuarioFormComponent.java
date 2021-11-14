@@ -1,4 +1,4 @@
-package com.example.trabalhofinal.view;
+package com.example.trabalhofinal.component;
 
 import static com.example.trabalhofinal.config.ResourceConfig.bundle;
 import javafx.geometry.Pos;
@@ -9,7 +9,7 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 
-public class UsuarioForm extends VBox {
+public class UsuarioFormComponent extends VBox {
 
 	private final UsuarioFormDelegate delegate;
 	private final TextField nome;
@@ -17,7 +17,7 @@ public class UsuarioForm extends VBox {
 	private final PasswordField senha;
 	private final Button cadastar;
 
-	public UsuarioForm(UsuarioFormDelegate delegate) {
+	public UsuarioFormComponent(UsuarioFormDelegate delegate) {
 		this.delegate = delegate;
 		this.nome = new TextField();
 		this.login = new TextField();

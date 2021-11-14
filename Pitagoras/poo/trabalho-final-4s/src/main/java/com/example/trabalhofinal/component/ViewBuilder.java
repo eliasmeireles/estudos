@@ -1,4 +1,4 @@
-package com.example.trabalhofinal.view;
+package com.example.trabalhofinal.component;
 
 import static com.example.trabalhofinal.util.ResourceUtil.resource;
 import javafx.scene.control.MenuItem;

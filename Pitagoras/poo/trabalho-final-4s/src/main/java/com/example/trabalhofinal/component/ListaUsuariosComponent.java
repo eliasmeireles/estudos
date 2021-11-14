@@ -1,4 +1,4 @@
-package com.example.trabalhofinal.view;
+package com.example.trabalhofinal.component;
 
 import javafx.scene.layout.GridPane;
 
@@ -7,14 +7,12 @@ import java.util.List;
 
 import com.example.trabalhofinal.App;
 import com.example.trabalhofinal.model.Usuario;
-import com.example.trabalhofinal.view.component.CardComponent;
-import com.example.trabalhofinal.view.component.UsuarioComponent;
 
-public class ListaUsuarios extends GridPane {
+public class ListaUsuariosComponent extends GridPane {
 
 	private List<Usuario> usuarios;
 
-	public ListaUsuarios() {
+	public ListaUsuariosComponent() {
 		this.usuarios = new ArrayList<>();
 		reajustar();
 	}

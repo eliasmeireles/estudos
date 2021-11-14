@@ -1,8 +1,8 @@
-package com.example.trabalhofinal.view;
+package com.example.trabalhofinal.component;
 
+import static com.example.trabalhofinal.component.ViewBuilder.novoMenuItem;
 import static com.example.trabalhofinal.config.ResourceConfig.bundle;
 import static com.example.trabalhofinal.util.ResourceUtil.resource;
-import static com.example.trabalhofinal.view.ViewBuilder.novoMenuItem;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
 
@@ -10,11 +10,11 @@ import java.io.IOException;
 
 import com.example.trabalhofinal.controller.delegate.TabMenuDelegate;
 
-public class MenuCardapio extends Menu {
+public class MenuCardapioComponent extends Menu {
 
 	private final TabMenuDelegate delegate;
 
-	public MenuCardapio(TabMenuDelegate delegate) throws IOException {
+	public MenuCardapioComponent(TabMenuDelegate delegate) throws IOException {
 		super(bundle.getString("label.cardapio"), resource.icon("plate", 18, 20));
 		this.delegate = delegate;
 		init();

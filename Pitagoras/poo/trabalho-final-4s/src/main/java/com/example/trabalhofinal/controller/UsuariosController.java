@@ -1,22 +1,22 @@
 package com.example.trabalhofinal.controller;
 
+import com.example.trabalhofinal.component.UsuariosTabComponent;
 import com.example.trabalhofinal.model.ServiceResponse;
 import com.example.trabalhofinal.model.Usuario;
 import com.example.trabalhofinal.service.UsuarioService;
-import com.example.trabalhofinal.view.UsuariosTab;
 
-public class UsuariosController implements UsuariosTab.UsuarioTabDelegate {
+public class UsuariosController implements UsuariosTabComponent.UsuarioTabDelegate {
 
-	private final UsuariosTab usuariosTab;
+	private final UsuariosTabComponent usuariosTab;
 	private final UsuarioService service;
 
 	public UsuariosController() {
 		this.service = new UsuarioService();
-		this.usuariosTab = new UsuariosTab(this);
+		this.usuariosTab = new UsuariosTabComponent(this);
 		usuariosTab.setUsuarios(service.findAll());
 	}
 
-	public UsuariosTab getUsuariosTab() {
+	public UsuariosTabComponent getUsuariosTab() {
 		return usuariosTab;
 	}
 
