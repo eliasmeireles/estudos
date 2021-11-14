@@ -18,6 +18,7 @@ public class App extends Application {
 		stage.setMaximized(true);
 		stage.show();
 		mainStage = stage;
+		SceneUtil.setScene("main");
 	}
 
 	public static void main(String[] args) {

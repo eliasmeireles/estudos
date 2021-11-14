@@ -30,15 +30,17 @@ public class UsuariosTab extends AppTab {
 
 	private void configuraContent() {
 		this.usuarioForm.setMinWidth(185);
+		this.listaUsuarios.setPrefHeight(App.mainStage.getWidth());
 		this.content.setFillHeight(true);
 		this.content.setSpacing(25);
-		this.content.setPadding(new Insets(16));
+		this.content.setPadding(new Insets(18));
 		this.content.setAlignment(Pos.TOP_LEFT);
 		this.content.getChildren().add(this.usuarioForm);
 
 		final ScrollPane scrollPane = new ScrollPane(listaUsuarios);
-		scrollPane.setPrefWidth(App.mainStage.getWidth());
+		scrollPane.setPrefHeight(App.mainStage.getWidth());
 		scrollPane.setPrefHeight(App.mainStage.getHeight());
+		scrollPane.setId("transparent-background");
 		scrollPane.setFitToWidth(true);
 		scrollPane.setFitToHeight(true);
 		this.content.getChildren().add(scrollPane);

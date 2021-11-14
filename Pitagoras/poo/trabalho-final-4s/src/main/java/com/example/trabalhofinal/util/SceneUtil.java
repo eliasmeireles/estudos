@@ -23,7 +23,6 @@ public class SceneUtil {
 		final Stage stage = stage(xmlView);
 		stage.setMaximized(true);
 		App.mainStage.setScene(stage.getScene());
-		App.mainStage.setMaximized(true);
 	}
 
 	public static <T> T load(String xmlView) throws IOException {

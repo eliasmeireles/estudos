@@ -1,6 +1,7 @@
 package com.example.trabalhofinal.view.component;
 
 import static com.example.trabalhofinal.config.ResourceConfig.bundle;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -19,11 +20,13 @@ public class UsuarioComponent extends HBox {
 		this.usuario = usuario;
 		this.userData = new VBox();
 		setupComponent();
+		setPadding(new Insets(8));
 	}
 
 	private void setupComponent() {
 		try {
-			getChildren().add(ResourceUtil.resource.icon("user", 80, 80));
+			getChildren().add(ResourceUtil.resource.icon("user", 50, 50));
+			setSpacing(8);
 			getChildren().add(userData);
 			userData.setAlignment(Pos.CENTER);
 			userData.setSpacing(5);
@@ -33,5 +36,4 @@ public class UsuarioComponent extends HBox {
 			e.printStackTrace();
 		}
 	}
-
 }

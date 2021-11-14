@@ -6,6 +6,18 @@
 /*    -fx-background-color: #8f8f8d;*/
 /*}*/
 
+#card-component > #card-container {
+    -fx-background-color: #fdfdfd;
+}
+
+#card-component > #card-container:hover {
+    -fx-background-color: #e8e9e3;
+}
+
+#transparent-background {
+    -fx-background-color: transparent;
+}
+
 #test-color {
     -fx-background-color: #000000;
 }
