@@ -1,13 +1,17 @@
 package com.example.trabalhofinal.controller;
 
+import com.example.trabalhofinal.model.ServiceResponse;
 import com.example.trabalhofinal.model.Usuario;
+import com.example.trabalhofinal.service.UsuarioService;
 import com.example.trabalhofinal.view.UsuariosTab;
 
 public class UsuariosController implements UsuariosTab.UsuarioTabDelegate {
 
 	private final UsuariosTab usuariosTab;
+	private final UsuarioService service;
 
 	public UsuariosController() {
+		this.service = new UsuarioService();
 		this.usuariosTab = new UsuariosTab(this);
 	}
 
@@ -21,8 +25,13 @@ public class UsuariosController implements UsuariosTab.UsuarioTabDelegate {
 
 	@Override public void cadastrar(String nome, String login, String senha) {
 		Usuario usuario = new Usuario(nome, senha, login);
-		System.out.println(usuario);
+		final ServiceResponse serviceResponse = service.salvar(usuario);
 
-		usuariosTab.limparUsuarioForm();
+		if (serviceResponse.isSucesso()) {
+			usuariosTab.showSuccessAlert(serviceResponse.getMensagem());
+			usuariosTab.limparUsuarioForm();
+		} else {
+			usuariosTab.showErrorAlert(serviceResponse.getMensagem());
+		}
 	}
 }

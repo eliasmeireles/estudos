@@ -28,4 +28,8 @@ public class MenuAdm extends Menu {
 		users.setOnAction(aE -> delegate.trocarConteudo(usuariosController.getUsuariosTab()));
 		getItems().add(users);
 	}
+
+	public UsuariosController getUsuariosController() {
+		return usuariosController;
+	}
 }

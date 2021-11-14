@@ -7,6 +7,19 @@ import com.example.trabalhofinal.model.Usuario;
 
 public class UsuarioRepository extends BaseRepository<Usuario> {
 
+	private static UsuarioRepository instance;
+
+	private UsuarioRepository() {
+
+	}
+
+	public static UsuarioRepository getInstance() {
+		if (instance == null) {
+			instance = new UsuarioRepository();
+		}
+		return instance;
+	}
+
 	public Usuario findByLoginAndPassword(String login, String password) {
 		final StringBuilder query = new StringBuilder("WHERE ")
 				.append(fieldFilter("login"))

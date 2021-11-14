@@ -3,25 +3,24 @@ package com.example.trabalhofinal.view;
 import static com.example.trabalhofinal.config.ResourceConfig.bundle;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.control.Tab;
 import javafx.scene.layout.HBox;
 
 import java.util.List;
 
 import com.example.trabalhofinal.model.Usuario;
 
-public class UsuariosTab extends Tab {
+public class UsuariosTab extends AppTab {
 
 	private final HBox content;
 	private final UsuarioForm usuarioForm;
 	private final UsuarioTabDelegate delegate;
 
 	public UsuariosTab(UsuarioTabDelegate delegate) {
-		super(bundle.getString("label.usuarios"));
+		super(String.format("%s -> %s", bundle.getString("label.administracao"), bundle.getString("label.usuarios")));
 		this.delegate = delegate;
 		this.content = new HBox();
 		this.usuarioForm = new UsuarioForm(delegate);
-		setContent(content);
+		setRoot(content);
 		configuraContent();
 	}
 

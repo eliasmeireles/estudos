@@ -6,6 +6,22 @@
 /*    -fx-background-color: #8f8f8d;*/
 /*}*/
 
+#success-alert {
+    -fx-background-color: #4cb42f;
+}
+
+#error-alert {
+    -fx-background-color: #b42f2f;
+}
+
+#error-alert > #mensagem-alert, #success-alert > #mensagem-alert {
+    -fx-text-fill: #FFFFFF;
+}
+
+#error-alert > #remover-alert, #success-alert > #remover-alert {
+    -fx-font-weight: bold;
+    -fx-text-fill: #000000;
+}
 
 .menu-item > .label, .menu > .label {
     -fx-font-size: 16px;

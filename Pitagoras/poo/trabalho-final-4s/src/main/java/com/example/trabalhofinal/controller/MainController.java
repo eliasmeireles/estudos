@@ -17,6 +17,8 @@ import com.example.trabalhofinal.view.MenuCardapio;
 public class MainController implements Initializable, TabMenuDelegate {
 
 	private String lastLoaded;
+	private final MenuAdm menuAdm;
+	private final MenuCardapio menuCardapio;
 
 	@FXML
 	protected MenuBar mainMenus;
@@ -24,13 +26,15 @@ public class MainController implements Initializable, TabMenuDelegate {
 	@FXML
 	protected TabPane tabPane;
 
+	public MainController() throws IOException {
+		this.menuAdm = new MenuAdm(this);
+		this.menuCardapio = new MenuCardapio(this);
+	}
+
 	@Override public void initialize(URL url, ResourceBundle resourceBundle) {
-		try {
-			mainMenus.getMenus().add(new MenuAdm(this));
-			mainMenus.getMenus().add(new MenuCardapio(this));
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		mainMenus.getMenus().add(menuAdm);
+		mainMenus.getMenus().add(menuCardapio);
+		trocarConteudo(menuAdm.getUsuariosController().getUsuariosTab());
 	}
 
 	@Override public void trocarConteudo(Tab tabContent) {

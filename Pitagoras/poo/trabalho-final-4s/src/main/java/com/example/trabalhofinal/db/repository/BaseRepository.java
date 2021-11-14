@@ -5,8 +5,11 @@ import static com.example.trabalhofinal.util.GenericsClassUtil.getGenericTypeCla
 import java.lang.reflect.Field;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -20,7 +23,7 @@ public abstract class BaseRepository<T> {
 	private final Logger logger = Logger.getAnonymousLogger();
 
 	private final Class<T> tClass;
-	public final String selectAllQuery;
+	protected final String selectAllQuery;
 	protected final String nomeTable;
 	private final DatabaseConnector connector;
 
@@ -36,7 +39,7 @@ public abstract class BaseRepository<T> {
 		return findAll(null);
 	}
 
-	protected List<T> findAll(String query, Object... params) {
+	public List<T> findAll(String query, Object... params) {
 		List<T> result = new ArrayList<>();
 		String fullQuery = selectAllQuery;
 
@@ -61,87 +64,80 @@ public abstract class BaseRepository<T> {
 		return result;
 	}
 
-	public boolean savar(T objeto) {
-		try {
-			final StringBuilder insertQuery = new StringBuilder("INSERT INTO ")
-					.append(nomeTable)
-					.append("(");
+	public boolean savar(T objeto) throws IllegalAccessException, SQLException, ClassNotFoundException {
 
-			final StringBuilder params = new StringBuilder(") VALUES (");
-			final List<Object> valores = new ArrayList<>();
+		final StringBuilder insertQuery = new StringBuilder("INSERT INTO ")
+				.append(nomeTable)
+				.append("(");
 
-			for (Field field : objeto.getClass().getDeclaredFields()) {
-				final Property property = field.getAnnotation(Property.class);
-				final String keyName = property != null ? property.name() : StringUitl.toSnakeCase(field.getName());
-				if (property == null || !property.primaryKey()) {
-					insertQuery.append(keyName)
-							.append(", ");
-					params.append("?, ");
+		final StringBuilder params = new StringBuilder(") VALUES (");
+		final Map<Integer, Object> valores = new HashMap<>();
 
-					valores.add(obterValorDoField(field, objeto));
-				}
+		int contador = 1;
+		for (Field field : objeto.getClass().getDeclaredFields()) {
+			final Property property = field.getAnnotation(Property.class);
+			final String keyName = property != null ? property.name() : StringUitl.toSnakeCase(field.getName());
+			if (property == null || !property.primaryKey()) {
+				insertQuery.append(keyName)
+						.append(", ");
+				params.append("?, ");
+
+				valores.put(contador, obterValorDoField(field, objeto));
+				contador++;
 			}
-
-			final String queryKeys = insertQuery.substring(0, insertQuery.length() - 2);
-			final String query = queryKeys +  params.substring(0, params.length() - 2) + ")";
-
-			logger.log(Level.INFO, query);
-
-			try (PreparedStatement statement = connector.getConnection().prepareStatement(query)) {
-				for (Object valor : valores) {
-					statement.setObject(valores.indexOf(valor) + 1, valor);
-				}
-				return statement.execute();
-			}
-		} catch (Exception e) {
-			logger.log(Level.WARNING, e.getMessage());
 		}
-		return false;
+
+		final String queryKeys = insertQuery.substring(0, insertQuery.length() - 2);
+		final String query = queryKeys + params.substring(0, params.length() - 2) + ")";
+
+		return executarInsertUpdateQuerySql(valores, query);
 	}
 
-	public boolean atualizar(T objeto) {
-		try {
-			final StringBuilder updateSql = new StringBuilder("UPDATE ")
-					.append(nomeTable)
-					.append(" SET ");
+	public boolean atualizar(T objeto) throws IllegalAccessException, SQLException, ClassNotFoundException {
+		final StringBuilder updateSql = new StringBuilder("UPDATE ")
+				.append(nomeTable)
+				.append(" SET ");
 
-			final List<Object> valores = new ArrayList<>();
+		final Map<Integer, Object> valores = new HashMap<>();
 
-			String nomePk = "";
-			Object pk = null;
+		String nomePk = "";
+		Object pk = null;
+		int contador = 1;
+		for (Field field : objeto.getClass().getDeclaredFields()) {
+			final Property property = field.getAnnotation(Property.class);
+			final String keyName = property != null ? property.name() : StringUitl.toSnakeCase(field.getName());
 
-			for (Field field : objeto.getClass().getDeclaredFields()) {
-				final Property property = field.getAnnotation(Property.class);
-				final String keyName = property != null ? property.name() : StringUitl.toSnakeCase(field.getName());
+			if (property == null || !property.primaryKey()) {
+				updateSql.append(keyName)
+						.append(" = ?, ");
 
-				if (property == null || !property.primaryKey()) {
-					updateSql.append(keyName)
-							.append(" = ?, ");
-
-					valores.add(obterValorDoField(field, objeto));
-				}
-
-				if (property != null && property.primaryKey()) {
-					pk = obterValorDoField(field, objeto);
-					nomePk = property.name();
-				}
+				valores.put(contador, obterValorDoField(field, objeto));
+				contador++;
 			}
 
-			valores.add(pk);
-
-			String fullSql = updateSql.substring(0, updateSql.length() - 2) + " WHERE " + nomePk + " = ?";
-
-			logger.log(Level.INFO, fullSql);
-			try (PreparedStatement statement = connector.getConnection().prepareStatement(fullSql)) {
-				for (Object valor : valores) {
-					statement.setObject(valores.indexOf(valor) + 1, valor);
-				}
-				return statement.execute();
+			if (property != null && property.primaryKey()) {
+				pk = obterValorDoField(field, objeto);
+				nomePk = property.name();
 			}
-		} catch (Exception e) {
-			logger.log(Level.WARNING, e.getMessage());
 		}
-		return false;
+
+		valores.put(contador + 1, pk);
+
+		String fullSql = updateSql.substring(0, updateSql.length() - 2) + " WHERE " + nomePk + " = ?";
+
+		return executarInsertUpdateQuerySql(valores, fullSql);
+	}
+
+	private boolean executarInsertUpdateQuerySql(Map<Integer, Object> valores, String query) throws SQLException, ClassNotFoundException {
+		logger.log(Level.INFO, query);
+
+		try (PreparedStatement statement = connector.getConnection().prepareStatement(query)) {
+			for (Map.Entry<Integer, Object> valor : valores.entrySet()) {
+				statement.setObject(valor.getKey(), valor.getValue());
+			}
+			statement.execute();
+		}
+		return true;
 	}
 
 	private Object obterValorDoField(Field field, Object objeto) throws IllegalAccessException {
