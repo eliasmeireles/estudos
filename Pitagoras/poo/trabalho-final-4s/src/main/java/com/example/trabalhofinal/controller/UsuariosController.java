@@ -13,6 +13,7 @@ public class UsuariosController implements UsuariosTab.UsuarioTabDelegate {
 	public UsuariosController() {
 		this.service = new UsuarioService();
 		this.usuariosTab = new UsuariosTab(this);
+		usuariosTab.setUsuarios(service.findAll());
 	}
 
 	public UsuariosTab getUsuariosTab() {
@@ -31,6 +32,7 @@ public class UsuariosController implements UsuariosTab.UsuarioTabDelegate {
 		if (serviceResponse.isSucesso()) {
 			usuariosTab.showSuccessAlert(serviceResponse.getMensagem());
 			usuariosTab.limparUsuarioForm();
+			usuariosTab.setUsuarios(service.findAll());
 		} else {
 			usuariosTab.showErrorAlert(serviceResponse.getMensagem());
 		}

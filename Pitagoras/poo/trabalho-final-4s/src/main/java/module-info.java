@@ -18,5 +18,6 @@ module com.example.trabalhofinal {
 	opens com.example.trabalhofinal.controller to javafx.fxml;
 	exports com.example.trabalhofinal.util;
 	exports com.example.trabalhofinal.view;
+	exports com.example.trabalhofinal.view.component;
 
 }

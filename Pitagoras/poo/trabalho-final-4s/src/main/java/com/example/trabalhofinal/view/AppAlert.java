@@ -33,12 +33,12 @@ public class AppAlert extends HBox {
 
 	public void setSuccessMensage(String mensagem) {
 		mensagemAlert.setText(mensagem);
-		setId("error-alert");
+		setId("success-alert");
 	}
 
 	public void setErrorMessage(String mensagem) {
 		mensagemAlert.setText(mensagem);
-		setId("success-alert");
+		setId("error-alert");
 	}
 
 	public interface OnCloseClick {
