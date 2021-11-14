@@ -7,11 +7,11 @@
 /*}*/
 
 #card-component > #card-container {
-    -fx-background-color: #fdfdfd;
+    -fx-background-color: #eeeeee;
 }
 
 #card-component > #card-container:hover {
-    -fx-background-color: #e8e9e3;
+    -fx-background-color: #e0e0e0;
 }
 
 #transparent-background {
@@ -47,7 +47,7 @@
 #title-label {
     -fx-font-size: 18px;
     -fx-font-weight: bold;
-    -fx-text-fill: #333030;
+    -fx-text-fill: #161616;
 }
 
 #login-failed {

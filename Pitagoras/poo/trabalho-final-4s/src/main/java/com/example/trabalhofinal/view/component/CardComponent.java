@@ -6,10 +6,14 @@ import javafx.scene.layout.VBox;
 
 public class CardComponent extends VBox {
 
-	public CardComponent(Pane node) {
+	protected Pane container;
+
+	public CardComponent(Pane container) {
+		this.container = container;
 		setId("card-component");
-		node.setId("card-container");
-		getChildren().add(node);
+		container.setId("card-container");
+		container.setPadding(new Insets(16));
+		getChildren().add(container);
 		setPadding(new Insets(5));
 	}
 }
