@@ -11,7 +11,7 @@ import com.example.trabalhofinal.db.adapter.Adapter;
 public enum UsuarioPermissao {
 
 	ADM(new AdmMenuFactory(), bundle.getString("label.administrador")),
-	GARSOM(new GarcomMenuFactory(), bundle.getString("label.garcom")),
+	GARCOM(new GarcomMenuFactory(), bundle.getString("label.garcom")),
 	CLIENTE(new ClienteMenuFactory(), bundle.getString("label.cliente"));
 
 	public final MainMenuFactory factory;
@@ -20,6 +20,10 @@ public enum UsuarioPermissao {
 	UsuarioPermissao(MainMenuFactory factory, String nome) {
 		this.factory = factory;
 		this.nome = nome;
+	}
+
+	@Override public String toString() {
+		return nome;
 	}
 
 	public static UsuarioPermissao valueOf(Object value) {

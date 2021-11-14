@@ -10,7 +10,7 @@ import java.io.IOException;
 import com.example.trabalhofinal.model.Usuario;
 import com.example.trabalhofinal.util.ResourceUtil;
 
-public class UsuarioComponent extends CardComponent {
+public class UsuarioComponent extends CardComponent<HBox> {
 
 	private final Usuario usuario;
 	private final VBox userData;
@@ -26,7 +26,8 @@ public class UsuarioComponent extends CardComponent {
 	private void setupComponent() {
 		try {
 			container.getChildren().add(ResourceUtil.resource.icon("user", 50, 50));
-			((HBox) container).setSpacing(8);
+			container.setAlignment(Pos.CENTER);
+			container.setSpacing(8);
 			container.getChildren().add(userData);
 			userData.setAlignment(Pos.CENTER);
 			userData.setSpacing(5);

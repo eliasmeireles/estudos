@@ -4,11 +4,11 @@ import javafx.geometry.Insets;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 
-public class CardComponent extends VBox {
+public class CardComponent<T extends Pane> extends VBox {
 
-	protected Pane container;
+	protected T container;
 
-	public CardComponent(Pane container) {
+	public CardComponent(T container) {
 		this.container = container;
 		setId("card-component");
 		container.setId("card-container");
