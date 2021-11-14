@@ -29,7 +29,7 @@ public class UsuariosTabComponent extends AppTabComponent {
 	}
 
 	private void configuraContent() {
-		this.usuarioFormComponent.setMinWidth(185);
+		this.usuarioFormComponent.width(185);
 		this.listaUsuariosComponent.setPrefHeight(App.mainStage.getWidth());
 		this.content.setFillHeight(true);
 		this.content.setSpacing(25);

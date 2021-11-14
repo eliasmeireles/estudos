@@ -25,10 +25,11 @@ public class Usuario {
 	public Usuario() {
 	}
 
-	public Usuario(String nome, String senha, String login) {
+	public Usuario(String nome, String senha, String login, UsuarioPermissao usuarioPermissao) {
 		this.nome = nome;
 		this.senha = senha;
 		this.login = login;
+		this.usuarioPermissao = usuarioPermissao;
 	}
 
 	public int getUserId() {
