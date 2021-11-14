@@ -61,8 +61,8 @@
 }
 
 .button {
-    -fx-min-width: 125px;
-    -fx-min-height: 35px;
+    -fx-min-width: 85px;
+    -fx-min-height: 16px;
     -fx-font-size: 16px;
     -fx-text-fill: #333030;
 }

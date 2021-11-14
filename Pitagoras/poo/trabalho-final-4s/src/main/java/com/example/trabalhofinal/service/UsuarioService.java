@@ -46,16 +46,20 @@ public class UsuarioService {
 	}
 
 	public ServiceResponse salvar(Usuario usuario) {
-		try {
-			if (validaUsuario(usuario) && repository.savar(usuario)) {
-				return new ServiceResponse(true, bundle.getString("label.usuario.salvo"));
-			}
-		} catch (DadosUsuarioInvalido dadosUsuarioInvalido) {
-			return dadosUsuarioInvalido.getResponse();
-		} catch (Exception e) {
-			e.printStackTrace();
-			if (ehViolacaoDeUniqueConstraint(e)) {
-				return new ServiceResponse(bundle.getString("label.falha.salvar.usuario.login.duplicado"));
+		if (usuario.getUserId() != null) {
+			return atulizarUsuario(usuario);
+		} else {
+			try {
+				if (validaUsuario(usuario) && repository.savar(usuario)) {
+					return new ServiceResponse(true, bundle.getString("label.usuario.salvo"));
+				}
+			} catch (DadosUsuarioInvalido dadosUsuarioInvalido) {
+				return dadosUsuarioInvalido.getResponse();
+			} catch (Exception e) {
+				e.printStackTrace();
+				if (ehViolacaoDeUniqueConstraint(e)) {
+					return new ServiceResponse(bundle.getString("label.falha.salvar.usuario.login.duplicado"));
+				}
 			}
 		}
 		return new ServiceResponse(bundle.getString("label.falha.salvar.usuario"));

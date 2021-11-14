@@ -3,7 +3,6 @@ package com.example.trabalhofinal.controller;
 import com.example.trabalhofinal.component.UsuariosTabComponent;
 import com.example.trabalhofinal.model.ServiceResponse;
 import com.example.trabalhofinal.model.Usuario;
-import com.example.trabalhofinal.model.UsuarioPermissao;
 import com.example.trabalhofinal.service.UsuarioService;
 
 public class UsuariosController implements UsuariosTabComponent.UsuarioTabDelegate {
@@ -22,12 +21,11 @@ public class UsuariosController implements UsuariosTabComponent.UsuarioTabDelega
 	}
 
 	@Override public void onUsuarioSelecionado(Usuario usuario) {
-
+		usuariosTab.setUsuario(usuario);
 	}
 
-	@Override public void cadastrar(String nome, String login, String senha, UsuarioPermissao usuarioPermissao) {
+	@Override public void cadastrar(Usuario usuario) {
 		usuariosTab.dismisAlert();
-		Usuario usuario = new Usuario(nome, senha, login, usuarioPermissao);
 		final ServiceResponse serviceResponse = service.salvar(usuario);
 
 		if (serviceResponse.isSucesso()) {

@@ -8,7 +8,7 @@ import com.example.trabalhofinal.db.annotation.Table;
 public class Usuario {
 
 	@Property(name = "user_id", primaryKey = true)
-	private int userId;
+	private Integer userId;
 
 	@Property(name = "nome", type = "VARCHAR(100) NOT NULL")
 	private String nome;
@@ -25,18 +25,19 @@ public class Usuario {
 	public Usuario() {
 	}
 
-	public Usuario(String nome, String senha, String login, UsuarioPermissao usuarioPermissao) {
+	public Usuario(Integer userId, String nome, String senha, String login, UsuarioPermissao usuarioPermissao) {
+		this.userId = userId;
 		this.nome = nome;
 		this.senha = senha;
 		this.login = login;
 		this.usuarioPermissao = usuarioPermissao;
 	}
 
-	public int getUserId() {
+	public Integer getUserId() {
 		return userId;
 	}
 
-	public void setUserId(int userId) {
+	public void setUserId(Integer userId) {
 		this.userId = userId;
 	}
 

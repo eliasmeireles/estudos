@@ -2,6 +2,7 @@ package com.example.trabalhofinal.db.repository;
 
 import static com.example.trabalhofinal.util.GenericsClassUtil.getGenericTypeClass;
 
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -123,9 +124,7 @@ public abstract class BaseRepository<T> {
 			}
 		}
 
-		valores.put(contador + 1, pk);
-
-		String fullSql = updateSql.substring(0, updateSql.length() - 2) + " WHERE " + nomePk + " = ?";
+		String fullSql = updateSql.substring(0, updateSql.length() - 2) + " WHERE " + nomePk + " = " + pk;
 
 		return executarInsertUpdateQuerySql(valores, fullSql);
 	}
@@ -162,7 +161,8 @@ public abstract class BaseRepository<T> {
 
 	@SuppressWarnings("unchecked")
 	protected T newInstanceFromResult(ResultSet resultSet) throws Exception {
-		T newInstance = (T) tClass.getConstructors()[0].newInstance();
+		final Constructor<?> constructor = tClass.getConstructors()[0];
+		T newInstance = (T) constructor.newInstance();
 
 		for (Field field : newInstance.getClass().getDeclaredFields()) {
 			final Property property = field.getAnnotation(Property.class);

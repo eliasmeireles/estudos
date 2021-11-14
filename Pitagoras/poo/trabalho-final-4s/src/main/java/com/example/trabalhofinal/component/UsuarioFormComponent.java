@@ -8,9 +8,11 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
 import com.example.trabalhofinal.App;
+import com.example.trabalhofinal.model.Usuario;
 import com.example.trabalhofinal.model.UsuarioPermissao;
 
 public class UsuarioFormComponent extends VBox {
@@ -21,6 +23,8 @@ public class UsuarioFormComponent extends VBox {
 	private final ComboBox<UsuarioPermissao> permissaoComboBox;
 	private final PasswordField senha;
 	private final Button cadastar;
+	private final Button limpar;
+	private Integer usuarioId;
 
 	public UsuarioFormComponent(UsuarioFormDelegate delegate) {
 		this.delegate = delegate;
@@ -29,6 +33,7 @@ public class UsuarioFormComponent extends VBox {
 		this.senha = new PasswordField();
 		this.permissaoComboBox = new ComboBox<>();
 		this.cadastar = new Button(bundle.getString("label.cadastrar"));
+		this.limpar = new Button(bundle.getString("label.limpar"));
 		this.setPrefHeight(App.mainStage.getWidth());
 		init();
 	}
@@ -41,9 +46,10 @@ public class UsuarioFormComponent extends VBox {
 		getChildren().add(label(bundle.getString("label.permissao"), permissaoComboBox));
 		getChildren().add(label(bundle.getString("label.senha"), senha));
 
-		VBox vBox = new VBox(cadastar);
-		vBox.setAlignment(Pos.TOP_CENTER);
-		getChildren().add(vBox);
+		HBox hBox = new HBox(cadastar, limpar);
+		hBox.setSpacing(3);
+		hBox.setAlignment(Pos.TOP_CENTER);
+		getChildren().add(hBox);
 		configuraBotao();
 	}
 
@@ -60,8 +66,12 @@ public class UsuarioFormComponent extends VBox {
 	}
 
 	private void configuraBotao() {
-		cadastar.setOnAction(actionEvent -> delegate.cadastrar(nome.getText(),
-				login.getText(), senha.getText(), permissaoComboBox.getValue()));
+		cadastar.setOnAction(actionEvent -> delegate.cadastrar(build()));
+		limpar.setOnAction(actionEvent -> clear());
+	}
+
+	private Usuario build() {
+		return new Usuario(usuarioId, nome.getText(), senha.getText(), login.getText(), permissaoComboBox.getValue());
 	}
 
 	private VBox label(String label, Node node) {
@@ -71,7 +81,15 @@ public class UsuarioFormComponent extends VBox {
 		return vBox;
 	}
 
+	public void setUsuario(Usuario usuario) {
+		nome.setText(usuario.getNome());
+		login.setText(usuario.getLogin());
+		permissaoComboBox.setValue(usuario.getUsuarioPermissao());
+		usuarioId = usuario.getUserId();
+	}
+
 	public void clear() {
+		usuarioId = null;
 		nome.clear();
 		login.clear();
 		senha.clear();
@@ -79,6 +97,6 @@ public class UsuarioFormComponent extends VBox {
 	}
 
 	public interface UsuarioFormDelegate {
-		void cadastrar(String nome, String login, String senha, UsuarioPermissao permissao);
+		void cadastrar(Usuario usuario);
 	}
 }

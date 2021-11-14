@@ -11,8 +11,10 @@ import com.example.trabalhofinal.model.Usuario;
 public class ListaUsuariosComponent extends GridPane {
 
 	private List<Usuario> usuarios;
+	private UsuariosTabComponent.UsuarioTabDelegate delegate;
 
-	public ListaUsuariosComponent() {
+	public ListaUsuariosComponent(UsuariosTabComponent.UsuarioTabDelegate delegate) {
+		this.delegate = delegate;
 		this.usuarios = new ArrayList<>();
 		reajustar();
 	}
@@ -40,7 +42,7 @@ public class ListaUsuariosComponent extends GridPane {
 		final double cardWidth = 325;
 		final long totalCards = Math.round(App.mainStage.getWidth() / (cardWidth + (cardWidth * 0.87)));
 		for (Usuario usuario : usuarios) {
-			final CardComponent usuarioComponent = new UsuarioComponent(usuario);
+			final CardComponent usuarioComponent = new UsuarioComponent(usuario, delegate);
 			usuarioComponent.setMinWidth(cardWidth);
 			this.add(usuarioComponent, column, row);
 			count++;

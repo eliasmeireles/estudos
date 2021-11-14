@@ -16,20 +16,18 @@ public class UsuariosTabComponent extends AppTabComponent {
 	private final HBox content;
 	private final UsuarioFormComponent usuarioFormComponent;
 	private final ListaUsuariosComponent listaUsuariosComponent;
-	private final UsuarioTabDelegate delegate;
 
 	public UsuariosTabComponent(UsuarioTabDelegate delegate) {
 		super(String.format("%s -> %s", bundle.getString("label.administracao"), bundle.getString("label.usuarios")));
-		this.delegate = delegate;
 		this.content = new HBox();
-		this.listaUsuariosComponent = new ListaUsuariosComponent();
+		this.listaUsuariosComponent = new ListaUsuariosComponent(delegate);
 		this.usuarioFormComponent = new UsuarioFormComponent(delegate);
 		setRoot(content);
 		configuraContent();
 	}
 
 	private void configuraContent() {
-		this.usuarioFormComponent.width(185);
+		this.usuarioFormComponent.width(215);
 		this.listaUsuariosComponent.setPrefHeight(App.mainStage.getWidth());
 		this.content.setFillHeight(true);
 		this.content.setSpacing(25);
@@ -48,6 +46,10 @@ public class UsuariosTabComponent extends AppTabComponent {
 
 	public void setUsuarios(List<Usuario> usuarios) {
 		listaUsuariosComponent.setUsuarios(usuarios);
+	}
+
+	public void setUsuario(Usuario usuario) {
+		usuarioFormComponent.setUsuario(usuario);
 	}
 
 	public void limparUsuarioForm() {

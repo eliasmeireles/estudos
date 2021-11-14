@@ -15,11 +15,12 @@ public class UsuarioComponent extends CardComponent {
 	private final Usuario usuario;
 	private final VBox userData;
 
-	public UsuarioComponent(Usuario usuario) {
+	public UsuarioComponent(Usuario usuario, UsuariosTabComponent.UsuarioTabDelegate delegate) {
 		super(new HBox());
 		this.usuario = usuario;
 		this.userData = new VBox();
 		setupComponent();
+		setOnMouseClicked(eH -> delegate.onUsuarioSelecionado(usuario));
 	}
 
 	private void setupComponent() {
