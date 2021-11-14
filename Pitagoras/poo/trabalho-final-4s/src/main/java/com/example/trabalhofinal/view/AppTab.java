@@ -48,7 +48,7 @@ public abstract class AppTab extends Tab {
 		containter.getChildren().add(0, alertContainer);
 	}
 
-	private void dismisAlert() {
+	public void dismisAlert() {
 		containter.getChildren().remove(alertContainer);
 	}
 

@@ -24,6 +24,7 @@ public class UsuariosController implements UsuariosTab.UsuarioTabDelegate {
 	}
 
 	@Override public void cadastrar(String nome, String login, String senha) {
+		usuariosTab.dismisAlert();
 		Usuario usuario = new Usuario(nome, senha, login);
 		final ServiceResponse serviceResponse = service.salvar(usuario);
 
