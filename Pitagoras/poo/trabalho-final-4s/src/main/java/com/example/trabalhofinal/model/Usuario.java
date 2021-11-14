@@ -1,6 +1,7 @@
 package com.example.trabalhofinal.model;
 
 import com.example.trabalhofinal.db.annotation.Property;
+import com.example.trabalhofinal.db.annotation.PropertyAdapter;
 import com.example.trabalhofinal.db.annotation.Table;
 
 @Table(name = "user")
@@ -17,6 +18,9 @@ public class Usuario {
 
 	@Property(name = "login", type = "VARCHAR(20) NOT NULL UNIQUE")
 	private String login;
+
+	@PropertyAdapter(adapter = UsuarioPermissao.UsuarioPermissaoAdapter.class)
+	private UsuarioPermissao usuarioPermissao;
 
 	public Usuario() {
 	}
@@ -57,6 +61,14 @@ public class Usuario {
 
 	public void setLogin(String login) {
 		this.login = login;
+	}
+
+	public UsuarioPermissao getUsuarioPermissao() {
+		return usuarioPermissao;
+	}
+
+	public void setUsuarioPermissao(UsuarioPermissao usuarioPermissao) {
+		this.usuarioPermissao = usuarioPermissao;
 	}
 
 	@Override public String toString() {

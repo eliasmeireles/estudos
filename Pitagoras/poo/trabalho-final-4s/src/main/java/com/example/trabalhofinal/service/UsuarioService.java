@@ -2,7 +2,6 @@ package com.example.trabalhofinal.service;
 
 import static com.example.trabalhofinal.config.ResourceConfig.bundle;
 
-import java.sql.SQLException;
 import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.List;
 
@@ -32,13 +31,13 @@ public class UsuarioService {
 			if (validaUsuario(usuario) && repository.savar(usuario)) {
 				return new ServiceResponse(true, bundle.getString("label.usuario.salvo"));
 			}
-		} catch (IllegalAccessException | SQLException | ClassNotFoundException e) {
+		} catch (DadosUsuarioInvalido dadosUsuarioInvalido) {
+			return dadosUsuarioInvalido.getResponse();
+		} catch (Exception e) {
 			e.printStackTrace();
 			if (ehViolacaoDeUniqueConstraint(e)) {
 				return new ServiceResponse(bundle.getString("label.falha.salvar.usuario.login.duplicado"));
 			}
-		} catch (DadosUsuarioInvalido dadosUsuarioInvalido) {
-			return dadosUsuarioInvalido.getResponse();
 		}
 		return new ServiceResponse(bundle.getString("label.falha.salvar.usuario"));
 	}
@@ -48,13 +47,13 @@ public class UsuarioService {
 			if (validaUsuario(usuario) && repository.atualizar(usuario)) {
 				return new ServiceResponse(true, bundle.getString("label.usuario.atualizado"));
 			}
-		} catch (IllegalAccessException | SQLException | ClassNotFoundException e) {
+		} catch (DadosUsuarioInvalido dadosUsuarioInvalido) {
+			return dadosUsuarioInvalido.getResponse();
+		} catch (Exception e) {
 			e.printStackTrace();
 			if (ehViolacaoDeUniqueConstraint(e)) {
 				return new ServiceResponse(bundle.getString("label.falha.atualizar.usuario.login.duplicado"));
 			}
-		} catch (DadosUsuarioInvalido dadosUsuarioInvalido) {
-			return dadosUsuarioInvalido.getResponse();
 		}
 		return new ServiceResponse(bundle.getString("label.falha.atualizar.usuario"));
 	}

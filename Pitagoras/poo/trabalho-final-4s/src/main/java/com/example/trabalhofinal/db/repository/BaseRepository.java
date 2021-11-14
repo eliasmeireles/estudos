@@ -13,7 +13,9 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import com.example.trabalhofinal.db.adapter.Adapter;
 import com.example.trabalhofinal.db.annotation.Property;
+import com.example.trabalhofinal.db.annotation.PropertyAdapter;
 import com.example.trabalhofinal.db.annotation.Table;
 import com.example.trabalhofinal.db.connector.DatabaseConnector;
 import com.example.trabalhofinal.util.StringUitl;
@@ -64,7 +66,7 @@ public abstract class BaseRepository<T> {
 		return result;
 	}
 
-	public boolean savar(T objeto) throws IllegalAccessException, SQLException, ClassNotFoundException {
+	public boolean savar(T objeto) throws Exception {
 
 		final StringBuilder insertQuery = new StringBuilder("INSERT INTO ")
 				.append(nomeTable)
@@ -93,7 +95,7 @@ public abstract class BaseRepository<T> {
 		return executarInsertUpdateQuerySql(valores, query);
 	}
 
-	public boolean atualizar(T objeto) throws IllegalAccessException, SQLException, ClassNotFoundException {
+	public boolean atualizar(T objeto) throws Exception {
 		final StringBuilder updateSql = new StringBuilder("UPDATE ")
 				.append(nomeTable)
 				.append(" SET ");
@@ -140,15 +142,22 @@ public abstract class BaseRepository<T> {
 		return true;
 	}
 
-	private Object obterValorDoField(Field field, Object objeto) throws IllegalAccessException {
+	private Object obterValorDoField(Field field, Object objeto) throws Exception {
+		Object value;
 		if (field.canAccess(objeto)) {
-			return field.get(objeto);
+			value = field.get(objeto);
 		} else {
 			field.setAccessible(true);
-			Object value = field.get(objeto);
+			value = field.get(objeto);
 			field.setAccessible(false);
-			return value;
 		}
+		final PropertyAdapter annotation = field.getAnnotation(PropertyAdapter.class);
+
+		if (annotation != null) {
+			final Adapter<?> instance = (Adapter<?>) annotation.adapter().getConstructors()[0].newInstance();
+			return instance.fromObject(value);
+		}
+		return value;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -161,14 +170,25 @@ public abstract class BaseRepository<T> {
 			final Object value = resultSet.getObject(keyName);
 
 			if (field.canAccess(newInstance)) {
-				field.set(newInstance, value);
+				field.set(newInstance, valuedAdatper(field, value));
 			} else {
 				field.setAccessible(true);
-				field.set(newInstance, value);
+				field.set(newInstance, valuedAdatper(field, value));
 				field.setAccessible(false);
 			}
 		}
 		return newInstance;
+	}
+
+	@SuppressWarnings("unchecked")
+	private <T> T valuedAdatper(Field field, Object value) throws Exception {
+		final PropertyAdapter annotation = field.getAnnotation(PropertyAdapter.class);
+
+		if (annotation != null) {
+			final Adapter<T> instance = (Adapter<T>) annotation.adapter().getConstructors()[0].newInstance();
+			return instance.toObject(value);
+		}
+		return (T) value;
 	}
 
 	protected String fieldFilter(String nome) {

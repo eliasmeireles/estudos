@@ -1,5 +1,6 @@
 package com.example.trabalhofinal.db.repository;
 
+import static com.example.trabalhofinal.db.repository.util.QueryUtil.fieldType;
 import static com.example.trabalhofinal.db.repository.util.QueryUtil.foreingKeyQuery;
 import static com.example.trabalhofinal.db.repository.util.QueryUtil.validaQueryTabelaCollection;
 
@@ -13,9 +14,9 @@ import java.util.logging.Logger;
 
 import com.example.trabalhofinal.db.annotation.Collection;
 import com.example.trabalhofinal.db.annotation.ForeignKey;
-import com.example.trabalhofinal.db.annotation.Property;
 import com.example.trabalhofinal.db.annotation.Table;
 import com.example.trabalhofinal.db.connector.DatabaseConnector;
+import com.example.trabalhofinal.db.repository.util.QueryUtil;
 import com.example.trabalhofinal.util.StringUitl;
 
 class CreateTableRepository {
@@ -92,29 +93,19 @@ class CreateTableRepository {
 	}
 
 	private void gerarQueryDeAtributo(TableQuery tableQuery, Field field) throws SQLException, ClassNotFoundException {
-		final Property property = field.getAnnotation(Property.class);
 		final Table relationShip = field.getType().getAnnotation(Table.class);
 		final Collection collections = field.getType().getAnnotation(Collection.class);
 
 		if (relationShip != null) {
 			configuraModeloDeRelacionamento(tableQuery, field, relationShip);
 		} else if (collections == null) {
-			configuraQueryDeAtributo(tableQuery, field, property);
+			configuraQueryDeAtributo(tableQuery, field);
 		}
 	}
 
-	private void configuraQueryDeAtributo(TableQuery tableQuery, Field field, Property property) {
-		String type = StringUitl.toSnakeCase(field.getType().getSimpleName())
-				.toUpperCase()
-				.replace("STRING", "VARCHAR(255)");
-
-		if (property != null) {
-			type = property.type().isBlank() ? type : property.type();
-			type = property.primaryKey() ? "INT PRIMARY KEY AUTO_INCREMENT" : type;
-			tableQuery.addFieldQuery(property.name(), type);
-		} else {
-			tableQuery.addFieldQuery(StringUitl.toSnakeCase(field.getName()), type);
-		}
+	private void configuraQueryDeAtributo(TableQuery tableQuery, Field field) {
+		final QueryUtil.SqlFieldData fieldData = fieldType(field);
+		tableQuery.addFieldQuery(fieldData.getColumnName(), fieldData.getColumnType());
 	}
 
 	private void configuraModeloDeRelacionamento(TableQuery tableQuery, Field field, Table relationShip) throws SQLException, ClassNotFoundException {
