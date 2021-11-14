@@ -10,7 +10,7 @@ public class LoginInteractor {
 
 	public LoginInteractor(LoginDelegate delegate) {
 		this.delegate = delegate;
-		this.usuarioService = new UsuarioService();
+		this.usuarioService = UsuarioService.getInstance();
 	}
 
 	public interface LoginDelegate {

@@ -12,10 +12,20 @@ import com.example.trabalhofinal.repository.UsuarioRepository;
 
 public class UsuarioService {
 
+	private static UsuarioService instance;
+
+	private Usuario usuarioLogado;
 	public final UsuarioRepository repository;
 
-	public UsuarioService() {
+	private UsuarioService() {
 		this.repository = UsuarioRepository.getInstance();
+	}
+
+	public static UsuarioService getInstance() {
+		if (instance == null) {
+			instance = new UsuarioService();
+		}
+		return instance;
 	}
 
 	public List<Usuario> findAll() {
@@ -23,7 +33,16 @@ public class UsuarioService {
 	}
 
 	public Usuario login(String login, String senha) {
-		return repository.findByLoginAndPassword(login, senha);
+		usuarioLogado = repository.findByLoginAndPassword(login, senha);
+		return usuarioLogado;
+	}
+
+	public void logout() {
+		this.usuarioLogado = null;
+	}
+
+	public Usuario getUsuarioLogado() {
+		return usuarioLogado;
 	}
 
 	public ServiceResponse salvar(Usuario usuario) {

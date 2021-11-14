@@ -31,6 +31,7 @@ public class UsuarioComponent extends CardComponent {
 			userData.setSpacing(5);
 			userData.getChildren().add(new LabelValorComponent(bundle.getString("label.nome"), usuario.getNome()));
 			userData.getChildren().add(new LabelValorComponent(bundle.getString("label.login"), usuario.getLogin()));
+			userData.getChildren().add(new LabelValorComponent(bundle.getString("label.permissao"), usuario.getUsuarioPermissao().nome));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

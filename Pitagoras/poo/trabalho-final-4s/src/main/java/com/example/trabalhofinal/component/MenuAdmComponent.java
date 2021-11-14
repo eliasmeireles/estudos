@@ -3,15 +3,15 @@ package com.example.trabalhofinal.component;
 import static com.example.trabalhofinal.component.ViewBuilder.novoMenuItem;
 import static com.example.trabalhofinal.config.ResourceConfig.bundle;
 import static com.example.trabalhofinal.util.ResourceUtil.resource;
-import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.Tab;
 
 import java.io.IOException;
 
 import com.example.trabalhofinal.controller.UsuariosController;
 import com.example.trabalhofinal.controller.delegate.TabMenuDelegate;
 
-public class MenuAdmComponent extends Menu {
+public class MenuAdmComponent extends AppMenu {
 
 	private final UsuariosController usuariosController;
 	private final TabMenuDelegate delegate;
@@ -31,5 +31,9 @@ public class MenuAdmComponent extends Menu {
 
 	public UsuariosController getUsuariosController() {
 		return usuariosController;
+	}
+
+	@Override public Tab tabInicial() {
+		return usuariosController.getUsuariosTab();
 	}
 }

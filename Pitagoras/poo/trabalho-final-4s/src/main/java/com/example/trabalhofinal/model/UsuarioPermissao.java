@@ -2,17 +2,23 @@ package com.example.trabalhofinal.model;
 
 import static com.example.trabalhofinal.config.ResourceConfig.bundle;
 
+import com.example.trabalhofinal.component.facoty.AdmMenuFactory;
+import com.example.trabalhofinal.component.facoty.ClienteMenuFactory;
+import com.example.trabalhofinal.component.facoty.GarcomMenuFactory;
+import com.example.trabalhofinal.component.facoty.MainMenuFactory;
 import com.example.trabalhofinal.db.adapter.Adapter;
 
 public enum UsuarioPermissao {
 
-	ADM(bundle.getString("label.administrador")),
-	GARSOM(bundle.getString("label.garcom")),
-	CLIENTE(bundle.getString("label.cliente"));
+	ADM(new AdmMenuFactory(), bundle.getString("label.administrador")),
+	GARSOM(new GarcomMenuFactory(), bundle.getString("label.garcom")),
+	CLIENTE(new ClienteMenuFactory(), bundle.getString("label.cliente"));
 
+	public final MainMenuFactory factory;
 	public final String nome;
 
-	UsuarioPermissao(String nome) {
+	UsuarioPermissao(MainMenuFactory factory, String nome) {
+		this.factory = factory;
 		this.nome = nome;
 	}
 
