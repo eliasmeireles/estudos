@@ -3,14 +3,15 @@ package com.example.trabalhofinal.controller;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.MenuBar;
-import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
+import javafx.scene.layout.VBox;
 
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
 import com.example.trabalhofinal.controller.delegate.TabMenuDelegate;
+import com.example.trabalhofinal.view.AppTab;
 import com.example.trabalhofinal.view.MenuAdm;
 import com.example.trabalhofinal.view.MenuCardapio;
 
@@ -19,6 +20,9 @@ public class MainController implements Initializable, TabMenuDelegate {
 	private String lastLoaded;
 	private final MenuAdm menuAdm;
 	private final MenuCardapio menuCardapio;
+
+	@FXML
+	protected VBox rootView;
 
 	@FXML
 	protected MenuBar mainMenus;
@@ -37,10 +41,11 @@ public class MainController implements Initializable, TabMenuDelegate {
 		trocarConteudo(menuAdm.getUsuariosController().getUsuariosTab());
 	}
 
-	@Override public void trocarConteudo(Tab tabContent) {
+	@Override public void trocarConteudo(AppTab tabContent) {
 		String tabName = tabContent.getClass().getName();
 		if (!tabName.equals(lastLoaded)) {
 			lastLoaded = tabName;
+			tabPane.setPrefHeight(rootView.getMinHeight());
 			tabPane.getTabs().clear();
 			tabPane.getTabs().add(tabContent);
 		}

@@ -6,6 +6,10 @@
 /*    -fx-background-color: #8f8f8d;*/
 /*}*/
 
+#test-color {
+    -fx-background-color: #000000;
+}
+
 #success-alert {
     -fx-background-color: #4cb42f;
 }

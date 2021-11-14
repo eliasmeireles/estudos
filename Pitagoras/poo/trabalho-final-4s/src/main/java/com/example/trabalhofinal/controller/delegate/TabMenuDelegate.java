@@ -1,7 +1,7 @@
 package com.example.trabalhofinal.controller.delegate;
 
-import javafx.scene.control.Tab;
+import com.example.trabalhofinal.view.AppTab;
 
 public interface TabMenuDelegate {
-	void trocarConteudo(Tab tabContent);
+	void trocarConteudo(AppTab tabContent);
 }

@@ -22,7 +22,8 @@ public class UsuarioForm extends VBox {
 		this.nome = new TextField();
 		this.login = new TextField();
 		this.senha = new PasswordField();
-		this.cadastar = new Button(bundle.getString("label.senha"));
+		this.cadastar = new Button(bundle.getString("label.cadastrar"));
+		this.setPrefHeight(450);
 		init();
 	}
 
