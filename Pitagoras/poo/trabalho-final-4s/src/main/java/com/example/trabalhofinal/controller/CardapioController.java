@@ -7,7 +7,7 @@ import com.example.trabalhofinal.model.Cardapio;
 import com.example.trabalhofinal.model.CardapioTipo;
 import com.example.trabalhofinal.service.CardapitoService;
 
-public class CardapioController implements CardapioTabComponent.CardapioTabDelegate {
+public class CardapioController implements CardapioTabComponent.CardapioDelegate {
 
 	private final CardapitoService service;
 	private final CardapioTipo tipo;
@@ -25,10 +25,6 @@ public class CardapioController implements CardapioTabComponent.CardapioTabDeleg
 	}
 
 	@Override public void onCardapioSelecionado(Cardapio cardapio) {
-
-	}
-
-	protected void listarCardapio() {
 
 	}
 

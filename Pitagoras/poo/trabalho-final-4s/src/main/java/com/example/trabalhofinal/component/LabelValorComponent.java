@@ -20,4 +20,8 @@ public class LabelValorComponent extends HBox {
 		getChildren().add(this.label);
 		getChildren().add(this.valor);
 	}
+
+	public void setValorMaximumWidth(double value) {
+		valor.setMaxWidth(value);
+	}
 }
