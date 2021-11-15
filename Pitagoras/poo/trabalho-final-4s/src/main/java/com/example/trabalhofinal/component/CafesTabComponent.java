@@ -1,10 +1,10 @@
 package com.example.trabalhofinal.component;
 
-import static com.example.trabalhofinal.config.ResourceConfig.bundle;
+import com.example.trabalhofinal.model.CardapioTipo;
 
-public class CafesTabComponent extends AppTabComponent {
+public class CafesTabComponent extends CardapioTabComponent {
 
-	protected CafesTabComponent() {
-		super(String.format("%s -> %s", bundle.getString("label.cardapio"), bundle.getString("label.cafe")));
+	public CafesTabComponent() {
+		super(CardapioTipo.CAFES);
 	}
 }
