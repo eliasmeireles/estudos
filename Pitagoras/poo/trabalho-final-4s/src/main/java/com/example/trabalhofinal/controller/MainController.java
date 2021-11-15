@@ -19,7 +19,7 @@ import com.example.trabalhofinal.service.UsuarioService;
 
 public class MainController implements Initializable, TabMenuDelegate {
 
-	private String lastLoaded;
+	private Tab lastLoaded;
 	private final UsuarioService service;
 
 	@FXML
@@ -50,9 +50,8 @@ public class MainController implements Initializable, TabMenuDelegate {
 	}
 
 	@Override public void trocarConteudo(Tab tabContent) {
-		String tabName = tabContent.getClass().getName();
-		if (!tabName.equals(lastLoaded)) {
-			lastLoaded = tabName;
+		if (!tabContent.equals(lastLoaded)) {
+			lastLoaded = tabContent;
 			tabPane.setPrefHeight(rootView.getMinHeight());
 			tabPane.getTabs().clear();
 			tabPane.getTabs().add(tabContent);

@@ -10,6 +10,8 @@ public class Cardapio {
 	@Property(name = "cardapio_id", primaryKey = true)
 	private Integer cardapioId;
 	private String nome;
+
+	@Property(name = "ingredientes", type = "TEXT NOT NULL")
 	private String ingredientes;
 	private double preco;
 	private String imagem;
@@ -65,4 +67,14 @@ public class Cardapio {
 		this.tipo = tipo;
 	}
 
+	@Override public String toString() {
+		return "Cardapio{" +
+				"cardapioId=" + cardapioId +
+				", nome='" + nome + '\'' +
+				", ingredientes='" + ingredientes + '\'' +
+				", preco=" + preco +
+				", imagem='" + imagem + '\'' +
+				", tipo=" + tipo +
+				'}';
+	}
 }

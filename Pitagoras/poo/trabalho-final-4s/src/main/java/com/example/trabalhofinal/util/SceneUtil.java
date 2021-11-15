@@ -2,8 +2,12 @@ package com.example.trabalhofinal.util;
 
 import static com.example.trabalhofinal.config.ResourceConfig.bundle;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
@@ -49,5 +53,12 @@ public class SceneUtil {
 		stage.setScene(scene);
 		stage.setMinHeight(DEFAULT_SCENE_HEIGHT);
 		stage.setMinWidth(DEFAULT_SCENE_WIDTH);
+	}
+
+	public static VBox label(String label, Node node) {
+		VBox vBox = new VBox(new Label(label), node);
+		vBox.setAlignment(Pos.TOP_LEFT);
+		vBox.setSpacing(2);
+		return vBox;
 	}
 }

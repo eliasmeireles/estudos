@@ -1,11 +1,10 @@
 package com.example.trabalhofinal.component;
 
 import static com.example.trabalhofinal.config.ResourceConfig.bundle;
+import static com.example.trabalhofinal.util.SceneUtil.label;
 import javafx.geometry.Pos;
-import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
@@ -72,13 +71,6 @@ public class UsuarioFormComponent extends VBox {
 
 	private Usuario build() {
 		return new Usuario(usuarioId, nome.getText(), senha.getText(), login.getText(), permissaoComboBox.getValue());
-	}
-
-	private VBox label(String label, Node node) {
-		VBox vBox = new VBox(new Label(label), node);
-		vBox.setAlignment(Pos.TOP_LEFT);
-		vBox.setSpacing(2);
-		return vBox;
 	}
 
 	public void setUsuario(Usuario usuario) {

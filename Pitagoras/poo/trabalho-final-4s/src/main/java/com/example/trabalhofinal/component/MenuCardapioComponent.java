@@ -10,6 +10,7 @@ import java.io.IOException;
 
 import com.example.trabalhofinal.controller.CardapioController;
 import com.example.trabalhofinal.controller.delegate.TabMenuDelegate;
+import com.example.trabalhofinal.model.CardapioTipo;
 
 public class MenuCardapioComponent extends AppMenu {
 
@@ -21,9 +22,9 @@ public class MenuCardapioComponent extends AppMenu {
 	public MenuCardapioComponent(TabMenuDelegate delegate) throws IOException {
 		super(bundle.getString("label.cardapio"), resource.icon("plate", 18, 20));
 		this.delegate = delegate;
-		this.pratosController = new CardapioController(new PratosTabComponent());
-		this.cafesController = new CardapioController(new CafesTabComponent());
-		this.bebidasController = new CardapioController(new BebidasTabComponent());
+		this.pratosController = new CardapioController(CardapioTipo.PRATOS);
+		this.cafesController = new CardapioController(CardapioTipo.CAFES);
+		this.bebidasController = new CardapioController(CardapioTipo.BEBIDAS);
 		init();
 	}
 
@@ -42,6 +43,6 @@ public class MenuCardapioComponent extends AppMenu {
 	}
 
 	@Override public Tab tabInicial() {
-		return new PratosTabComponent();
+		return pratosController.getTab();
 	}
 }

@@ -16,6 +16,10 @@ public enum CardapioTipo {
 		this.nome = nome;
 	}
 
+	@Override public String toString() {
+		return nome;
+	}
+
 	public static CardapioTipo from(Object value) {
 		try {
 			for (CardapioTipo usuarioPermissao : values()) {
