@@ -33,14 +33,6 @@ public class QueryUtil {
 		throw new IllegalCallerException("Classe sem a anotação " + Table.class.getName());
 	}
 
-	public static String validaQueryTabelaCollection(Class<?> tClass, Field field) {
-		final Collection collection = field.getAnnotation(Collection.class);
-		if (collection != null) {
-			return gerarQueryTableCollection(tClass, collection);
-		}
-		return null;
-	}
-
 	public static SqlFieldData fieldType(Field field) {
 		final Property annotation = field.getAnnotation(Property.class);
 
@@ -63,7 +55,7 @@ public class QueryUtil {
 				.replace("STRING", "VARCHAR(255)");
 	}
 
-	private static String gerarQueryTableCollection(Class<?> tClass, Collection collection) {
+	public static String gerarQueryTableCollection(Class<?> tClass, Collection collection) {
 		final String fkParent = QueryUtil.getForeignKeyName(tClass);
 		final String fkChild = QueryUtil.getForeignKeyName(collection.target());
 		final String tableNameParent = QueryUtil.getTableName(tClass);

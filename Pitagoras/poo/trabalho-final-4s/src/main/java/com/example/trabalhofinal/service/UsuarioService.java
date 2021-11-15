@@ -50,7 +50,7 @@ public class UsuarioService {
 			return atulizarUsuario(usuario);
 		} else {
 			try {
-				if (validaUsuario(usuario) && repository.savar(usuario)) {
+				if (validaUsuario(usuario) && repository.salvar(usuario)) {
 					return new ServiceResponse(true, bundle.getString("label.usuario.salvo"));
 				}
 			} catch (DadosUsuarioInvalido dadosUsuarioInvalido) {

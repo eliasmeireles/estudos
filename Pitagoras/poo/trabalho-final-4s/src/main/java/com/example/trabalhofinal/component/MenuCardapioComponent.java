@@ -35,6 +35,6 @@ public class MenuCardapioComponent extends AppMenu {
 	}
 
 	@Override public Tab tabInicial() {
-		return null;
+		return new PratosTabComponent();
 	}
 }

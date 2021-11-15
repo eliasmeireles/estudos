@@ -2,7 +2,7 @@ package com.example.trabalhofinal.db.repository;
 
 import static com.example.trabalhofinal.db.repository.util.QueryUtil.fieldType;
 import static com.example.trabalhofinal.db.repository.util.QueryUtil.foreingKeyQuery;
-import static com.example.trabalhofinal.db.repository.util.QueryUtil.validaQueryTabelaCollection;
+import static com.example.trabalhofinal.db.repository.util.QueryUtil.gerarQueryTableCollection;
 
 import java.lang.reflect.Field;
 import java.sql.SQLException;
@@ -52,7 +52,7 @@ class CreateTableRepository {
 	}
 
 	public boolean criarQueryTabelasTabela() throws SQLException, ClassNotFoundException {
-		criarQueryTabelasTabela(tClass, validaClass());
+		criarQueryTabelasTabela(tClass);
 		try (final Statement statement = DatabaseConnector.connector
 				.getConnection()
 				.createStatement()) {
@@ -65,8 +65,9 @@ class CreateTableRepository {
 		return true;
 	}
 
-	private void criarQueryTabelasTabela(Class<?> tClass, Table annotation) throws SQLException, ClassNotFoundException {
-		final TableQuery tableQuery = new TableQuery(annotation.name());
+	private void criarQueryTabelasTabela(Class<?> tClass) throws SQLException, ClassNotFoundException {
+		final Table table = tClass.getAnnotation(Table.class);
+		final TableQuery tableQuery = new TableQuery(table.name());
 		criarQueryAtributos(tClass, tableQuery);
 		criarTabelaCollections(tClass);
 	}
@@ -84,6 +85,15 @@ class CreateTableRepository {
 		}
 	}
 
+	public String validaQueryTabelaCollection(Class<?> tClass, Field field) throws SQLException, ClassNotFoundException {
+		final Collection collection = field.getAnnotation(Collection.class);
+		if (collection != null) {
+			criarQueryTabelasTabela(collection.target());
+			return gerarQueryTableCollection(tClass, collection);
+		}
+		return null;
+	}
+
 	private void criarQueryAtributos(Class<?> tClass, TableQuery tableQuery) throws SQLException, ClassNotFoundException {
 		for (Field field : tClass.getDeclaredFields()) {
 			gerarQueryDeAtributo(tableQuery, field);
@@ -94,7 +104,7 @@ class CreateTableRepository {
 
 	private void gerarQueryDeAtributo(TableQuery tableQuery, Field field) throws SQLException, ClassNotFoundException {
 		final Table relationShip = field.getType().getAnnotation(Table.class);
-		final Collection collections = field.getType().getAnnotation(Collection.class);
+		final Collection collections = field.getAnnotation(Collection.class);
 
 		if (relationShip != null) {
 			configuraModeloDeRelacionamento(tableQuery, field, relationShip);
@@ -113,7 +123,7 @@ class CreateTableRepository {
 		if (foreignKey == null) {
 			throw new IllegalCallerException("Uma relação entre classes deve possuir a anotação " + ForeignKey.class.getName());
 		}
-		criarQueryTabelasTabela(field.getType(), relationShip);
+		criarQueryTabelasTabela(field.getType());
 
 		final StringBuilder foreignProperties = new StringBuilder("INT");
 

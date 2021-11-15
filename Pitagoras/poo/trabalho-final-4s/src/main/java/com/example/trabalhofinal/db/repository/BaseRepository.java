@@ -67,7 +67,7 @@ public abstract class BaseRepository<T> {
 		return result;
 	}
 
-	public boolean savar(T objeto) throws Exception {
+	public boolean salvar(T objeto) throws Exception {
 
 		final StringBuilder insertQuery = new StringBuilder("INSERT INTO ")
 				.append(nomeTable)
@@ -170,10 +170,10 @@ public abstract class BaseRepository<T> {
 			final Object value = resultSet.getObject(keyName);
 
 			if (field.canAccess(newInstance)) {
-				field.set(newInstance, valuedAdatper(field, value));
+				field.set(newInstance, valuedAdapter(field, value));
 			} else {
 				field.setAccessible(true);
-				field.set(newInstance, valuedAdatper(field, value));
+				field.set(newInstance, valuedAdapter(field, value));
 				field.setAccessible(false);
 			}
 		}
@@ -181,7 +181,7 @@ public abstract class BaseRepository<T> {
 	}
 
 	@SuppressWarnings("unchecked")
-	private <T> T valuedAdatper(Field field, Object value) throws Exception {
+	private <T> T valuedAdapter(Field field, Object value) throws Exception {
 		final PropertyAdapter annotation = field.getAnnotation(PropertyAdapter.class);
 
 		if (annotation != null) {
