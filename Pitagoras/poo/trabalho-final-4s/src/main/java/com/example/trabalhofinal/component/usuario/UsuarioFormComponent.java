@@ -1,4 +1,4 @@
-package com.example.trabalhofinal.component;
+package com.example.trabalhofinal.component.usuario;
 
 import static com.example.trabalhofinal.config.ResourceConfig.bundle;
 import static com.example.trabalhofinal.util.SceneUtil.label;

@@ -1,4 +1,4 @@
-package com.example.trabalhofinal.component;
+package com.example.trabalhofinal.component.cardapio;
 
 import static com.example.trabalhofinal.config.ResourceConfig.bundle;
 import static com.example.trabalhofinal.util.SceneUtil.label;
@@ -55,7 +55,7 @@ public class CardapioFormComponent extends VBox {
 		getChildren().add(label(bundle.getString("label.imagem.url"), urlImagem));
 		getChildren().add(label(bundle.getString("label.preco"), preco));
 		getChildren().add(label(bundle.getString("label.ingredientes"), ingredientes));
-
+		ingredientes.setMaxHeight(455);
 		HBox hBox = new HBox(cadastar, limpar);
 		hBox.setSpacing(3);
 		hBox.setAlignment(Pos.TOP_CENTER);
@@ -64,7 +64,8 @@ public class CardapioFormComponent extends VBox {
 	}
 
 	public void width(double width) {
-		setPrefWidth(width);
+		setMinWidth(width);
+		setMaxWidth(width);
 	}
 
 	private void configuraBotao() {
@@ -74,6 +75,7 @@ public class CardapioFormComponent extends VBox {
 
 	private Cardapio build() {
 		final Cardapio cardapio = new Cardapio();
+		cardapio.setCardapioId(cardapioId);
 		cardapio.setImagem(urlImagem.getText());
 		cardapio.setNome(nome.getText());
 		cardapio.setPreco(Double.parseDouble(preco.getText()));
@@ -82,7 +84,11 @@ public class CardapioFormComponent extends VBox {
 	}
 
 	public void setCardapito(Cardapio cardapio) {
-
+		cardapioId = cardapio.getCardapioId();
+		nome.setText(cardapio.getNome());
+		urlImagem.setText(cardapio.getImagem());
+		preco.setText(String.valueOf(cardapio.getPreco()));
+		ingredientes.setText(cardapio.getIngredientes());
 	}
 
 	public void clear() {
@@ -90,6 +96,7 @@ public class CardapioFormComponent extends VBox {
 		ingredientes.clear();
 		urlImagem.clear();
 		preco.clear();
+		cardapioId = null;
 	}
 
 	public interface CadapioFormDelegate {

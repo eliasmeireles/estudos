@@ -1,16 +1,21 @@
 package com.example.trabalhofinal.controller;
 
+import javafx.application.Platform;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 
 import java.io.IOException;
+import java.net.URL;
+import java.util.ResourceBundle;
 
 import com.example.trabalhofinal.interator.LoginInteractor;
 import com.example.trabalhofinal.util.SceneUtil;
 
-public class LoginController implements LoginInteractor.LoginDelegate {
+public class LoginController implements Initializable, LoginInteractor.LoginDelegate {
 
 	private final LoginInteractor interactor;
 
@@ -19,6 +24,9 @@ public class LoginController implements LoginInteractor.LoginDelegate {
 
 	@FXML
 	private PasswordField password;
+
+	@FXML
+	private Button login;
 
 	@FXML
 	private Label loginFailed;
@@ -45,5 +53,11 @@ public class LoginController implements LoginInteractor.LoginDelegate {
 		username.setText(null);
 		password.setText(null);
 		loginFailed.setVisible(true);
+	}
+
+	@Override public void initialize(URL url, ResourceBundle resourceBundle) {
+		username.setText("elias");
+		password.setText("123456");
+		Platform.runLater(() -> login.fire());
 	}
 }

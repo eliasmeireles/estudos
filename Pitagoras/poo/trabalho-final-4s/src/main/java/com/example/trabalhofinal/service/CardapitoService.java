@@ -19,6 +19,9 @@ public class CardapitoService {
 	}
 
 	public boolean salvar(Cardapio cardapio) {
+		if (cardapio.getCardapioId() != null) {
+			return atualizar(cardapio);
+		}
 		try {
 			return repository.salvar(cardapio);
 		} catch (Exception e) {

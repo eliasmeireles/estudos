@@ -1,11 +1,13 @@
-package com.example.trabalhofinal.component;
+package com.example.trabalhofinal.component.usuario;
 
+import javafx.application.Platform;
 import javafx.scene.layout.GridPane;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import com.example.trabalhofinal.App;
+import com.example.trabalhofinal.component.CardComponent;
 import com.example.trabalhofinal.model.Usuario;
 
 public class ListaUsuariosComponent extends GridPane {
@@ -30,17 +32,17 @@ public class ListaUsuariosComponent extends GridPane {
 	}
 
 	private void reajustar() {
-		App.mainStage.widthProperty().addListener((observableValue, number, t1) -> reload());
+		App.mainStage.widthProperty().addListener((observableValue, number, t1) -> Platform.runLater(this::reload));
+		App.mainStage.heightProperty().addListener((observableValue, number, t1) -> Platform.runLater(this::reload));
 	}
 
 	public void reload() {
 		getChildren().clear();
-
 		int row = 0;
 		int column = 0;
 		int count = 0;
-		final double cardWidth = 325;
-		final long totalCards = Math.round(App.mainStage.getWidth() / (cardWidth + (cardWidth * 0.87)));
+		final double cardWidth = 355;
+		final long totalCards = Math.round(App.mainStage.getWidth() / (cardWidth + (cardWidth * 0.3)));
 		for (Usuario usuario : usuarios) {
 			final CardComponent usuarioComponent = new UsuarioComponent(usuario, delegate);
 			usuarioComponent.setMinWidth(cardWidth);

@@ -9,13 +9,11 @@ import com.example.trabalhofinal.App;
 
 public class ResourceUtil {
 
-	public static final ResourceUtil resource = new ResourceUtil();
-
 	private ResourceUtil() {
 
 	}
 
-	public ImageView icon(String icon, double width, double height) throws IOException {
+	public static ImageView icon(String icon, double width, double height) throws IOException {
 		final URL resource = App.class.getResource(String.format("icons/%s.png", icon));
 		if (resource != null) {
 			final ImageView imageView = new ImageView(resource.toExternalForm());
@@ -26,7 +24,7 @@ public class ResourceUtil {
 		throw new IOException("File not found");
 	}
 
-	public ImageView icon(String icon) throws IOException {
+	public static ImageView icon(String icon) throws IOException {
 		final URL resource = App.class.getResource(String.format("icons/%s.png", icon));
 		if (resource != null) {
 			final ImageView imageView = new ImageView(resource.toExternalForm());

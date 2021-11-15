@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.util.List;
 
 import com.example.trabalhofinal.component.AppMenu;
-import com.example.trabalhofinal.component.MenuCardapioComponent;
+import com.example.trabalhofinal.component.cardapio.MenuCardapioComponent;
 import com.example.trabalhofinal.controller.delegate.TabMenuDelegate;
 
 public class GarcomMenuFactory implements MainMenuFactory {

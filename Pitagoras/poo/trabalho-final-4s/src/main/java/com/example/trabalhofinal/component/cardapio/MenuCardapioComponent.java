@@ -1,16 +1,17 @@
-package com.example.trabalhofinal.component;
+package com.example.trabalhofinal.component.cardapio;
 
 import static com.example.trabalhofinal.component.ViewBuilder.novoMenuItem;
 import static com.example.trabalhofinal.config.ResourceConfig.bundle;
-import static com.example.trabalhofinal.util.ResourceUtil.resource;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.Tab;
 
 import java.io.IOException;
 
+import com.example.trabalhofinal.component.AppMenu;
 import com.example.trabalhofinal.controller.CardapioController;
 import com.example.trabalhofinal.controller.delegate.TabMenuDelegate;
 import com.example.trabalhofinal.model.CardapioTipo;
+import com.example.trabalhofinal.util.ResourceUtil;
 
 public class MenuCardapioComponent extends AppMenu {
 
@@ -20,7 +21,7 @@ public class MenuCardapioComponent extends AppMenu {
 	private final CardapioController bebidasController;
 
 	public MenuCardapioComponent(TabMenuDelegate delegate) throws IOException {
-		super(bundle.getString("label.cardapio"), resource.icon("plate", 18, 20));
+		super(bundle.getString("label.cardapio"), ResourceUtil.icon("plate", 18, 20));
 		this.delegate = delegate;
 		this.pratosController = new CardapioController(CardapioTipo.PRATOS);
 		this.cafesController = new CardapioController(CardapioTipo.CAFES);

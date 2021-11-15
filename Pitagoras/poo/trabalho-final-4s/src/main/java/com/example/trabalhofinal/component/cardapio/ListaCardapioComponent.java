@@ -1,5 +1,6 @@
-package com.example.trabalhofinal.component;
+package com.example.trabalhofinal.component.cardapio;
 
+import javafx.application.Platform;
 import javafx.scene.layout.GridPane;
 
 import java.util.ArrayList;
@@ -15,6 +16,7 @@ public class ListaCardapioComponent extends GridPane {
 	public ListaCardapioComponent(CardapioTabComponent.CardapioDelegate delegate) {
 		this.delegate = delegate;
 		this.cardapios = new ArrayList<>();
+		reajustar();
 	}
 
 	public void setCardapios(List<Cardapio> cardapios) {
@@ -22,9 +24,13 @@ public class ListaCardapioComponent extends GridPane {
 		reload();
 	}
 
+	private void reajustar() {
+		App.mainStage.widthProperty().addListener((observableValue, number, t1) -> Platform.runLater(this::reload));
+	}
+
 	public void reload() {
 		getChildren().clear();
-
+		setMaxWidth(App.mainStage.getWidth() - 325);
 		int row = 0;
 		int column = 0;
 		int count = 0;

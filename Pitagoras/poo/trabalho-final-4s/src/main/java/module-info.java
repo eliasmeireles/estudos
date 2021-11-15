@@ -19,5 +19,7 @@ module com.example.trabalhofinal {
 	exports com.example.trabalhofinal.util;
 	exports com.example.trabalhofinal.component;
 	exports com.example.trabalhofinal.model;
+	exports com.example.trabalhofinal.component.cardapio;
+	exports com.example.trabalhofinal.component.usuario;
 
 }

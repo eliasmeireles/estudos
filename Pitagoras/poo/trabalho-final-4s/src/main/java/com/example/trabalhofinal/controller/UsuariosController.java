@@ -1,6 +1,6 @@
 package com.example.trabalhofinal.controller;
 
-import com.example.trabalhofinal.component.UsuariosTabComponent;
+import com.example.trabalhofinal.component.usuario.UsuariosTabComponent;
 import com.example.trabalhofinal.model.ServiceResponse;
 import com.example.trabalhofinal.model.Usuario;
 import com.example.trabalhofinal.service.UsuarioService;
