@@ -28,12 +28,12 @@ public class UsuarioComponent extends CardComponent<HBox> {
 	private void setupComponent() {
 		try {
 			container.getChildren().add(ResourceUtil.icon("user", 50, 50));
-			container.setAlignment(Pos.CENTER);
+			container.setAlignment(Pos.CENTER_LEFT);
 			container.setSpacing(8);
 			container.getChildren().add(userData);
 			userData.setAlignment(Pos.CENTER);
 			userData.setSpacing(5);
-			userData.getChildren().add(new HLabelValorComponent(bundle.getString("label.nome"), usuario.getNome()));
+			userData.getChildren().add(new HLabelValorComponent(bundle.getString("label.nome"), usuario.getNome(), 200));
 			userData.getChildren().add(new HLabelValorComponent(bundle.getString("label.login"), usuario.getLogin()));
 			userData.getChildren().add(new HLabelValorComponent(bundle.getString("label.permissao"), usuario.getUsuarioPermissao().nome));
 		} catch (IOException e) {

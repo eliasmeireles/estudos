@@ -1,6 +1,7 @@
 package com.example.trabalhofinal.component.usuario;
 
 import javafx.application.Platform;
+import javafx.geometry.Pos;
 import javafx.scene.layout.GridPane;
 
 import java.util.ArrayList;
@@ -38,11 +39,15 @@ public class ListaUsuariosComponent extends GridPane {
 
 	public void reload() {
 		getChildren().clear();
+		setAlignment(Pos.TOP_RIGHT);
 		int row = 0;
 		int column = 0;
 		int count = 0;
-		final double cardWidth = 355;
-		final long totalCards = Math.round(App.mainStage.getWidth() / (cardWidth + (cardWidth * 0.3)));
+		final double cardWidth = 335;
+		long totalCards = Math.round(App.mainStage.getWidth() / cardWidth);
+		while (totalCards * (cardWidth + (cardWidth * 0.2)) > App.mainStage.getWidth()) {
+			totalCards--;
+		}
 		for (Usuario usuario : usuarios) {
 			final CardComponent usuarioComponent = new UsuarioComponent(usuario, delegate);
 			usuarioComponent.setMinWidth(cardWidth);
