@@ -1,13 +1,11 @@
 package com.example.trabalhofinal.db.repository;
 
-import static com.example.trabalhofinal.db.repository.util.QueryUtil.ehAtributoSimple;
-
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.example.trabalhofinal.db.annotation.Property;
-import com.example.trabalhofinal.util.StringUitl;
+import com.example.trabalhofinal.db.annotation.OneToMany;
+import com.example.trabalhofinal.db.repository.util.QueryUtil;
 
 public class QueryBuilder {
 	private final Class<?> tClass;
@@ -32,12 +30,8 @@ public class QueryBuilder {
 	}
 
 	private void gerarQueryDeAtributo(String nomeTable, Field field) {
-		if (ehAtributoSimple(field)) {
-			final Property property = field.getAnnotation(Property.class);
-			String type = StringUitl.toSnakeCase(field.getName());
-			if (property != null) {
-				type = property.name();
-			}
+		if (field.getAnnotation(OneToMany.class) == null) {
+			String type = QueryUtil.obterNomeDoAtributoNoBanco(field);
 			selectQuery.params.add(nomeTable + "." + type);
 		}
 	}

@@ -2,8 +2,8 @@ package com.example.trabalhofinal.model;
 
 import java.util.List;
 
-import com.example.trabalhofinal.db.annotation.Collection;
-import com.example.trabalhofinal.db.annotation.ForeignKey;
+import com.example.trabalhofinal.db.annotation.OneToMany;
+import com.example.trabalhofinal.db.annotation.OneToOne;
 import com.example.trabalhofinal.db.annotation.Property;
 import com.example.trabalhofinal.db.annotation.Table;
 
@@ -15,13 +15,13 @@ public class UsuarioTest {
 	private String nome;
 	private String email;
 	private String cpf;
-	@ForeignKey
+	@OneToOne
 	private Endereco endereco;
 
-	@ForeignKey
+	@OneToOne
 	private Configuracao configuracao;
 
-	@Collection(target = Endereco.class)
+	@OneToMany(target = Endereco.class)
 	private List<Endereco> enderecos;
 
 	public int getUsuarioId() {

@@ -1,5 +1,7 @@
 package com.example.trabalhofinal.db.repository;
 
+import static com.example.trabalhofinal.db.repository.util.QueryUtil.ehAtributoSimple;
+import static com.example.trabalhofinal.db.repository.util.QueryUtil.obterNomeDoAtributoNoBanco;
 import static com.example.trabalhofinal.util.GenericsClassUtil.getGenericTypeClass;
 
 import java.lang.reflect.Constructor;
@@ -15,17 +17,19 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.example.trabalhofinal.db.adapter.Adapter;
+import com.example.trabalhofinal.db.annotation.OneToMany;
+import com.example.trabalhofinal.db.annotation.OneToOne;
 import com.example.trabalhofinal.db.annotation.Property;
 import com.example.trabalhofinal.db.annotation.PropertyAdapter;
 import com.example.trabalhofinal.db.annotation.Table;
 import com.example.trabalhofinal.db.connector.DatabaseConnector;
 import com.example.trabalhofinal.util.StringUitl;
 
-public abstract class BaseRepository<T> {
+@SuppressWarnings("unchecked") public abstract class BaseRepository<T> {
 
 	private final Logger logger = Logger.getAnonymousLogger();
 
-	private final Class<T> tClass;
+	protected final Class<T> tClass;
 	protected final String selectAllQuery;
 	protected final String nomeTable;
 	private final DatabaseConnector connector;
@@ -33,6 +37,14 @@ public abstract class BaseRepository<T> {
 	protected BaseRepository() {
 		connector = DatabaseConnector.connector;
 		this.tClass = getGenericTypeClass(getClass());
+		new CreateTableRepository(tClass);
+		nomeTable = getNomeTable();
+		this.selectAllQuery = new QueryBuilder(tClass, nomeTable).build();
+	}
+
+	protected BaseRepository(Class<?> tClass) {
+		connector = DatabaseConnector.connector;
+		this.tClass = (Class<T>) tClass;
 		new CreateTableRepository(tClass);
 		nomeTable = getNomeTable();
 		this.selectAllQuery = new QueryBuilder(tClass, nomeTable).build();
@@ -165,20 +177,50 @@ public abstract class BaseRepository<T> {
 		final Constructor<?> constructor = tClass.getConstructors()[0];
 		T newInstance = (T) constructor.newInstance();
 
-		for (Field field : newInstance.getClass().getDeclaredFields()) {
-			final Property property = field.getAnnotation(Property.class);
-			final String keyName = property != null ? property.name() : StringUitl.toSnakeCase(field.getName());
-			final Object value = resultSet.getObject(keyName);
+		carregarAtributosSimples(resultSet, newInstance);
+		return newInstance;
+	}
 
-			if (field.canAccess(newInstance)) {
-				field.set(newInstance, valuedAdapter(field, value));
-			} else {
-				field.setAccessible(true);
-				field.set(newInstance, valuedAdapter(field, value));
-				field.setAccessible(false);
+	private Field carregarAtributosSimples(ResultSet resultSet, T newInstance) throws Exception {
+		Field fieldPk = null;
+		Object valuePk = null;
+		for (Field field : newInstance.getClass().getDeclaredFields()) {
+			final String keyName = obterNomeDoAtributoNoBanco(field);
+
+			if (ehAtributoSimple(field)) {
+				Object value = resultSet.getObject(keyName);
+				final Property property = field.getAnnotation(Property.class);
+				fieldPk = property != null && property.primaryKey() ? field : fieldPk;
+				valuePk = property != null && property.primaryKey() ? value : valuePk;
+				adicionarValorDoAtributo(newInstance, field, value);
+			} else if (field.getAnnotation(OneToOne.class) != null) {
+				Object value = resultSet.getObject(keyName);
+				final OneToOneRepository oneToOneRepository = new OneToOneRepository(field.getType(), field, value);
+				adicionarValorDoAtributo(newInstance, field, oneToOneRepository.find());
+			} else if (ehCollection(fieldPk, valuePk, field)) {
+				final OneToManyRepository oneToManyRepository =
+						new OneToManyRepository(newInstance.getClass(), field.getAnnotation(OneToMany.class).target(), field, fieldPk, valuePk);
+				adicionarValorDoAtributo(newInstance, field, oneToManyRepository.find());
 			}
 		}
-		return newInstance;
+		if (fieldPk == null) {
+			throw new IllegalCallerException("Id da class " + tClass.getName() + " não encontrado.");
+		}
+		return fieldPk;
+	}
+
+	private boolean ehCollection(Field fieldPk, Object valuePk, Field field) {
+		return field.getAnnotation(OneToMany.class) != null && fieldPk != null && valuePk != null;
+	}
+
+	private void adicionarValorDoAtributo(T newInstance, Field field, Object value) throws Exception {
+		if (field.canAccess(newInstance)) {
+			field.set(newInstance, valuedAdapter(field, value));
+		} else {
+			field.setAccessible(true);
+			field.set(newInstance, valuedAdapter(field, value));
+			field.setAccessible(false);
+		}
 	}
 
 	@SuppressWarnings("unchecked")

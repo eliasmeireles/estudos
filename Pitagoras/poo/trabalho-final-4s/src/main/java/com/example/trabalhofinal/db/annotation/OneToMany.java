@@ -7,14 +7,7 @@ import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
-public @interface ForeignKey {
+public @interface OneToMany {
 
-	String foreignKeyName() default "";
-
-	String columnName() default "";
-
-	boolean unique() default false;
-
-	boolean required() default false;
-
+	Class<?> target();
 }

@@ -12,9 +12,6 @@ public class Mesa {
 	@Property(name = "numero", type = "INT NOT NULL UNIQUE")
 	private Integer numero;
 
-	@Property(name = "numero_cadeiras", type = "INT NOT NULL")
-	private Integer numeroCadeiras;
-
 	@Property(name = "ativa", type = "BOOLEAN DEFAULT TRUE")
 	private boolean ativa;
 
@@ -32,14 +29,6 @@ public class Mesa {
 
 	public void setNumero(Integer numero) {
 		this.numero = numero;
-	}
-
-	public Integer getNumeroCadeiras() {
-		return numeroCadeiras;
-	}
-
-	public void setNumeroCadeiras(Integer numeroCadeiras) {
-		this.numeroCadeiras = numeroCadeiras;
 	}
 
 	public boolean isAtiva() {

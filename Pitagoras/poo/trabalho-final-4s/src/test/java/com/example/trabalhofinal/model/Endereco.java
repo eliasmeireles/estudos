@@ -1,6 +1,6 @@
 package com.example.trabalhofinal.model;
 
-import com.example.trabalhofinal.db.annotation.ForeignKey;
+import com.example.trabalhofinal.db.annotation.OneToOne;
 import com.example.trabalhofinal.db.annotation.Property;
 import com.example.trabalhofinal.db.annotation.Table;
 
@@ -13,7 +13,7 @@ public class Endereco {
 	private String logradouro;
 	private String numero;
 
-	@ForeignKey
+	@OneToOne
 	private Cidade cidade;
 
 	public int getEnderecoId() {

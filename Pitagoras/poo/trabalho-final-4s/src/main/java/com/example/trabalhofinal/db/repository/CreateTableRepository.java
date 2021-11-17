@@ -13,8 +13,8 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.example.trabalhofinal.db.annotation.Collection;
-import com.example.trabalhofinal.db.annotation.ForeignKey;
+import com.example.trabalhofinal.db.annotation.OneToMany;
+import com.example.trabalhofinal.db.annotation.OneToOne;
 import com.example.trabalhofinal.db.annotation.Table;
 import com.example.trabalhofinal.db.connector.DatabaseConnector;
 import com.example.trabalhofinal.db.repository.util.QueryUtil;
@@ -91,7 +91,7 @@ class CreateTableRepository {
 	}
 
 	public String validaQueryTabelaCollection(Class<?> tClass, Field field) throws SQLException, ClassNotFoundException {
-		final Collection collection = field.getAnnotation(Collection.class);
+		final OneToMany collection = field.getAnnotation(OneToMany.class);
 		if (collection != null) {
 			criarQueryTabelasTabela(collection.target());
 			return gerarQueryTableCollection(tClass, collection);
@@ -109,7 +109,7 @@ class CreateTableRepository {
 
 	private void gerarQueryDeAtributo(TableQuery tableQuery, Field field) throws SQLException, ClassNotFoundException {
 		final Table relationShip = field.getType().getAnnotation(Table.class);
-		final Collection collections = field.getAnnotation(Collection.class);
+		final OneToMany collections = field.getAnnotation(OneToMany.class);
 
 		if (relationShip != null) {
 			configuraModeloDeRelacionamento(tableQuery, field, relationShip);
@@ -126,9 +126,9 @@ class CreateTableRepository {
 	}
 
 	private void configuraModeloDeRelacionamento(TableQuery tableQuery, Field field, Table relationShip) throws SQLException, ClassNotFoundException {
-		final ForeignKey foreignKey = field.getAnnotation(ForeignKey.class);
+		final OneToOne foreignKey = field.getAnnotation(OneToOne.class);
 		if (foreignKey == null) {
-			throw new IllegalCallerException("Uma relação entre classes deve possuir a anotação " + ForeignKey.class.getName());
+			throw new IllegalCallerException("Uma relação entre classes deve possuir a anotação " + OneToOne.class.getName());
 		}
 		criarQueryTabelasTabela(field.getType());
 

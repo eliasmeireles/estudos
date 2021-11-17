@@ -4,10 +4,10 @@ import com.example.trabalhofinal.db.annotation.Property;
 import com.example.trabalhofinal.db.annotation.PropertyAdapter;
 import com.example.trabalhofinal.db.annotation.Table;
 
-@Table(name = "user")
+@Table(name = "usuarios")
 public class Usuario {
 
-	@Property(name = "user_id", primaryKey = true)
+	@Property(name = "usuario_id", primaryKey = true)
 	private Integer userId;
 
 	@Property(name = "nome", type = "VARCHAR(100) NOT NULL")
