@@ -1,4 +1,4 @@
-package com.example.trabalhofinal.component;
+package com.example.trabalhofinal.component.menu;
 
 import javafx.geometry.Pos;
 import javafx.scene.layout.VBox;

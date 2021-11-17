@@ -11,7 +11,7 @@ import java.util.List;
 
 import com.example.trabalhofinal.App;
 import com.example.trabalhofinal.component.AppTabComponent;
-import com.example.trabalhofinal.component.MenuSair;
+import com.example.trabalhofinal.component.menu.MenuSair;
 import com.example.trabalhofinal.controller.CardapioController;
 import com.example.trabalhofinal.model.Cardapio;
 import com.example.trabalhofinal.model.CardapioTipo;

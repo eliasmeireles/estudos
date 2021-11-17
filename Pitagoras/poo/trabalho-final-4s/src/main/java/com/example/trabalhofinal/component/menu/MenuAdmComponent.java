@@ -1,4 +1,4 @@
-package com.example.trabalhofinal.component;
+package com.example.trabalhofinal.component.menu;
 
 import static com.example.trabalhofinal.component.ViewBuilder.novoMenuItem;
 import static com.example.trabalhofinal.config.ResourceConfig.bundle;
@@ -7,6 +7,7 @@ import javafx.scene.control.Tab;
 
 import java.io.IOException;
 
+import com.example.trabalhofinal.component.AppMenu;
 import com.example.trabalhofinal.controller.UsuariosController;
 import com.example.trabalhofinal.controller.delegate.TabMenuDelegate;
 import com.example.trabalhofinal.util.ResourceUtil;

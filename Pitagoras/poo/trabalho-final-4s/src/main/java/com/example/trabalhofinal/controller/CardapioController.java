@@ -4,10 +4,10 @@ import static com.example.trabalhofinal.config.ResourceConfig.bundle;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 
-import com.example.trabalhofinal.component.MenuEditar;
-import com.example.trabalhofinal.component.MenuSair;
-import com.example.trabalhofinal.component.MenuSelecionar;
 import com.example.trabalhofinal.component.cardapio.CardapioTabComponent;
+import com.example.trabalhofinal.component.menu.MenuEditar;
+import com.example.trabalhofinal.component.menu.MenuSair;
+import com.example.trabalhofinal.component.menu.MenuSelecionar;
 import com.example.trabalhofinal.model.Cardapio;
 import com.example.trabalhofinal.model.CardapioTipo;
 import com.example.trabalhofinal.model.Usuario;
