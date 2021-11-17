@@ -21,5 +21,6 @@ module com.example.trabalhofinal {
 	exports com.example.trabalhofinal.model;
 	exports com.example.trabalhofinal.component.cardapio;
 	exports com.example.trabalhofinal.component.usuario;
+	exports com.example.trabalhofinal.component.mesa;
 
 }

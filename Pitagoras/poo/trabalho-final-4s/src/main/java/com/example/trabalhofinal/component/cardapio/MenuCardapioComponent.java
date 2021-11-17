@@ -21,7 +21,7 @@ public class MenuCardapioComponent extends AppMenu {
 	private final CardapioController bebidasController;
 
 	public MenuCardapioComponent(TabMenuDelegate delegate) throws IOException {
-		super(bundle.getString("label.cardapio"), ResourceUtil.icon("plate", 18, 20));
+		super(bundle.getString("label.cardapios"), ResourceUtil.icon("plate", 18, 20));
 		this.delegate = delegate;
 		this.pratosController = new CardapioController(CardapioTipo.PRATOS);
 		this.cafesController = new CardapioController(CardapioTipo.CAFES);

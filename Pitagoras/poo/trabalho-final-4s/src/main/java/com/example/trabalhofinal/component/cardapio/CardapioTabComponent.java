@@ -21,20 +21,19 @@ public class CardapioTabComponent extends AppTabComponent {
 	private final ScrollPane scrollPane;
 	private final CardapioTipo tipo;
 	private final ListaCardapioComponent listaCardapioComponent;
-	private HBox content;
+	private final HBox content;
 	private CardapioFormComponent cardapioFormComponent;
-	private CardapioDetalhesComponent cardapioComponent;
-	private CardapioDelegate delegate;
+	private final CardapioDelegate delegate;
 
 	public CardapioTabComponent(CardapioDelegate delegate, CardapioTipo tipo) {
-		super(String.format("%s -> %s", bundle.getString("label.cardapio"), tipo.nome));
+		super(String.format("%s -> %s", bundle.getString("label.cardapios"), tipo.nome));
 		this.delegate = delegate;
 		this.listaCardapioComponent = new ListaCardapioComponent(delegate);
 		this.tipo = tipo;
 		this.content = new HBox();
 		this.scrollPane = new ScrollPane(listaCardapioComponent);
 		reajustarPane();
-		adicionarFormDeEdicao(delegate);
+		adicionarFormDeEdicao();
 		setRoot(content);
 		configuraScrollPane();
 		content.setSpacing(25);
@@ -42,7 +41,7 @@ public class CardapioTabComponent extends AppTabComponent {
 		content.getChildren().add(scrollPane);
 	}
 
-	private void adicionarFormDeEdicao(CardapioDelegate delegate) {
+	private void adicionarFormDeEdicao() {
 		if (delegate.temPemissaoAdm()) {
 			this.cardapioFormComponent = new CardapioFormComponent(delegate);
 			this.cardapioFormComponent.width(225);
