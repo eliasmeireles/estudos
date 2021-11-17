@@ -1,5 +1,6 @@
 package com.example.trabalhofinal.db.repository;
 
+import static com.example.trabalhofinal.db.repository.util.QueryUtil.ehAtributoSimple;
 import static com.example.trabalhofinal.db.repository.util.QueryUtil.fieldType;
 import static com.example.trabalhofinal.db.repository.util.QueryUtil.foreingKeyQuery;
 import static com.example.trabalhofinal.db.repository.util.QueryUtil.gerarQueryTableCollection;
@@ -58,8 +59,12 @@ class CreateTableRepository {
 				.createStatement()) {
 
 			for (String query : queries) {
-				statement.execute(query);
-				System.out.println(query);
+				try {
+					statement.execute(query);
+					System.out.println(query);
+				} catch (Exception e) {
+					logger.log(Level.WARNING, e.getMessage());
+				}
 			}
 		}
 		return true;
@@ -114,8 +119,10 @@ class CreateTableRepository {
 	}
 
 	private void configuraQueryDeAtributo(TableQuery tableQuery, Field field) {
-		final QueryUtil.SqlFieldData fieldData = fieldType(field);
-		tableQuery.addFieldQuery(fieldData.getColumnName(), fieldData.getColumnType());
+		if (ehAtributoSimple(field)) {
+			final QueryUtil.SqlFieldData fieldData = fieldType(field);
+			tableQuery.addFieldQuery(fieldData.getColumnName(), fieldData.getColumnType());
+		}
 	}
 
 	private void configuraModeloDeRelacionamento(TableQuery tableQuery, Field field, Table relationShip) throws SQLException, ClassNotFoundException {

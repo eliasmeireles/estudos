@@ -3,6 +3,7 @@ package com.example.trabalhofinal.db.repository.util;
 import java.lang.reflect.Field;
 
 import com.example.trabalhofinal.db.annotation.Collection;
+import com.example.trabalhofinal.db.annotation.ForeignKey;
 import com.example.trabalhofinal.db.annotation.Property;
 import com.example.trabalhofinal.db.annotation.Table;
 import com.example.trabalhofinal.util.StringUitl;
@@ -44,6 +45,10 @@ public class QueryUtil {
 		}
 
 		return new SqlFieldData(StringUitl.toSnakeCase(field.getName()), type);
+	}
+
+	public static boolean ehAtributoSimple(Field field) {
+		return field.getAnnotation(ForeignKey.class) == null && field.getAnnotation(Collection.class) == null;
 	}
 
 	public static String columnType(Field field) {

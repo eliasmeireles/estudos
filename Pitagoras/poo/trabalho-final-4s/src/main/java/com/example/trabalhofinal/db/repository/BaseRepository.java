@@ -39,6 +39,7 @@ public abstract class BaseRepository<T> {
 	}
 
 	public List<T> findAll() {
+		System.out.println(selectAllQuery);
 		return findAll(null);
 	}
 

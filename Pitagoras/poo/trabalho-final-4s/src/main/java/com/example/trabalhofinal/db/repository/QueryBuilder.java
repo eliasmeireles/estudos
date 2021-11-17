@@ -1,12 +1,12 @@
 package com.example.trabalhofinal.db.repository;
 
+import static com.example.trabalhofinal.db.repository.util.QueryUtil.ehAtributoSimple;
+
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.example.trabalhofinal.db.annotation.ForeignKey;
 import com.example.trabalhofinal.db.annotation.Property;
-import com.example.trabalhofinal.db.annotation.Table;
 import com.example.trabalhofinal.util.StringUitl;
 
 public class QueryBuilder {
@@ -32,13 +32,8 @@ public class QueryBuilder {
 	}
 
 	private void gerarQueryDeAtributo(String nomeTable, Field field) {
-		final ForeignKey foreignKey = field.getAnnotation(ForeignKey.class);
-
-		if (foreignKey != null) {
-			queryRelaciomanento(nomeTable, field, foreignKey);
-		} else {
+		if (ehAtributoSimple(field)) {
 			final Property property = field.getAnnotation(Property.class);
-
 			String type = StringUitl.toSnakeCase(field.getName());
 			if (property != null) {
 				type = property.name();
@@ -47,29 +42,8 @@ public class QueryBuilder {
 		}
 	}
 
-	private void queryRelaciomanento(String nomeTable, Field field, ForeignKey relationShip) {
-		final Table table = field.getType().getAnnotation(Table.class);
-		final String nomeColuna = relationShip.columnName().isBlank() ? table.name() + "_id" : relationShip.columnName();
-
-		final StringBuilder join = new StringBuilder("INNER JOIN ")
-				.append(table.name())
-				.append(" ON ")
-				.append(nomeTable)
-				.append(".")
-				.append(nomeColuna)
-				.append(" = ")
-				.append(table.name())
-				.append(".")
-				.append(relationShip.foreignKeyName().isBlank() ? StringUitl.toSnakeCase(table.name()) + "_id": relationShip.foreignKeyName())
-				.append(" ");
-
-		selectQuery.joins.add(join.toString());
-		prepararQuerySelectAll(table.name(), field.getType());
-	}
-
 	private class SelectQueryBuilder {
 		private final List<String> params = new ArrayList<>();
-		private final List<String> joins = new ArrayList<>();
 
 		private String build() {
 			final StringBuilder tablesFields = new StringBuilder();
@@ -78,16 +52,12 @@ public class QueryBuilder {
 						.append(", ");
 			}
 
-			final StringBuilder fullQuery = new StringBuilder("SELECT ")
+			return new StringBuilder("SELECT ")
 					.append(tablesFields.subSequence(0, tablesFields.length() - 2))
 					.append(" FROM ")
 					.append(nomeTable)
-					.append(" ");
-
-			for (String join : joins) {
-				fullQuery.append(join);
-			}
-			return fullQuery.toString();
+					.append(" ")
+					.toString();
 		}
 	}
 }
