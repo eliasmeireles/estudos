@@ -6,7 +6,7 @@ import com.example.trabalhofinal.db.repository.BaseRepository;
 import com.example.trabalhofinal.model.Cardapio;
 import com.example.trabalhofinal.model.CardapioTipo;
 
-public class CardapioRepository extends BaseRepository<Cardapio> {
+public class CardapioRepository extends BaseRepository<Cardapio, Integer> {
 
 	private static CardapioRepository instance;
 
@@ -24,6 +24,6 @@ public class CardapioRepository extends BaseRepository<Cardapio> {
 	public List<Cardapio> listarPorTipo(CardapioTipo tipo) {
 		final StringBuilder query = new StringBuilder("WHERE ")
 				.append(fieldFilter("tipo"));
-		return findAll(query.toString(), tipo.name());
+		return findAll(query, tipo.name());
 	}
 }

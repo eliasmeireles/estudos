@@ -9,7 +9,7 @@ import com.example.trabalhofinal.db.annotation.OneToMany;
 import com.example.trabalhofinal.db.annotation.Property;
 import com.example.trabalhofinal.db.annotation.Table;
 
-public class OneToManyRepository extends BaseRepository<Object> {
+public class OneToManyRepository extends BaseRepository<Object, Object> {
 
 	private final Class<?> mainClass;
 	private final String tableName;
@@ -42,7 +42,7 @@ public class OneToManyRepository extends BaseRepository<Object> {
 		return findAll(querBuilder(), foreignKeyValue);
 	}
 
-	private String querBuilder() {
+	private StringBuilder querBuilder() {
 		final String mainClassTableName = getTableName(mainClass);
 		final String collectionTableName = mainClassTableName + "_" + this.tableName + "s";
 		return new StringBuilder("INNER JOIN ")
@@ -59,7 +59,6 @@ public class OneToManyRepository extends BaseRepository<Object> {
 				.append(collectionTableName)
 				.append(".")
 				.append(targetPkName)
-				.append(" = ?")
-				.toString();
+				.append(" = ?");
 	}
 }

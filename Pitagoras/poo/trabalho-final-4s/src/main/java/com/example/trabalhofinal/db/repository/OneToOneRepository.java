@@ -4,7 +4,7 @@ import static com.example.trabalhofinal.db.repository.util.QueryUtil.obterNomeDo
 
 import java.lang.reflect.Field;
 
-public class OneToOneRepository extends BaseRepository<Object> {
+public class OneToOneRepository extends BaseRepository<Object, Object> {
 
 	private final Field fromField;
 	private final Object foreignKeyValue;
@@ -20,7 +20,7 @@ public class OneToOneRepository extends BaseRepository<Object> {
 				.append(obterNomeDoAtributoNoBanco(fromField))
 				.append(" = ?");
 
-		return findAll(query.toString(), foreignKeyValue).stream()
+		return findAll(query, foreignKeyValue).stream()
 				.findFirst().orElse(null);
 	}
 }

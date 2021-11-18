@@ -50,7 +50,7 @@ public class UsuarioService {
 			return atulizarUsuario(usuario);
 		} else {
 			try {
-				if (validaUsuario(usuario) && repository.salvar(usuario)) {
+				if (validaUsuario(usuario) && repository.salvar(usuario) != null) {
 					return new ServiceResponse(true, bundle.getString("label.usuario.salvo"));
 				}
 			} catch (DadosUsuarioInvalido dadosUsuarioInvalido) {
@@ -67,7 +67,7 @@ public class UsuarioService {
 
 	public ServiceResponse atulizarUsuario(Usuario usuario) {
 		try {
-			if (validaUsuario(usuario) && repository.atualizar(usuario)) {
+			if (validaUsuario(usuario) && repository.atualizar(usuario) != null) {
 				return new ServiceResponse(true, bundle.getString("label.usuario.atualizado"));
 			}
 		} catch (DadosUsuarioInvalido dadosUsuarioInvalido) {

@@ -23,7 +23,8 @@ public class CardapitoService {
 			return atualizar(cardapio);
 		}
 		try {
-			return repository.salvar(cardapio);
+			repository.salvar(cardapio);
+			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -32,7 +33,8 @@ public class CardapitoService {
 
 	public boolean atualizar(Cardapio cardapio) {
 		try {
-			return repository.atualizar(cardapio);
+			repository.atualizar(cardapio);
+			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

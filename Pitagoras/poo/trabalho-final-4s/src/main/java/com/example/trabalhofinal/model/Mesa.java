@@ -12,8 +12,8 @@ public class Mesa {
 	@Property(name = "numero", type = "INT NOT NULL UNIQUE")
 	private Integer numero;
 
-	@Property(name = "ativa", type = "BOOLEAN DEFAULT TRUE")
-	private boolean ativa;
+	@Property(name = "disponivel", type = "BOOLEAN NOT NULL DEFAULT TRUE")
+	private boolean disponivel;
 
 	public Integer getMesaId() {
 		return mesaId;
@@ -31,11 +31,11 @@ public class Mesa {
 		this.numero = numero;
 	}
 
-	public boolean isAtiva() {
-		return ativa;
+	public boolean isDisponivel() {
+		return disponivel;
 	}
 
-	public void setAtiva(boolean ativa) {
-		this.ativa = ativa;
+	public void setDisponivel(boolean disponivel) {
+		this.disponivel = disponivel;
 	}
 }

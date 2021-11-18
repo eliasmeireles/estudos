@@ -13,7 +13,11 @@ public class Pedido {
 	@Property(name = "pedido_id", primaryKey = true)
 	private Integer pedidoId;
 
+	@Property(name = "valor_total", type = "DOUBLE NOT NULL")
 	private Double valorTotal;
+
+	@Property(name = "finalizado", type = "BOOLEAN NOT NULL DEFAULT false")
+	private boolean finalizado;
 
 	@OneToOne
 	private Mesa mesa;
@@ -35,6 +39,14 @@ public class Pedido {
 
 	public void setValorTotal(Double valorTotal) {
 		this.valorTotal = valorTotal;
+	}
+
+	public boolean isFinalizado() {
+		return finalizado;
+	}
+
+	public void setFinalizado(boolean finalizado) {
+		this.finalizado = finalizado;
 	}
 
 	public Mesa getMesa() {

@@ -5,7 +5,7 @@ import java.util.List;
 import com.example.trabalhofinal.db.repository.BaseRepository;
 import com.example.trabalhofinal.model.Usuario;
 
-public class UsuarioRepository extends BaseRepository<Usuario> {
+public class UsuarioRepository extends BaseRepository<Usuario, Integer> {
 
 	private static UsuarioRepository instance;
 
@@ -26,7 +26,7 @@ public class UsuarioRepository extends BaseRepository<Usuario> {
 				.append(" AND ")
 				.append(fieldFilter("senha"));
 
-		final List<Usuario> usuarios = findAll(query.toString(), login, password);
+		final List<Usuario> usuarios = findAll(query, login, password);
 		return usuarios.stream().findFirst().orElse(null);
 
 	}

@@ -2,13 +2,17 @@ package com.example.trabalhofinal.db.repository;
 
 import static com.example.trabalhofinal.db.repository.util.QueryUtil.ehAtributoSimple;
 import static com.example.trabalhofinal.db.repository.util.QueryUtil.obterNomeDoAtributoNoBanco;
+import static com.example.trabalhofinal.util.GenericsClassUtil.ehCollection;
 import static com.example.trabalhofinal.util.GenericsClassUtil.getGenericTypeClass;
+import static com.example.trabalhofinal.util.GenericsClassUtil.obterValorDoField;
+import static com.example.trabalhofinal.util.GenericsClassUtil.valuedAdapter;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -16,16 +20,14 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.example.trabalhofinal.db.adapter.Adapter;
 import com.example.trabalhofinal.db.annotation.OneToMany;
 import com.example.trabalhofinal.db.annotation.OneToOne;
 import com.example.trabalhofinal.db.annotation.Property;
-import com.example.trabalhofinal.db.annotation.PropertyAdapter;
 import com.example.trabalhofinal.db.annotation.Table;
 import com.example.trabalhofinal.db.connector.DatabaseConnector;
 import com.example.trabalhofinal.util.StringUitl;
 
-@SuppressWarnings("unchecked") public abstract class BaseRepository<T> {
+@SuppressWarnings("unchecked") public abstract class BaseRepository<T, ID> {
 
 	private final Logger logger = Logger.getAnonymousLogger();
 
@@ -51,16 +53,15 @@ import com.example.trabalhofinal.util.StringUitl;
 	}
 
 	public List<T> findAll() {
-		System.out.println(selectAllQuery);
 		return findAll(null);
 	}
 
-	public List<T> findAll(String query, Object... params) {
+	public List<T> findAll(StringBuilder query, Object... params) {
 		List<T> result = new ArrayList<>();
 		String fullQuery = selectAllQuery;
 
 		if (query != null) {
-			fullQuery = selectAllQuery.concat(" ").concat(query);
+			fullQuery = selectAllQuery.concat(" ").concat(query.toString());
 		}
 
 		try (PreparedStatement statement = connector.getConnection().prepareStatement(fullQuery)) {
@@ -80,7 +81,7 @@ import com.example.trabalhofinal.util.StringUitl;
 		return result;
 	}
 
-	public boolean salvar(T objeto) throws Exception {
+	public ID salvar(T objeto) throws Exception {
 
 		final StringBuilder insertQuery = new StringBuilder("INSERT INTO ")
 				.append(nomeTable)
@@ -109,7 +110,7 @@ import com.example.trabalhofinal.util.StringUitl;
 		return executarInsertUpdateQuerySql(valores, query);
 	}
 
-	public boolean atualizar(T objeto) throws Exception {
+	public ID atualizar(T objeto) throws Exception {
 		final StringBuilder updateSql = new StringBuilder("UPDATE ")
 				.append(nomeTable)
 				.append(" SET ");
@@ -138,38 +139,25 @@ import com.example.trabalhofinal.util.StringUitl;
 		}
 
 		String fullSql = updateSql.substring(0, updateSql.length() - 2) + " WHERE " + nomePk + " = " + pk;
-
-		return executarInsertUpdateQuerySql(valores, fullSql);
+		executarInsertUpdateQuerySql(valores, fullSql);
+		return (ID) pk;
 	}
 
-	private boolean executarInsertUpdateQuerySql(Map<Integer, Object> valores, String query) throws SQLException, ClassNotFoundException {
+	private ID executarInsertUpdateQuerySql(Map<Integer, Object> valores, String query) throws SQLException, ClassNotFoundException {
 		logger.log(Level.INFO, query);
 
-		try (PreparedStatement statement = connector.getConnection().prepareStatement(query)) {
+		try (PreparedStatement statement = connector.getConnection().prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
 			for (Map.Entry<Integer, Object> valor : valores.entrySet()) {
 				statement.setObject(valor.getKey(), valor.getValue());
 			}
 			statement.execute();
-		}
-		return true;
-	}
 
-	private Object obterValorDoField(Field field, Object objeto) throws Exception {
-		Object value;
-		if (field.canAccess(objeto)) {
-			value = field.get(objeto);
-		} else {
-			field.setAccessible(true);
-			value = field.get(objeto);
-			field.setAccessible(false);
+			ResultSet resultSet = statement.getGeneratedKeys();
+			if (resultSet.next()) {
+				return (ID) resultSet.getString(1);
+			}
 		}
-		final PropertyAdapter annotation = field.getAnnotation(PropertyAdapter.class);
-
-		if (annotation != null) {
-			final Adapter<?> instance = (Adapter<?>) annotation.adapter().getConstructors()[0].newInstance();
-			return instance.fromObject(value);
-		}
-		return value;
+		return null;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -177,11 +165,11 @@ import com.example.trabalhofinal.util.StringUitl;
 		final Constructor<?> constructor = tClass.getConstructors()[0];
 		T newInstance = (T) constructor.newInstance();
 
-		carregarAtributosSimples(resultSet, newInstance);
+		carregarAtributos(resultSet, newInstance);
 		return newInstance;
 	}
 
-	private Field carregarAtributosSimples(ResultSet resultSet, T newInstance) throws Exception {
+	private Field carregarAtributos(ResultSet resultSet, T newInstance) throws Exception {
 		Field fieldPk = null;
 		Object valuePk = null;
 		for (Field field : newInstance.getClass().getDeclaredFields()) {
@@ -209,10 +197,6 @@ import com.example.trabalhofinal.util.StringUitl;
 		return fieldPk;
 	}
 
-	private boolean ehCollection(Field fieldPk, Object valuePk, Field field) {
-		return field.getAnnotation(OneToMany.class) != null && fieldPk != null && valuePk != null;
-	}
-
 	private void adicionarValorDoAtributo(T newInstance, Field field, Object value) throws Exception {
 		if (field.canAccess(newInstance)) {
 			field.set(newInstance, valuedAdapter(field, value));
@@ -221,17 +205,6 @@ import com.example.trabalhofinal.util.StringUitl;
 			field.set(newInstance, valuedAdapter(field, value));
 			field.setAccessible(false);
 		}
-	}
-
-	@SuppressWarnings("unchecked")
-	private <T> T valuedAdapter(Field field, Object value) throws Exception {
-		final PropertyAdapter annotation = field.getAnnotation(PropertyAdapter.class);
-
-		if (annotation != null) {
-			final Adapter<T> instance = (Adapter<T>) annotation.adapter().getConstructors()[0].newInstance();
-			return instance.toObject(value);
-		}
-		return (T) value;
 	}
 
 	protected String fieldFilter(String nome) {
