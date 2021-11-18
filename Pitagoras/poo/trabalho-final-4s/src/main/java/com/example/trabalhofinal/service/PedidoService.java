@@ -50,4 +50,12 @@ public class PedidoService {
 		}
 		return false;
 	}
+
+	public void deleteById(Integer id) {
+		try {
+			repository.deleteById(id);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 }

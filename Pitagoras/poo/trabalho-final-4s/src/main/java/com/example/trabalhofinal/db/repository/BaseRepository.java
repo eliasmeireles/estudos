@@ -1,13 +1,16 @@
 package com.example.trabalhofinal.db.repository;
 
 import static com.example.trabalhofinal.db.repository.util.QueryUtil.obterNomeDoAtributoNoBanco;
+import static com.example.trabalhofinal.util.GenericsClassUtil.adicionarValorDoAtributo;
 import static com.example.trabalhofinal.util.GenericsClassUtil.ehAtributoSimple;
-import static com.example.trabalhofinal.util.GenericsClassUtil.ehCollection;
 import static com.example.trabalhofinal.util.GenericsClassUtil.ehOneToMany;
 import static com.example.trabalhofinal.util.GenericsClassUtil.ehOneToOne;
+import static com.example.trabalhofinal.util.GenericsClassUtil.ehPk;
+import static com.example.trabalhofinal.util.GenericsClassUtil.findAllCollectionMembers;
+import static com.example.trabalhofinal.util.GenericsClassUtil.findObjectPk;
 import static com.example.trabalhofinal.util.GenericsClassUtil.getGenericTypeClass;
+import static com.example.trabalhofinal.util.GenericsClassUtil.getPkData;
 import static com.example.trabalhofinal.util.GenericsClassUtil.obterValorDoField;
-import static com.example.trabalhofinal.util.GenericsClassUtil.valuedAdapter;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
@@ -22,11 +25,11 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.example.trabalhofinal.db.annotation.OneToMany;
 import com.example.trabalhofinal.db.annotation.OneToOne;
 import com.example.trabalhofinal.db.annotation.Property;
 import com.example.trabalhofinal.db.annotation.Table;
 import com.example.trabalhofinal.db.connector.DatabaseConnector;
+import com.example.trabalhofinal.util.GenericsClassUtil;
 
 @SuppressWarnings("unchecked") public abstract class BaseRepository<T, ID> {
 
@@ -155,6 +158,35 @@ import com.example.trabalhofinal.db.connector.DatabaseConnector;
 		return contador;
 	}
 
+	public void deleteById(ID id) throws Exception {
+		final GenericsClassUtil.PrimaryKeyData<Object> primaryKeyData = findObjectPk(newInstance());
+		oneToManyDeleteMode(id);
+		final StringBuilder query = new StringBuilder("DELETE FROM ")
+				.append(nomeTable)
+				.append(" WHERE ")
+				.append(fieldFilter(primaryKeyData.getPkName()));
+
+		delete(query, id);
+	}
+
+	public void delete(StringBuilder query, Object... params) throws Exception {
+		try (final PreparedStatement statement = connector.getConnection().prepareStatement(query.toString())) {
+			int contador = 1;
+
+			for (Object param : params) {
+				statement.setObject(contador, param);
+				contador++;
+			}
+			statement.execute();
+		}
+	}
+
+	private void oneToManyDeleteMode(ID id) throws Exception {
+		for (Field field : findAllCollectionMembers(newInstance())) {
+			new OneToManyRepository(tClass, field).collectionDelete(id);
+		}
+	}
+
 	private ID executarInsertUpdateQuerySql(Map<Integer, Object> valores, String query) throws SQLException, ClassNotFoundException {
 		logger.log(Level.INFO, query);
 
@@ -172,50 +204,35 @@ import com.example.trabalhofinal.db.connector.DatabaseConnector;
 		return null;
 	}
 
-	@SuppressWarnings("unchecked")
-	protected T newInstanceFromResult(ResultSet resultSet) throws Exception {
-		final Constructor<?> constructor = tClass.getConstructors()[0];
-		T newInstance = (T) constructor.newInstance();
+	private void carregarAtributos(ResultSet resultSet, T newInstance) throws Exception {
+		GenericsClassUtil.PrimaryKeyData<Object> primaryKeyData = null;
 
-		carregarAtributos(resultSet, newInstance);
-		return newInstance;
-	}
-
-	private Field carregarAtributos(ResultSet resultSet, T newInstance) throws Exception {
-		Field fieldPk = null;
-		Object valuePk = null;
 		for (Field field : newInstance.getClass().getDeclaredFields()) {
-			final String keyName = obterNomeDoAtributoNoBanco(field);
-
-			if (ehAtributoSimple(field)) {
-				Object value = resultSet.getObject(keyName);
-				final Property property = field.getAnnotation(Property.class);
-				fieldPk = property != null && property.primaryKey() ? field : fieldPk;
-				valuePk = property != null && property.primaryKey() ? value : valuePk;
-				adicionarValorDoAtributo(newInstance, field, value);
-			} else if (field.getAnnotation(OneToOne.class) != null) {
-				Object value = resultSet.getObject(keyName);
-				final OneToOneRepository oneToOneRepository = new OneToOneRepository(field);
-				adicionarValorDoAtributo(newInstance, field, oneToOneRepository.find(value));
-			} else if (ehCollection(fieldPk, valuePk, field)) {
-				final OneToManyRepository oneToManyRepository =
-						new OneToManyRepository(newInstance.getClass(), field.getAnnotation(OneToMany.class).target(), field, fieldPk, valuePk);
-				adicionarValorDoAtributo(newInstance, field, oneToManyRepository.find());
+			if (ehPk(field)) {
+				primaryKeyData = getPkData(newInstance, field);
 			}
+			setValorDoAtributo(resultSet, newInstance, primaryKeyData, field);
 		}
-		if (fieldPk == null) {
+
+		if (primaryKeyData == null) {
 			throw new IllegalCallerException("Id da class " + tClass.getName() + " não encontrado.");
 		}
-		return fieldPk;
 	}
 
-	private void adicionarValorDoAtributo(T newInstance, Field field, Object value) throws Exception {
-		if (field.canAccess(newInstance)) {
-			field.set(newInstance, valuedAdapter(field, value));
-		} else {
-			field.setAccessible(true);
-			field.set(newInstance, valuedAdapter(field, value));
-			field.setAccessible(false);
+	private void setValorDoAtributo(ResultSet resultSet, T newInstance,
+			GenericsClassUtil.PrimaryKeyData<Object> primaryKeyData, Field field) throws Exception {
+		final String keyName = obterNomeDoAtributoNoBanco(field);
+
+		if (ehAtributoSimple(field)) {
+			Object value = resultSet.getObject(keyName);
+			adicionarValorDoAtributo(newInstance, field, value);
+		} else if (field.getAnnotation(OneToOne.class) != null) {
+			Object value = resultSet.getObject(keyName);
+			final OneToOneRepository oneToOneRepository = new OneToOneRepository(field);
+			adicionarValorDoAtributo(newInstance, field, oneToOneRepository.find(value));
+		} else if (ehOneToMany(field) && primaryKeyData != null) {
+			final OneToManyRepository oneToManyRepository = new OneToManyRepository(newInstance.getClass(), field);
+			adicionarValorDoAtributo(newInstance, field, oneToManyRepository.find(primaryKeyData.getPkValue()));
 		}
 	}
 
@@ -229,5 +246,16 @@ import com.example.trabalhofinal.db.connector.DatabaseConnector;
 		} catch (Exception e) {
 			throw new IllegalArgumentException("Classe informada não possui a anotação de " + Table.class.getName());
 		}
+	}
+
+	protected T newInstanceFromResult(ResultSet resultSet) throws Exception {
+		T newInstance = newInstance();
+		carregarAtributos(resultSet, newInstance);
+		return newInstance;
+	}
+
+	protected T newInstance() throws Exception {
+		final Constructor<?> constructor = tClass.getConstructors()[0];
+		return (T) constructor.newInstance();
 	}
 }

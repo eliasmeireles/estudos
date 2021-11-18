@@ -1,15 +1,21 @@
 package com.example.trabalhofinal.util;
 
+import static com.example.trabalhofinal.db.repository.util.QueryUtil.obterNomeDoAtributoNoBanco;
+
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import com.example.trabalhofinal.db.adapter.Adapter;
 import com.example.trabalhofinal.db.annotation.OneToMany;
 import com.example.trabalhofinal.db.annotation.OneToOne;
+import com.example.trabalhofinal.db.annotation.Property;
 import com.example.trabalhofinal.db.annotation.PropertyAdapter;
 
-public class GenericsClassUtil {
+@SuppressWarnings("unchecked") public class GenericsClassUtil {
 
 	private GenericsClassUtil() {
 
@@ -58,10 +64,6 @@ public class GenericsClassUtil {
 		return value;
 	}
 
-	public static boolean ehCollection(Field fieldPk, Object valuePk, Field field) {
-		return field.getAnnotation(OneToMany.class) != null && fieldPk != null && valuePk != null;
-	}
-
 	@SuppressWarnings("unchecked")
 	public static <T> T valuedAdapter(Field field, Object value) throws Exception {
 		final PropertyAdapter annotation = field.getAnnotation(PropertyAdapter.class);
@@ -71,5 +73,57 @@ public class GenericsClassUtil {
 			return instance.toObject(value);
 		}
 		return (T) value;
+	}
+
+	public static List<Field> findAllCollectionMembers(Object object) {
+		return Arrays.stream(object.getClass().getDeclaredFields())
+				.filter(f -> f.getAnnotation(OneToMany.class) != null)
+				.collect(Collectors.toList());
+	}
+
+	public static <ID> PrimaryKeyData<ID> findObjectPk(Object object) throws Exception {
+		for (Field field : object.getClass().getDeclaredFields()) {
+			if (ehPk(field)) {
+				return getPkData(object, field);
+			}
+		}
+		throw new IllegalCallerException("Object não possui uma primary key");
+	}
+
+	public static boolean ehPk(Field field) {
+		final Property annotation = field.getAnnotation(Property.class);
+		return annotation != null && annotation.primaryKey();
+	}
+
+	public static <ID> PrimaryKeyData<ID> getPkData(Object object, Field field) throws Exception {
+		return new PrimaryKeyData<>((ID) obterValorDoField(field, object), obterNomeDoAtributoNoBanco(field));
+	}
+
+	public static <T> void adicionarValorDoAtributo(T newInstance, Field field, Object value) throws Exception {
+		if (field.canAccess(newInstance)) {
+			field.set(newInstance, valuedAdapter(field, value));
+		} else {
+			field.setAccessible(true);
+			field.set(newInstance, valuedAdapter(field, value));
+			field.setAccessible(false);
+		}
+	}
+
+	public static class PrimaryKeyData<ID> {
+		private final ID pkValue;
+		private final String pkName;
+
+		public PrimaryKeyData(ID pkValue, String pkName) {
+			this.pkValue = pkValue;
+			this.pkName = pkName;
+		}
+
+		public ID getPkValue() {
+			return pkValue;
+		}
+
+		public String getPkName() {
+			return pkName;
+		}
 	}
 }

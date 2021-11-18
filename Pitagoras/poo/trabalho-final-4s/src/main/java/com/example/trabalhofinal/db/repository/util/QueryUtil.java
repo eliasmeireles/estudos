@@ -8,7 +8,7 @@ import com.example.trabalhofinal.db.annotation.Property;
 import com.example.trabalhofinal.db.annotation.Table;
 import com.example.trabalhofinal.util.StringUitl;
 
-public class QueryUtil {
+@SuppressWarnings("unchecked") public class QueryUtil {
 
 	private QueryUtil() {
 
@@ -46,7 +46,6 @@ public class QueryUtil {
 
 		return new SqlFieldData(StringUitl.toSnakeCase(field.getName()), type);
 	}
-
 
 	public static String columnType(Field field) {
 		if (Enum.class.isAssignableFrom(field.getType())) {

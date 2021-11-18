@@ -49,7 +49,7 @@ class CreateTableRepository {
 		if (annotation != null) {
 			return annotation;
 		}
-		throw new IllegalArgumentException("Classe informada não possui a anotação de " + Table.class.getName());
+		throw new IllegalArgumentException("Classe " + tClass.getName() + "  informada não possui a anotação de " + Table.class.getName());
 	}
 
 	public boolean criarQueryTabelasTabela() throws SQLException, ClassNotFoundException {
