@@ -6,6 +6,7 @@ import java.lang.reflect.Type;
 
 import com.example.trabalhofinal.db.adapter.Adapter;
 import com.example.trabalhofinal.db.annotation.OneToMany;
+import com.example.trabalhofinal.db.annotation.OneToOne;
 import com.example.trabalhofinal.db.annotation.PropertyAdapter;
 
 public class GenericsClassUtil {
@@ -26,13 +27,26 @@ public class GenericsClassUtil {
 		throw new IllegalStateException("Class is not parametrized with generic type!!! Please use extends <> ");
 	}
 
-	public static Object obterValorDoField(Field field, Object objeto) throws Exception {
+	public static boolean ehAtributoSimple(Field field) {
+		return field.getAnnotation(OneToOne.class) == null &&
+				field.getAnnotation(OneToMany.class) == null;
+	}
+
+	public static boolean ehOneToMany(Field field) {
+		return field.getAnnotation(OneToMany.class) != null;
+	}
+
+	public static boolean ehOneToOne(Field field) {
+		return field.getAnnotation(OneToOne.class) != null;
+	}
+
+	public static Object obterValorDoField(Field field, Object parent) throws Exception {
 		Object value;
-		if (field.canAccess(objeto)) {
-			value = field.get(objeto);
+		if (field.canAccess(parent)) {
+			value = field.get(parent);
 		} else {
 			field.setAccessible(true);
-			value = field.get(objeto);
+			value = field.get(parent);
 			field.setAccessible(false);
 		}
 		final PropertyAdapter annotation = field.getAnnotation(PropertyAdapter.class);

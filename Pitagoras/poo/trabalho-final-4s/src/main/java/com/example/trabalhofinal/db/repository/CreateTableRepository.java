@@ -1,9 +1,9 @@
 package com.example.trabalhofinal.db.repository;
 
-import static com.example.trabalhofinal.db.repository.util.QueryUtil.ehAtributoSimple;
 import static com.example.trabalhofinal.db.repository.util.QueryUtil.fieldType;
 import static com.example.trabalhofinal.db.repository.util.QueryUtil.foreingKeyQuery;
 import static com.example.trabalhofinal.db.repository.util.QueryUtil.gerarQueryTableCollection;
+import static com.example.trabalhofinal.util.GenericsClassUtil.ehAtributoSimple;
 
 import java.lang.reflect.Field;
 import java.sql.SQLException;

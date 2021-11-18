@@ -1,8 +1,10 @@
 package com.example.trabalhofinal.db.repository;
 
-import static com.example.trabalhofinal.db.repository.util.QueryUtil.ehAtributoSimple;
 import static com.example.trabalhofinal.db.repository.util.QueryUtil.obterNomeDoAtributoNoBanco;
+import static com.example.trabalhofinal.util.GenericsClassUtil.ehAtributoSimple;
 import static com.example.trabalhofinal.util.GenericsClassUtil.ehCollection;
+import static com.example.trabalhofinal.util.GenericsClassUtil.ehOneToMany;
+import static com.example.trabalhofinal.util.GenericsClassUtil.ehOneToOne;
 import static com.example.trabalhofinal.util.GenericsClassUtil.getGenericTypeClass;
 import static com.example.trabalhofinal.util.GenericsClassUtil.obterValorDoField;
 import static com.example.trabalhofinal.util.GenericsClassUtil.valuedAdapter;
@@ -93,13 +95,21 @@ import com.example.trabalhofinal.util.StringUitl;
 		int contador = 1;
 		for (Field field : objeto.getClass().getDeclaredFields()) {
 			final Property property = field.getAnnotation(Property.class);
-			final String keyName = property != null ? property.name() : StringUitl.toSnakeCase(field.getName());
-			if (property == null || !property.primaryKey()) {
+			final String keyName = obterNomeDoAtributoNoBanco(field);
+
+			if ((property == null || !property.primaryKey()) && !ehOneToMany(field)) {
 				insertQuery.append(keyName)
 						.append(", ");
 				params.append("?, ");
 
-				valores.put(contador, obterValorDoField(field, objeto));
+				Object valor = obterValorDoField(field, objeto);
+
+				if (ehOneToOne(field)) {
+					valor = new OneToOneRepository(field)
+							.salvar(obterValorDoField(field, objeto));
+				}
+
+				valores.put(contador, valor);
 				contador++;
 			}
 		}
@@ -183,8 +193,8 @@ import com.example.trabalhofinal.util.StringUitl;
 				adicionarValorDoAtributo(newInstance, field, value);
 			} else if (field.getAnnotation(OneToOne.class) != null) {
 				Object value = resultSet.getObject(keyName);
-				final OneToOneRepository oneToOneRepository = new OneToOneRepository(field.getType(), field, value);
-				adicionarValorDoAtributo(newInstance, field, oneToOneRepository.find());
+				final OneToOneRepository oneToOneRepository = new OneToOneRepository(field);
+				adicionarValorDoAtributo(newInstance, field, oneToOneRepository.find(value));
 			} else if (ehCollection(fieldPk, valuePk, field)) {
 				final OneToManyRepository oneToManyRepository =
 						new OneToManyRepository(newInstance.getClass(), field.getAnnotation(OneToMany.class).target(), field, fieldPk, valuePk);

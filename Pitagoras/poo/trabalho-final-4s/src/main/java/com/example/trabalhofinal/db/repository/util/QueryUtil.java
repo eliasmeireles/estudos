@@ -47,9 +47,6 @@ public class QueryUtil {
 		return new SqlFieldData(StringUitl.toSnakeCase(field.getName()), type);
 	}
 
-	public static boolean ehAtributoSimple(Field field) {
-		return field.getAnnotation(OneToOne.class) == null && field.getAnnotation(OneToMany.class) == null;
-	}
 
 	public static String columnType(Field field) {
 		if (Enum.class.isAssignableFrom(field.getType())) {
