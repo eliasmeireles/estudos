@@ -17,13 +17,15 @@ public class PedidoController implements PediosTabComponent.PedidoDelegate {
 
 	public PediosTabComponent getTab() {
 		final Mesa mesa = new Mesa();
-		mesa.setNumero(11);
+		mesa.setMesaId(1);
+		mesa.setNumero(1);
 		final Pedido pedido = new Pedido();
+		pedido.setPedidoId(2);
 		pedido.setMesa(mesa);
 		pedido.setValorTotal(355.0);
-		pedido.setFinalizado(false);
+		pedido.setFinalizado(true);
 
-		pedidoService.salvar(pedido);
+		pedidoService.atualizar(pedido);
 
 		tabComponent.setPedidos(pedidoService.findAll());
 		return tabComponent;

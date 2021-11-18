@@ -27,7 +27,6 @@ import com.example.trabalhofinal.db.annotation.OneToOne;
 import com.example.trabalhofinal.db.annotation.Property;
 import com.example.trabalhofinal.db.annotation.Table;
 import com.example.trabalhofinal.db.connector.DatabaseConnector;
-import com.example.trabalhofinal.util.StringUitl;
 
 @SuppressWarnings("unchecked") public abstract class BaseRepository<T, ID> {
 
@@ -102,15 +101,7 @@ import com.example.trabalhofinal.util.StringUitl;
 						.append(", ");
 				params.append("?, ");
 
-				Object valor = obterValorDoField(field, objeto);
-
-				if (ehOneToOne(field)) {
-					valor = new OneToOneRepository(field)
-							.salvar(obterValorDoField(field, objeto));
-				}
-
-				valores.put(contador, valor);
-				contador++;
+				contador = atribuiValorDeAtributo(objeto, valores, contador, field);
 			}
 		}
 
@@ -132,14 +123,13 @@ import com.example.trabalhofinal.util.StringUitl;
 		int contador = 1;
 		for (Field field : objeto.getClass().getDeclaredFields()) {
 			final Property property = field.getAnnotation(Property.class);
-			final String keyName = property != null ? property.name() : StringUitl.toSnakeCase(field.getName());
+			final String keyName = obterNomeDoAtributoNoBanco(field);
 
-			if (property == null || !property.primaryKey()) {
+			if ((property == null || !property.primaryKey()) && !ehOneToMany(field)) {
 				updateSql.append(keyName)
 						.append(" = ?, ");
 
-				valores.put(contador, obterValorDoField(field, objeto));
-				contador++;
+				contador = atribuiValorDeAtributo(objeto, valores, contador, field);
 			}
 
 			if (property != null && property.primaryKey()) {
@@ -151,6 +141,18 @@ import com.example.trabalhofinal.util.StringUitl;
 		String fullSql = updateSql.substring(0, updateSql.length() - 2) + " WHERE " + nomePk + " = " + pk;
 		executarInsertUpdateQuerySql(valores, fullSql);
 		return (ID) pk;
+	}
+
+	private int atribuiValorDeAtributo(T objeto, Map<Integer, Object> valores, int contador, Field field) throws Exception {
+		Object valor = obterValorDoField(field, objeto);
+
+		if (ehOneToOne(field)) {
+			valor = new OneToOneRepository(field).salvar(obterValorDoField(field, objeto));
+		}
+
+		valores.put(contador, valor);
+		contador++;
+		return contador;
 	}
 
 	private ID executarInsertUpdateQuerySql(Map<Integer, Object> valores, String query) throws SQLException, ClassNotFoundException {
