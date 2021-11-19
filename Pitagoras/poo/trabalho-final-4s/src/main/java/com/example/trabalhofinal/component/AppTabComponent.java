@@ -1,9 +1,12 @@
 package com.example.trabalhofinal.component;
 
+import javafx.application.Platform;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Tab;
 import javafx.scene.layout.VBox;
+
+import com.example.trabalhofinal.App;
 
 public abstract class AppTabComponent extends Tab {
 
@@ -15,6 +18,7 @@ public abstract class AppTabComponent extends Tab {
 		this.containter = new VBox();
 		this.appAlertComponent = new AppAlertComponent(this::dismisAlert);
 		configurarContainer();
+		reajustarView();
 	}
 
 	public void setContainerSize(double width, double height) {
@@ -42,6 +46,13 @@ public abstract class AppTabComponent extends Tab {
 		containter.setFillWidth(true);
 		setContent(containter);
 	}
+
+	private void reajustarView() {
+		App.mainStage.widthProperty().addListener((observableValue, number, t1) -> Platform.runLater(this::resize));
+		App.mainStage.heightProperty().addListener((observableValue, number, t1) -> Platform.runLater(this::resize));
+	}
+
+	protected abstract void resize();
 
 	public final void setRoot(Node node) {
 		containter.getChildren().add(node);

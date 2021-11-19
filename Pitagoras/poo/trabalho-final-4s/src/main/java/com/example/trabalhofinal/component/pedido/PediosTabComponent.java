@@ -20,6 +20,10 @@ public class PediosTabComponent extends AppTabComponent {
 		System.out.println(pedidos);
 	}
 
+	@Override protected void resize() {
+
+	}
+
 	public interface PedidoDelegate {
 
 	}

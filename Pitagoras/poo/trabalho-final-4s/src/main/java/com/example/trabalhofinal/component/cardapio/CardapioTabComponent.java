@@ -1,7 +1,6 @@
 package com.example.trabalhofinal.component.cardapio;
 
 import static com.example.trabalhofinal.config.ResourceConfig.bundle;
-import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.HBox;
@@ -32,10 +31,9 @@ public class CardapioTabComponent extends AppTabComponent {
 		this.tipo = tipo;
 		this.content = new HBox();
 		this.scrollPane = new ScrollPane(listaCardapioComponent);
-		reajustarPane();
 		adicionarFormDeEdicao();
 		setRoot(content);
-		configuraScrollPane();
+		resize();
 		content.setSpacing(25);
 		content.setPadding(new Insets(16));
 		content.getChildren().add(scrollPane);
@@ -55,12 +53,8 @@ public class CardapioTabComponent extends AppTabComponent {
 		}
 	}
 
-	private void reajustarPane() {
-		App.mainStage.widthProperty().addListener((observableValue, number, t1) -> Platform.runLater(this::configuraScrollPane));
-		App.mainStage.heightProperty().addListener((observableValue, number, t1) -> Platform.runLater(this::configuraScrollPane));
-	}
-
-	private void configuraScrollPane() {
+	@Override
+	protected void resize() {
 		final int espacamento = delegate.temPemissaoAdm() ? 275 : 25;
 		scrollPane.setMaxWidth(App.mainStage.getWidth() - espacamento);
 		scrollPane.setMinWidth(App.mainStage.getWidth() - espacamento);

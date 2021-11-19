@@ -6,6 +6,7 @@ import com.example.trabalhofinal.model.Pedido;
 import com.example.trabalhofinal.repository.PedidoRepository;
 
 public class PedidoService {
+
 	private final PedidoRepository repository;
 
 	public PedidoService() {

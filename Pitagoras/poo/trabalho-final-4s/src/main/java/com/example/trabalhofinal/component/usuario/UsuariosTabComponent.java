@@ -1,7 +1,6 @@
 package com.example.trabalhofinal.component.usuario;
 
 import static com.example.trabalhofinal.config.ResourceConfig.bundle;
-import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.HBox;
@@ -27,7 +26,6 @@ public class UsuariosTabComponent extends AppTabComponent {
 		this.scrollPane = new ScrollPane(listaUsuariosComponent);
 		setRoot(content);
 		configuraContent();
-		reajustarView();
 	}
 
 	private void configuraContent() {
@@ -38,12 +36,8 @@ public class UsuariosTabComponent extends AppTabComponent {
 		this.content.getChildren().add(scrollPane);
 	}
 
-	private void reajustarView() {
-		App.mainStage.widthProperty().addListener((observableValue, number, t1) -> Platform.runLater(this::resize));
-		App.mainStage.heightProperty().addListener((observableValue, number, t1) -> Platform.runLater(this::resize));
-	}
-
-	private void resize() {
+	@Override
+	protected void resize() {
 		scrollPane.setMinWidth(App.mainStage.getWidth() - 220);
 	}
 

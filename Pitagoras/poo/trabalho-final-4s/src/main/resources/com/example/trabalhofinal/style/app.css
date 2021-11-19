@@ -38,6 +38,14 @@
     -fx-background-color: #b42f2f;
 }
 
+#success-text {
+    -fx-text-fill: #4cb42f;
+}
+
+#warning-text {
+    -fx-text-fill: #b24f13;
+}
+
 #error-alert > #mensagem-alert, #success-alert > #mensagem-alert {
     -fx-text-fill: #FFFFFF;
 }
