@@ -22,7 +22,7 @@ public class UsuarioComponent extends CardComponent<HBox> {
 		this.usuario = usuario;
 		this.userData = new VBox();
 		setupComponent();
-		setOnMouseClicked(eH -> delegate.onUsuarioSelecionado(usuario));
+		setOnMouseClicked(eH -> delegate.selecionarElemento(usuario));
 	}
 
 	private void setupComponent() {

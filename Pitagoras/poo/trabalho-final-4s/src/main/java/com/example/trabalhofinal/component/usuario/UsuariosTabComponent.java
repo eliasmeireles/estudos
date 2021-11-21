@@ -2,28 +2,21 @@ package com.example.trabalhofinal.component.usuario;
 
 import static com.example.trabalhofinal.config.ResourceConfig.bundle;
 import javafx.geometry.Insets;
-import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.HBox;
 
-import java.util.List;
-
-import com.example.trabalhofinal.App;
 import com.example.trabalhofinal.component.AppTabComponent;
+import com.example.trabalhofinal.component.ListaComponent;
 import com.example.trabalhofinal.model.Usuario;
 
-public class UsuariosTabComponent extends AppTabComponent {
+public class UsuariosTabComponent extends AppTabComponent<Usuario, UsuariosTabComponent.UsuarioTabDelegate> {
 
 	private final HBox content;
 	private final UsuarioFormComponent usuarioFormComponent;
-	private final ListaUsuariosComponent listaUsuariosComponent;
-	private final ScrollPane scrollPane;
 
 	public UsuariosTabComponent(UsuarioTabDelegate delegate) {
-		super(String.format("%s -> %s", bundle.getString("label.administracao"), bundle.getString("label.usuarios")));
+		super(delegate, String.format("%s -> %s", bundle.getString("label.administracao"), bundle.getString("label.usuarios")));
 		this.content = new HBox();
-		this.listaUsuariosComponent = new ListaUsuariosComponent(delegate);
 		this.usuarioFormComponent = new UsuarioFormComponent(delegate);
-		this.scrollPane = new ScrollPane(listaUsuariosComponent);
 		setRoot(content);
 		configuraContent();
 	}
@@ -36,13 +29,8 @@ public class UsuariosTabComponent extends AppTabComponent {
 		this.content.getChildren().add(scrollPane);
 	}
 
-	@Override
-	protected void resize() {
-		scrollPane.setMinWidth(App.mainStage.getWidth() - 220);
-	}
-
-	public void setUsuarios(List<Usuario> usuarios) {
-		listaUsuariosComponent.setUsuarios(usuarios);
+	@Override protected ListaComponent<Usuario> listaComponentBuilder(UsuarioTabDelegate delegate) {
+		return new ListaUsuariosComponent(delegate);
 	}
 
 	public void setUsuario(Usuario usuario) {
@@ -54,6 +42,5 @@ public class UsuariosTabComponent extends AppTabComponent {
 	}
 
 	public interface UsuarioTabDelegate extends UsuarioFormComponent.UsuarioFormDelegate {
-		void onUsuarioSelecionado(Usuario usuario);
 	}
 }

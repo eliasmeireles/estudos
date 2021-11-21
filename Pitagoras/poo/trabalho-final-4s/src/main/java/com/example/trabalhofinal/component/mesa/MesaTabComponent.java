@@ -2,27 +2,20 @@ package com.example.trabalhofinal.component.mesa;
 
 import static com.example.trabalhofinal.config.ResourceConfig.bundle;
 import javafx.geometry.Insets;
-import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.HBox;
 
-import java.util.List;
-
-import com.example.trabalhofinal.App;
 import com.example.trabalhofinal.component.AppTabComponent;
+import com.example.trabalhofinal.component.ListaComponent;
 import com.example.trabalhofinal.model.Mesa;
 
-public class MesaTabComponent extends AppTabComponent {
+public class MesaTabComponent extends AppTabComponent<Mesa, MesaTabComponent.MesaDelegate> {
 
 	private final MesaDelegate delegate;
-	private final ListaMesaComponent listaMesaComponent;
-	private final ScrollPane scrollPane;
 	private final HBox content;
 
 	public MesaTabComponent(MesaDelegate delegate) {
-		super(String.format("%s -> %s", bundle.getString("label.servicos"), bundle.getString("label.mesa")));
+		super(delegate, String.format("%s -> %s", bundle.getString("label.servicos"), bundle.getString("label.mesa")));
 		this.delegate = delegate;
-		this.listaMesaComponent = new ListaMesaComponent(delegate);
-		this.scrollPane = new ScrollPane(listaMesaComponent);
 		this.content = new HBox();
 		setRoot(content);
 		configuraContent();
@@ -34,16 +27,10 @@ public class MesaTabComponent extends AppTabComponent {
 		this.content.getChildren().add(scrollPane);
 	}
 
-	@Override
-	protected void resize() {
-		scrollPane.setMinWidth(App.mainStage.getWidth() - 220);
+	@Override protected ListaComponent<Mesa> listaComponentBuilder(MesaDelegate delegate) {
+		return new ListaMesaComponent(delegate);
 	}
 
-	public void setMesas(List<Mesa> mesas) {
-		listaMesaComponent.setMesas(mesas);
-	}
-
-	public interface MesaDelegate {
-		void mesaSelecionada(Mesa mesa);
+	public interface MesaDelegate extends TabMenuDelegate<Mesa> {
 	}
 }

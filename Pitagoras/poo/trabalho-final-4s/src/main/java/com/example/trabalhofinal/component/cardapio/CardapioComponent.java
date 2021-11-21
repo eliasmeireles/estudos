@@ -21,7 +21,7 @@ public class CardapioComponent extends CardComponent<HBox> {
 		this.cardapio = cardapio;
 		this.userData = new VBox();
 		setupComponent();
-		setOnMouseClicked(eH -> delegate.mostrarCardapioSelecionado(this.cardapio));
+		setOnMouseClicked(eH -> delegate.mostrarElemento(this.cardapio));
 	}
 
 	private void setupComponent() {

@@ -15,11 +15,23 @@ public class MesaController implements MesaTabComponent.MesaDelegate {
 	}
 
 	public MesaTabComponent getTab() {
-		tabComponent.setMesas(service.findByDisponivel(true));
+		tabComponent.setElementos(service.findByDisponivel(true));
 		return tabComponent;
 	}
 
-	@Override public void mesaSelecionada(Mesa mesa) {
+	@Override public void cadastrarElemento(Mesa elemento) {
+
+	}
+
+	@Override public void mostrarElemento(Mesa elemento) {
+
+	}
+
+	@Override public void editarElemento(Mesa elemento) {
+
+	}
+
+	@Override public void selecionarElemento(Mesa elemento) {
 
 	}
 }

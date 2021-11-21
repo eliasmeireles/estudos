@@ -5,11 +5,11 @@ import javafx.geometry.Pos;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 
-public class CardComponent<T extends Pane> extends VBox {
+public abstract class CardComponent<T extends Pane> extends VBox {
 
 	protected T container;
 
-	public CardComponent(T container) {
+	protected CardComponent(T container) {
 		this.container = container;
 		setId("card-component");
 		container.setId("card-container");

@@ -1,64 +1,19 @@
 package com.example.trabalhofinal.component.usuario;
 
-import javafx.application.Platform;
-import javafx.geometry.Pos;
-import javafx.scene.layout.GridPane;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import com.example.trabalhofinal.App;
 import com.example.trabalhofinal.component.CardComponent;
+import com.example.trabalhofinal.component.ListaComponent;
 import com.example.trabalhofinal.model.Usuario;
 
-public class ListaUsuariosComponent extends GridPane {
+public class ListaUsuariosComponent extends ListaComponent<Usuario> {
 
-	private List<Usuario> usuarios;
-	private UsuariosTabComponent.UsuarioTabDelegate delegate;
+	private final UsuariosTabComponent.UsuarioTabDelegate delegate;
 
 	public ListaUsuariosComponent(UsuariosTabComponent.UsuarioTabDelegate delegate) {
+		super(335, 0.2);
 		this.delegate = delegate;
-		this.usuarios = new ArrayList<>();
-		reajustar();
 	}
 
-	public void setUsuarios(List<Usuario> usuarios) {
-		this.usuarios = usuarios;
-		reload();
-	}
-
-	public void addUsuario(Usuario usuario) {
-		this.usuarios.add(usuario);
-		reload();
-	}
-
-	private void reajustar() {
-		App.mainStage.widthProperty().addListener((observableValue, number, t1) -> Platform.runLater(this::reload));
-		App.mainStage.heightProperty().addListener((observableValue, number, t1) -> Platform.runLater(this::reload));
-	}
-
-	public void reload() {
-		getChildren().clear();
-		setAlignment(Pos.TOP_RIGHT);
-		int row = 0;
-		int column = 0;
-		int count = 0;
-		final double cardWidth = 335;
-		long totalCards = Math.round(App.mainStage.getWidth() / cardWidth);
-		while (totalCards * (cardWidth + (cardWidth * 0.2)) > App.mainStage.getWidth()) {
-			totalCards--;
-		}
-		for (Usuario usuario : usuarios) {
-			final CardComponent usuarioComponent = new UsuarioComponent(usuario, delegate);
-			usuarioComponent.setMinWidth(cardWidth);
-			this.add(usuarioComponent, column, row);
-			count++;
-			column++;
-			if (count >= totalCards) {
-				row++;
-				count = 0;
-				column = 0;
-			}
-		}
+	@Override protected CardComponent<?> cardComponentBuilder(Usuario element) {
+		return new UsuarioComponent(element, delegate);
 	}
 }

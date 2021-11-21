@@ -3,48 +3,56 @@ package com.example.trabalhofinal.component;
 import javafx.application.Platform;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Tab;
 import javafx.scene.layout.VBox;
 
+import java.util.List;
+
 import com.example.trabalhofinal.App;
 
-public abstract class AppTabComponent extends Tab {
+public abstract class AppTabComponent<T, D extends AppTabComponent.TabMenuDelegate<?>> extends Tab {
 
-	private final VBox containter;
+	protected final ScrollPane scrollPane;
 	private final AppAlertComponent appAlertComponent;
+	protected final ListaComponent<T> listaComponent;
+	private final VBox container;
 
-	protected AppTabComponent(String s) {
-		super(s);
-		this.containter = new VBox();
+	protected AppTabComponent(D delegate, String tabTitulo) {
+		super(tabTitulo);
+		this.container = new VBox();
 		this.appAlertComponent = new AppAlertComponent(this::dismisAlert);
+		this.listaComponent = listaComponentBuilder(delegate);
+		this.scrollPane = new ScrollPane(listaComponent);
 		configurarContainer();
 		reajustarView();
 	}
 
-	public void setContainerSize(double width, double height) {
-		this.containter.setMinWidth(width);
-		this.containter.setMinHeight(height);
+	public void setElementos(List<T> elementos) {
+		this.listaComponent.setElementos(elementos);
 	}
+
+	protected abstract ListaComponent<T> listaComponentBuilder(D delegate);
 
 	public void showErrorAlert(String mensagem) {
 		appAlertComponent.setErrorMessage(mensagem);
-		containter.getChildren().add(0, appAlertComponent);
+		container.getChildren().add(0, appAlertComponent);
 	}
 
 	public void showSuccessAlert(String mensagem) {
 		appAlertComponent.setSuccessMensage(mensagem);
-		containter.getChildren().add(0, appAlertComponent);
+		container.getChildren().add(0, appAlertComponent);
 	}
 
 	public void dismisAlert() {
-		containter.getChildren().remove(appAlertComponent);
+		container.getChildren().remove(appAlertComponent);
 	}
 
 	private void configurarContainer() {
-		containter.setAlignment(Pos.TOP_CENTER);
-		containter.setSpacing(2);
-		containter.setFillWidth(true);
-		setContent(containter);
+		container.setAlignment(Pos.TOP_CENTER);
+		container.setSpacing(2);
+		container.setFillWidth(true);
+		setContent(container);
 	}
 
 	private void reajustarView() {
@@ -52,9 +60,22 @@ public abstract class AppTabComponent extends Tab {
 		App.mainStage.heightProperty().addListener((observableValue, number, t1) -> Platform.runLater(this::resize));
 	}
 
-	protected abstract void resize();
+	protected void resize() {
+		scrollPane.setMinWidth(App.mainStage.getWidth() - 220);
+	}
 
 	public final void setRoot(Node node) {
-		containter.getChildren().add(node);
+		container.getChildren().add(node);
+	}
+
+	public interface TabMenuDelegate<E> {
+
+		void cadastrarElemento(E elemento);
+
+		void mostrarElemento(E elemento);
+
+		void editarElemento(E elemento);
+
+		void selecionarElemento(E elemento);
 	}
 }

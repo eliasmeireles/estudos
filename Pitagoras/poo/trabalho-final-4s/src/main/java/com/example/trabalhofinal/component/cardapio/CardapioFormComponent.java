@@ -10,6 +10,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
 import com.example.trabalhofinal.App;
+import com.example.trabalhofinal.component.AppTabComponent;
 import com.example.trabalhofinal.model.Cardapio;
 
 public class CardapioFormComponent extends VBox {
@@ -69,7 +70,7 @@ public class CardapioFormComponent extends VBox {
 	}
 
 	private void configuraBotao() {
-		cadastar.setOnAction(actionEvent -> delegate.cadastrar(build()));
+		cadastar.setOnAction(actionEvent -> delegate.cadastrarElemento(build()));
 		limpar.setOnAction(actionEvent -> clear());
 	}
 
@@ -99,7 +100,7 @@ public class CardapioFormComponent extends VBox {
 		cardapioId = null;
 	}
 
-	public interface CadapioFormDelegate {
-		void cadastrar(Cardapio cardapio);
+	public interface CadapioFormDelegate extends AppTabComponent.TabMenuDelegate<Cardapio> {
+
 	}
 }

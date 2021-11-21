@@ -2,35 +2,29 @@ package com.example.trabalhofinal.component.cardapio;
 
 import static com.example.trabalhofinal.config.ResourceConfig.bundle;
 import javafx.geometry.Insets;
-import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 
-import java.util.List;
-
 import com.example.trabalhofinal.App;
 import com.example.trabalhofinal.component.AppTabComponent;
+import com.example.trabalhofinal.component.ListaComponent;
 import com.example.trabalhofinal.component.menu.MenuSair;
 import com.example.trabalhofinal.controller.CardapioController;
 import com.example.trabalhofinal.model.Cardapio;
 import com.example.trabalhofinal.model.CardapioTipo;
 
-public class CardapioTabComponent extends AppTabComponent {
+public class CardapioTabComponent extends AppTabComponent<Cardapio, CardapioTabComponent.CardapioDelegate> {
 
-	private final ScrollPane scrollPane;
 	private final CardapioTipo tipo;
-	private final ListaCardapioComponent listaCardapioComponent;
 	private final HBox content;
 	private CardapioFormComponent cardapioFormComponent;
 	private final CardapioDelegate delegate;
 
 	public CardapioTabComponent(CardapioDelegate delegate, CardapioTipo tipo) {
-		super(String.format("%s -> %s", bundle.getString("label.cardapios"), tipo.nome));
+		super(delegate, String.format("%s -> %s", bundle.getString("label.cardapios"), tipo.nome));
 		this.delegate = delegate;
-		this.listaCardapioComponent = new ListaCardapioComponent(delegate);
 		this.tipo = tipo;
 		this.content = new HBox();
-		this.scrollPane = new ScrollPane(listaCardapioComponent);
 		adicionarFormDeEdicao();
 		setRoot(content);
 		resize();
@@ -53,6 +47,10 @@ public class CardapioTabComponent extends AppTabComponent {
 		}
 	}
 
+	@Override protected ListaComponent<Cardapio> listaComponentBuilder(CardapioDelegate delegate) {
+		return new ListaCardapioComponent(delegate);
+	}
+
 	@Override
 	protected void resize() {
 		final int espacamento = delegate.temPemissaoAdm() ? 275 : 25;
@@ -72,11 +70,7 @@ public class CardapioTabComponent extends AppTabComponent {
 	}
 
 	public void mostrarListaCardapio() {
-		scrollPane.setContent(listaCardapioComponent);
-	}
-
-	public void setCardapios(List<Cardapio> cardapios) {
-		listaCardapioComponent.setCardapios(cardapios);
+		scrollPane.setContent(listaComponent);
 	}
 
 	public CardapioTipo getTipo() {
@@ -84,12 +78,6 @@ public class CardapioTabComponent extends AppTabComponent {
 	}
 
 	public interface CardapioDelegate extends CardapioFormComponent.CadapioFormDelegate, MenuSair.Listener {
-		void mostrarCardapioSelecionado(Cardapio cardapio);
-
-		void editarCardapio(Cardapio cardapio);
-
-		void selecionarCardapio(Cardapio cardapio);
-
 		boolean temPemissaoAdm();
 
 		Pane menuBuild(CardapioController.CardapioDetalhesListener detalhesListener);

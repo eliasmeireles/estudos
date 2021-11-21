@@ -28,19 +28,30 @@ public class CardapioController implements CardapioTabComponent.CardapioDelegate
 	}
 
 	public CardapioTabComponent getTab() {
-		tabComponent.setCardapios(service.listarPorTipo(tipo));
+		tabComponent.setElementos(service.listarPorTipo(tipo));
 		return tabComponent;
 	}
 
-	@Override public void mostrarCardapioSelecionado(Cardapio cardapio) {
+	@Override public void cadastrarElemento(Cardapio cardapio) {
+		cardapio.setTipo(tipo);
+		if (service.salvar(cardapio)) {
+			tabComponent.showSuccessAlert(bundle.getString("label.cardapio.salvo"));
+			tabComponent.setElementos(service.listarPorTipo(tipo));
+			sair();
+		} else {
+			tabComponent.showSuccessAlert(bundle.getString("label.cardapio.falha"));
+		}
+	}
+
+	@Override public void mostrarElemento(Cardapio cardapio) {
 		tabComponent.mostrarCardapioSelecionado(cardapio);
 	}
 
-	@Override public void editarCardapio(Cardapio cardapio) {
+	@Override public void editarElemento(Cardapio cardapio) {
 		tabComponent.edicarCardapio(cardapio);
 	}
 
-	@Override public void selecionarCardapio(Cardapio cardapio) {
+	@Override public void selecionarElemento(Cardapio cardapio) {
 
 	}
 
@@ -60,16 +71,6 @@ public class CardapioController implements CardapioTabComponent.CardapioDelegate
 		return UsuarioPermissao.ADM.equals(UsuarioService.getInstance().getUsuarioLogado().getUsuarioPermissao());
 	}
 
-	@Override public void cadastrar(Cardapio cardapio) {
-		cardapio.setTipo(tipo);
-		if (service.salvar(cardapio)) {
-			tabComponent.showSuccessAlert(bundle.getString("label.cardapio.salvo"));
-			tabComponent.setCardapios(service.listarPorTipo(tipo));
-			sair();
-		} else {
-			tabComponent.showSuccessAlert(bundle.getString("label.cardapio.falha"));
-		}
-	}
 
 	@Override public void sair() {
 		tabComponent.clear();

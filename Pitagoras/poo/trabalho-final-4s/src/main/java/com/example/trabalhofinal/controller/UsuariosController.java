@@ -13,27 +13,35 @@ public class UsuariosController implements UsuariosTabComponent.UsuarioTabDelega
 	public UsuariosController() {
 		this.service = UsuarioService.getInstance();
 		this.usuariosTab = new UsuariosTabComponent(this);
-		usuariosTab.setUsuarios(service.findAll());
+		usuariosTab.setElementos(service.findAll());
 	}
 
 	public UsuariosTabComponent getUsuariosTab() {
 		return usuariosTab;
 	}
 
-	@Override public void onUsuarioSelecionado(Usuario usuario) {
-		usuariosTab.setUsuario(usuario);
-	}
-
-	@Override public void cadastrar(Usuario usuario) {
+	@Override public void cadastrarElemento(Usuario elemento) {
 		usuariosTab.dismisAlert();
-		final ServiceResponse serviceResponse = service.salvar(usuario);
+		final ServiceResponse serviceResponse = service.salvar(elemento);
 
 		if (serviceResponse.isSucesso()) {
 			usuariosTab.showSuccessAlert(serviceResponse.getMensagem());
 			usuariosTab.limparUsuarioForm();
-			usuariosTab.setUsuarios(service.findAll());
+			usuariosTab.setElementos(service.findAll());
 		} else {
 			usuariosTab.showErrorAlert(serviceResponse.getMensagem());
 		}
+	}
+
+	@Override public void mostrarElemento(Usuario elemento) {
+
+	}
+
+	@Override public void editarElemento(Usuario elemento) {
+
+	}
+
+	@Override public void selecionarElemento(Usuario elemento) {
+		usuariosTab.setUsuario(elemento);
 	}
 }

@@ -58,11 +58,11 @@ public class CardapioDetalhesComponent extends VBox implements CardapioControlle
 	}
 
 	@Override public void editar() {
-		delegate.editarCardapio(cardapio);
+		delegate.editarElemento(cardapio);
 	}
 
 	@Override public void selecionar() {
-		delegate.selecionarCardapio(cardapio);
+		delegate.selecionarElemento(cardapio);
 	}
 
 }

@@ -11,6 +11,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
 import com.example.trabalhofinal.App;
+import com.example.trabalhofinal.component.AppTabComponent;
 import com.example.trabalhofinal.model.Usuario;
 import com.example.trabalhofinal.model.UsuarioPermissao;
 
@@ -65,7 +66,7 @@ public class UsuarioFormComponent extends VBox {
 	}
 
 	private void configuraBotao() {
-		cadastar.setOnAction(actionEvent -> delegate.cadastrar(build()));
+		cadastar.setOnAction(actionEvent -> delegate.cadastrarElemento(build()));
 		limpar.setOnAction(actionEvent -> clear());
 	}
 
@@ -88,7 +89,7 @@ public class UsuarioFormComponent extends VBox {
 		permissaoComboBox.setValue(UsuarioPermissao.CLIENTE);
 	}
 
-	public interface UsuarioFormDelegate {
-		void cadastrar(Usuario usuario);
+	public interface UsuarioFormDelegate extends AppTabComponent.TabMenuDelegate<Usuario> {
+
 	}
 }
