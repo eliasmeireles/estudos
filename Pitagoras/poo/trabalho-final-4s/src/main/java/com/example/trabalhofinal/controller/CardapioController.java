@@ -4,7 +4,6 @@ import static com.example.trabalhofinal.config.ResourceConfig.bundle;
 
 import com.example.trabalhofinal.authority.UsuarioAuthority;
 import com.example.trabalhofinal.component.cardapio.CardapioTabComponent;
-import com.example.trabalhofinal.component.menu.MenuListener;
 import com.example.trabalhofinal.model.Cardapio;
 import com.example.trabalhofinal.model.CardapioTipo;
 import com.example.trabalhofinal.service.CardapitoService;
@@ -56,8 +55,5 @@ public class CardapioController implements CardapioTabComponent.CardapioDelegate
 	@Override public void sair() {
 		tabComponent.clear();
 		tabComponent.mostrarListaCardapio();
-	}
-
-	public interface CardapioDetalhesListener extends MenuListener {
 	}
 }

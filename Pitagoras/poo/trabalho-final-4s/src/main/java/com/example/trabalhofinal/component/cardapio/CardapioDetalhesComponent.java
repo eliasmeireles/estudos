@@ -15,11 +15,11 @@ import com.example.trabalhofinal.App;
 import com.example.trabalhofinal.authority.UsuarioAuthority;
 import com.example.trabalhofinal.component.HLabelValorComponent;
 import com.example.trabalhofinal.component.VLabelValorComponent;
-import com.example.trabalhofinal.controller.CardapioController;
+import com.example.trabalhofinal.component.menu.MenuListener;
 import com.example.trabalhofinal.model.Cardapio;
 import com.example.trabalhofinal.model.Usuario;
 
-public class CardapioDetalhesComponent extends VBox implements CardapioController.CardapioDetalhesListener {
+public class CardapioDetalhesComponent extends VBox implements MenuListener {
 
 	private final Cardapio cardapio;
 	private final CardapioTabComponent.CardapioDelegate delegate;
@@ -62,7 +62,7 @@ public class CardapioDetalhesComponent extends VBox implements CardapioControlle
 		getChildren().add(menuBuild(this));
 	}
 
-	private Pane menuBuild(CardapioController.CardapioDetalhesListener detalhesListener) {
+	private Pane menuBuild(MenuListener detalhesListener) {
 		final Optional<Usuario> usuarioLogado = UsuarioAuthority.getUsuarioLogado();
 		if (usuarioLogado.isPresent()) {
 			return usuarioLogado.get()

@@ -70,10 +70,6 @@ public class CardapioTabComponent extends AppTabComponent<Cardapio, CardapioTabC
 		scrollPane.setContent(listaComponent);
 	}
 
-	public CardapioTipo getTipo() {
-		return tipo;
-	}
-
 	public interface CardapioDelegate extends CardapioFormComponent.CadapioFormDelegate {
 		boolean temPemissaoAdm();
 
