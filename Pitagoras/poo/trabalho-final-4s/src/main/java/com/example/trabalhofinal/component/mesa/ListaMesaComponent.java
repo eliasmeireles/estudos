@@ -9,7 +9,7 @@ public class ListaMesaComponent extends ListaComponent<Mesa> {
 	private final MesaTabComponent.MesaDelegate delegate;
 
 	public ListaMesaComponent(MesaTabComponent.MesaDelegate delegate) {
-		super(335, 0.2);
+		super(230, 0.04);
 		this.delegate = delegate;
 	}
 

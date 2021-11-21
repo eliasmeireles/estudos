@@ -4,8 +4,10 @@ import static com.example.trabalhofinal.config.ResourceConfig.bundle;
 import javafx.geometry.Insets;
 import javafx.scene.layout.HBox;
 
+import com.example.trabalhofinal.App;
 import com.example.trabalhofinal.component.AppTabComponent;
 import com.example.trabalhofinal.component.ListaComponent;
+import com.example.trabalhofinal.component.menu.MenuListener;
 import com.example.trabalhofinal.model.Mesa;
 
 public class MesaTabComponent extends AppTabComponent<Mesa, MesaTabComponent.MesaDelegate> {
@@ -24,13 +26,24 @@ public class MesaTabComponent extends AppTabComponent<Mesa, MesaTabComponent.Mes
 	private void configuraContent() {
 		this.content.setSpacing(25);
 		this.content.setPadding(new Insets(16));
+		this.content.setMinHeight(App.mainStage.getHeight() - 86);
 		this.content.getChildren().add(scrollPane);
+	}
+
+	public void mesaDetalhes(Mesa mesa) {
+		this.content.getChildren().clear();
+		this.content.getChildren().add(new MesaDetalhesComponent(mesa, delegate));
+	}
+
+	public void listarMesas() {
+		this.content.getChildren().clear();
+		this.content.getChildren().add(listaComponent);
 	}
 
 	@Override protected ListaComponent<Mesa> listaComponentBuilder(MesaDelegate delegate) {
 		return new ListaMesaComponent(delegate);
 	}
 
-	public interface MesaDelegate extends TabMenuDelegate<Mesa> {
+	public interface MesaDelegate extends TabMenuDelegate<Mesa>, MenuListener {
 	}
 }

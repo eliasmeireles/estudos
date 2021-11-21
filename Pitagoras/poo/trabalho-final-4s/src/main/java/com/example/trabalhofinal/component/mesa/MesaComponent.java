@@ -23,7 +23,7 @@ public class MesaComponent extends CardComponent<HBox> {
 		this.mesa = mesa;
 		this.mesaData = new VBox();
 		setupComponent();
-		setOnMouseClicked(eH -> delegate.selecionarElemento(mesa));
+		setOnMouseClicked(eH -> delegate.mostrarElemento(mesa));
 	}
 
 	private void setupComponent() {

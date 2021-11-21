@@ -16,7 +16,7 @@ public class PediosTabComponent extends AppTabComponent<Pedido, PediosTabCompone
 	private final PedidoDelegate delegate;
 
 	public PediosTabComponent(PedidoDelegate delegate) {
-		super(delegate, String.format("%s -> %s", bundle.getString("label.servicos"), bundle.getString("label.pedios")));
+		super(delegate, String.format("%s -> %s", bundle.getString("label.servicos"), bundle.getString("label.pedidos")));
 		this.delegate = delegate;
 	}
 

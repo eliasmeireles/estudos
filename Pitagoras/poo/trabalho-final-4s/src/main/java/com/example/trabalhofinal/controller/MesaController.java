@@ -24,7 +24,7 @@ public class MesaController implements MesaTabComponent.MesaDelegate {
 	}
 
 	@Override public void mostrarElemento(Mesa elemento) {
-
+		tabComponent.mesaDetalhes(elemento);
 	}
 
 	@Override public void editarElemento(Mesa elemento) {
@@ -32,6 +32,19 @@ public class MesaController implements MesaTabComponent.MesaDelegate {
 	}
 
 	@Override public void selecionarElemento(Mesa elemento) {
+
+	}
+
+	@Override public void sair() {
+		tabComponent.listarMesas();
+		tabComponent.setElementos(service.findByDisponivel(true));
+	}
+
+	@Override public void editar() {
+
+	}
+
+	@Override public void selecionar() {
 
 	}
 }

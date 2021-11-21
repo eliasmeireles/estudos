@@ -5,9 +5,9 @@ import javafx.scene.layout.VBox;
 
 import com.example.trabalhofinal.util.ResourceUtil;
 
-public class MenuSelecionar extends VBox {
+public class MenuConcluir extends VBox {
 
-	public MenuSelecionar(MenuListener listener) {
+	public MenuConcluir(MenuListener listener) {
 		setId("menu-item");
 		try {
 			getChildren().add(ResourceUtil.icon("check", 35, 35));
