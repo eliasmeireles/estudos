@@ -19,18 +19,18 @@ public class Usuario {
 	@Property(name = "login", type = "VARCHAR(20) NOT NULL UNIQUE")
 	private String login;
 
-	@PropertyAdapter(adapter = UsuarioPermissao.UsuarioPermissaoAdapter.class)
-	private UsuarioPermissao usuarioPermissao;
+	@PropertyAdapter(adapter = Permissao.PermissaoAdapter.class)
+	private Permissao permissao;
 
 	public Usuario() {
 	}
 
-	public Usuario(Integer userId, String nome, String senha, String login, UsuarioPermissao usuarioPermissao) {
+	public Usuario(Integer userId, String nome, String senha, String login, Permissao permissao) {
 		this.userId = userId;
 		this.nome = nome;
 		this.senha = senha;
 		this.login = login;
-		this.usuarioPermissao = usuarioPermissao;
+		this.permissao = permissao;
 	}
 
 	public Integer getUserId() {
@@ -65,12 +65,12 @@ public class Usuario {
 		this.login = login;
 	}
 
-	public UsuarioPermissao getUsuarioPermissao() {
-		return usuarioPermissao;
+	public Permissao getPermissao() {
+		return permissao;
 	}
 
-	public void setUsuarioPermissao(UsuarioPermissao usuarioPermissao) {
-		this.usuarioPermissao = usuarioPermissao;
+	public void setPermissao(Permissao permissao) {
+		this.permissao = permissao;
 	}
 
 	@Override public String toString() {

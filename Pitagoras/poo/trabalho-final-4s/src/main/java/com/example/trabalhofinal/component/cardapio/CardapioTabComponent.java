@@ -3,13 +3,10 @@ package com.example.trabalhofinal.component.cardapio;
 import static com.example.trabalhofinal.config.ResourceConfig.bundle;
 import javafx.geometry.Insets;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
 
 import com.example.trabalhofinal.App;
 import com.example.trabalhofinal.component.AppTabComponent;
 import com.example.trabalhofinal.component.ListaComponent;
-import com.example.trabalhofinal.component.menu.MenuSair;
-import com.example.trabalhofinal.controller.CardapioController;
 import com.example.trabalhofinal.model.Cardapio;
 import com.example.trabalhofinal.model.CardapioTipo;
 
@@ -77,9 +74,9 @@ public class CardapioTabComponent extends AppTabComponent<Cardapio, CardapioTabC
 		return tipo;
 	}
 
-	public interface CardapioDelegate extends CardapioFormComponent.CadapioFormDelegate, MenuSair.Listener {
+	public interface CardapioDelegate extends CardapioFormComponent.CadapioFormDelegate {
 		boolean temPemissaoAdm();
 
-		Pane menuBuild(CardapioController.CardapioDetalhesListener detalhesListener);
+		void sair();
 	}
 }

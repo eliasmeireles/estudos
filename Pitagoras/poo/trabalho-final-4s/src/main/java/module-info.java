@@ -18,6 +18,7 @@ module com.example.trabalhofinal {
 	opens com.example.trabalhofinal.controller to javafx.fxml;
 	exports com.example.trabalhofinal.util;
 	exports com.example.trabalhofinal.component;
+	exports com.example.trabalhofinal.component.facoty;
 	exports com.example.trabalhofinal.model;
 	exports com.example.trabalhofinal.component.cardapio;
 	exports com.example.trabalhofinal.component.usuario;

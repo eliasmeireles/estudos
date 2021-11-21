@@ -6,13 +6,18 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 
+import java.util.Optional;
+
 import com.example.trabalhofinal.App;
+import com.example.trabalhofinal.authority.UsuarioAuthority;
 import com.example.trabalhofinal.component.HLabelValorComponent;
 import com.example.trabalhofinal.component.VLabelValorComponent;
 import com.example.trabalhofinal.controller.CardapioController;
 import com.example.trabalhofinal.model.Cardapio;
+import com.example.trabalhofinal.model.Usuario;
 
 public class CardapioDetalhesComponent extends VBox implements CardapioController.CardapioDetalhesListener {
 
@@ -54,7 +59,22 @@ public class CardapioDetalhesComponent extends VBox implements CardapioControlle
 				new VLabelValorComponent(bundle.getString("label.ingredientes"), String.valueOf(cardapio.getIngredientes()));
 		setMaxWidth(App.mainStage.getWidth() - 325);
 		cardapioData.getChildren().add(labelValorComponent);
-		getChildren().add(delegate.menuBuild(this));
+		getChildren().add(menuBuild(this));
+	}
+
+	private Pane menuBuild(CardapioController.CardapioDetalhesListener detalhesListener) {
+		final Optional<Usuario> usuarioLogado = UsuarioAuthority.getUsuarioLogado();
+		if (usuarioLogado.isPresent()) {
+			return usuarioLogado.get()
+					.getPermissao()
+					.menuBuilder
+					.cardapioMenu(detalhesListener);
+		}
+		return new Pane();
+	}
+
+	@Override public void sair() {
+		delegate.sair();
 	}
 
 	@Override public void editar() {
@@ -64,5 +84,4 @@ public class CardapioDetalhesComponent extends VBox implements CardapioControlle
 	@Override public void selecionar() {
 		delegate.selecionarElemento(cardapio);
 	}
-
 }

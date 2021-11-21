@@ -1,19 +1,13 @@
 package com.example.trabalhofinal.controller;
 
 import static com.example.trabalhofinal.config.ResourceConfig.bundle;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
 
+import com.example.trabalhofinal.authority.UsuarioAuthority;
 import com.example.trabalhofinal.component.cardapio.CardapioTabComponent;
-import com.example.trabalhofinal.component.menu.MenuEditar;
-import com.example.trabalhofinal.component.menu.MenuSair;
-import com.example.trabalhofinal.component.menu.MenuSelecionar;
+import com.example.trabalhofinal.component.menu.MenuListener;
 import com.example.trabalhofinal.model.Cardapio;
 import com.example.trabalhofinal.model.CardapioTipo;
-import com.example.trabalhofinal.model.Usuario;
-import com.example.trabalhofinal.model.UsuarioPermissao;
 import com.example.trabalhofinal.service.CardapitoService;
-import com.example.trabalhofinal.service.UsuarioService;
 
 public class CardapioController implements CardapioTabComponent.CardapioDelegate {
 
@@ -22,9 +16,9 @@ public class CardapioController implements CardapioTabComponent.CardapioDelegate
 	private final CardapioTabComponent tabComponent;
 
 	public CardapioController(CardapioTipo tipo) {
+		this.tipo = tipo;
 		this.service = new CardapitoService();
 		this.tabComponent = new CardapioTabComponent(this, tipo);
-		this.tipo = this.tabComponent.getTipo();
 	}
 
 	public CardapioTabComponent getTab() {
@@ -55,28 +49,15 @@ public class CardapioController implements CardapioTabComponent.CardapioDelegate
 
 	}
 
-	@Override public Pane menuBuild(CardapioDetalhesListener detalhesListener) {
-		final Usuario usuarioLogado = UsuarioService.getInstance().getUsuarioLogado();
-		if (UsuarioPermissao.CLIENTE.equals(usuarioLogado.getUsuarioPermissao())) {
-			return new HBox(new MenuSair(this));
-		} else if (UsuarioPermissao.GARCOM.equals(usuarioLogado.getUsuarioPermissao())) {
-			return new HBox(new MenuSair(this), new MenuSelecionar(detalhesListener));
-		} else if (UsuarioPermissao.ADM.equals(usuarioLogado.getUsuarioPermissao())) {
-			return new HBox(new MenuSair(this), new MenuEditar(detalhesListener), new MenuSelecionar(detalhesListener));
-		}
-		return new Pane();
-	}
-
 	@Override public boolean temPemissaoAdm() {
-		return UsuarioPermissao.ADM.equals(UsuarioService.getInstance().getUsuarioLogado().getUsuarioPermissao());
+		return UsuarioAuthority.ehAdm();
 	}
-
 
 	@Override public void sair() {
 		tabComponent.clear();
 		tabComponent.mostrarListaCardapio();
 	}
 
-	public interface CardapioDetalhesListener extends MenuEditar.Listener, MenuSelecionar.Listener {
+	public interface CardapioDetalhesListener extends MenuListener {
 	}
 }

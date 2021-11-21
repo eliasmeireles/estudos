@@ -12,15 +12,15 @@ import javafx.scene.layout.VBox;
 
 import com.example.trabalhofinal.App;
 import com.example.trabalhofinal.component.AppTabComponent;
+import com.example.trabalhofinal.model.Permissao;
 import com.example.trabalhofinal.model.Usuario;
-import com.example.trabalhofinal.model.UsuarioPermissao;
 
 public class UsuarioFormComponent extends VBox {
 
 	private final UsuarioFormDelegate delegate;
 	private final TextField nome;
 	private final TextField login;
-	private final ComboBox<UsuarioPermissao> permissaoComboBox;
+	private final ComboBox<Permissao> permissaoComboBox;
 	private final PasswordField senha;
 	private final Button cadastar;
 	private final Button limpar;
@@ -54,8 +54,8 @@ public class UsuarioFormComponent extends VBox {
 	}
 
 	private void configuraPermisaoComboBox() {
-		permissaoComboBox.setValue(UsuarioPermissao.CLIENTE);
-		for (UsuarioPermissao permissao : UsuarioPermissao.values()) {
+		permissaoComboBox.setValue(Permissao.CLIENTE);
+		for (Permissao permissao : Permissao.values()) {
 			permissaoComboBox.getItems().add(permissao);
 		}
 	}
@@ -77,7 +77,7 @@ public class UsuarioFormComponent extends VBox {
 	public void setUsuario(Usuario usuario) {
 		nome.setText(usuario.getNome());
 		login.setText(usuario.getLogin());
-		permissaoComboBox.setValue(usuario.getUsuarioPermissao());
+		permissaoComboBox.setValue(usuario.getPermissao());
 		usuarioId = usuario.getUserId();
 	}
 
@@ -86,7 +86,7 @@ public class UsuarioFormComponent extends VBox {
 		nome.clear();
 		login.clear();
 		senha.clear();
-		permissaoComboBox.setValue(UsuarioPermissao.CLIENTE);
+		permissaoComboBox.setValue(Permissao.CLIENTE);
 	}
 
 	public interface UsuarioFormDelegate extends AppTabComponent.TabMenuDelegate<Usuario> {

@@ -5,6 +5,7 @@ import static com.example.trabalhofinal.config.ResourceConfig.bundle;
 import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.List;
 
+import com.example.trabalhofinal.authority.UsuarioAuthority;
 import com.example.trabalhofinal.exception.DadosUsuarioInvalido;
 import com.example.trabalhofinal.model.ServiceResponse;
 import com.example.trabalhofinal.model.Usuario;
@@ -12,20 +13,10 @@ import com.example.trabalhofinal.repository.UsuarioRepository;
 
 public class UsuarioService {
 
-	private static UsuarioService instance;
-
-	private Usuario usuarioLogado;
 	public final UsuarioRepository repository;
 
-	private UsuarioService() {
+	public UsuarioService() {
 		this.repository = UsuarioRepository.getInstance();
-	}
-
-	public static UsuarioService getInstance() {
-		if (instance == null) {
-			instance = new UsuarioService();
-		}
-		return instance;
 	}
 
 	public List<Usuario> findAll() {
@@ -33,16 +24,13 @@ public class UsuarioService {
 	}
 
 	public Usuario login(String login, String senha) {
-		usuarioLogado = repository.findByLoginAndPassword(login, senha);
+		final Usuario usuarioLogado = repository.findByLoginAndPassword(login, senha);
+		UsuarioAuthority.setUsuarioLogado(usuarioLogado);
 		return usuarioLogado;
 	}
 
 	public void logout() {
-		this.usuarioLogado = null;
-	}
-
-	public Usuario getUsuarioLogado() {
-		return usuarioLogado;
+		UsuarioAuthority.logout();
 	}
 
 	public ServiceResponse salvar(Usuario usuario) {

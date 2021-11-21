@@ -11,7 +11,7 @@ public class UsuariosController implements UsuariosTabComponent.UsuarioTabDelega
 	private final UsuarioService service;
 
 	public UsuariosController() {
-		this.service = UsuarioService.getInstance();
+		this.service = new UsuarioService();
 		this.usuariosTab = new UsuariosTabComponent(this);
 		usuariosTab.setElementos(service.findAll());
 	}

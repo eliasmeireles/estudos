@@ -35,7 +35,7 @@ public class UsuarioComponent extends CardComponent<HBox> {
 			userData.setSpacing(5);
 			userData.getChildren().add(new HLabelValorComponent(bundle.getString("label.nome"), usuario.getNome(), 200));
 			userData.getChildren().add(new HLabelValorComponent(bundle.getString("label.login"), usuario.getLogin()));
-			userData.getChildren().add(new HLabelValorComponent(bundle.getString("label.permissao"), usuario.getUsuarioPermissao().nome));
+			userData.getChildren().add(new HLabelValorComponent(bundle.getString("label.permissao"), usuario.getPermissao().nome));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

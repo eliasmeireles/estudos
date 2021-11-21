@@ -41,6 +41,7 @@ public abstract class AppTabComponent<T, D extends AppTabComponent.TabMenuDelega
 
 	public void showSuccessAlert(String mensagem) {
 		appAlertComponent.setSuccessMensage(mensagem);
+		container.getChildren().remove(appAlertComponent);
 		container.getChildren().add(0, appAlertComponent);
 	}
 
