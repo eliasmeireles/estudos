@@ -7,7 +7,7 @@ import com.example.trabalhofinal.util.ResourceUtil;
 
 public class MenuConcluir extends VBox {
 
-	public MenuConcluir(MenuListener listener) {
+	public MenuConcluir(MenuActions.MenuConcluir listener) {
 		setId("menu-item");
 		try {
 			getChildren().add(ResourceUtil.icon("check", 35, 35));
@@ -17,6 +17,6 @@ public class MenuConcluir extends VBox {
 		setAlignment(Pos.CENTER);
 		setMinWidth(55);
 		setMinHeight(55);
-		setOnMouseClicked(eH -> listener.selecionar());
+		setOnMouseClicked(eH -> listener.concluir());
 	}
 }

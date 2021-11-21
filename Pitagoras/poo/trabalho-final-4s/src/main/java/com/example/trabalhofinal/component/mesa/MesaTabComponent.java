@@ -7,7 +7,7 @@ import javafx.scene.layout.HBox;
 import com.example.trabalhofinal.App;
 import com.example.trabalhofinal.component.AppTabComponent;
 import com.example.trabalhofinal.component.ListaComponent;
-import com.example.trabalhofinal.component.menu.MenuListener;
+import com.example.trabalhofinal.component.facoty.MenuBuilder;
 import com.example.trabalhofinal.model.Mesa;
 
 public class MesaTabComponent extends AppTabComponent<Mesa, MesaTabComponent.MesaDelegate> {
@@ -44,6 +44,6 @@ public class MesaTabComponent extends AppTabComponent<Mesa, MesaTabComponent.Mes
 		return new ListaMesaComponent(delegate);
 	}
 
-	public interface MesaDelegate extends TabMenuDelegate<Mesa>, MenuListener {
+	public interface MesaDelegate extends TabMenuDelegate<Mesa>, MenuBuilder.MenuCardapio {
 	}
 }

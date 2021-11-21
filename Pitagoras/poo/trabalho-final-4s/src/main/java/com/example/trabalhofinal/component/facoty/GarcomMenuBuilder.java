@@ -8,7 +8,6 @@ import java.util.List;
 
 import com.example.trabalhofinal.component.AppMenu;
 import com.example.trabalhofinal.component.cardapio.MenuCardapioComponent;
-import com.example.trabalhofinal.component.menu.MenuListener;
 import com.example.trabalhofinal.component.menu.MenuSair;
 import com.example.trabalhofinal.component.menu.MenuServicosComponent;
 import com.example.trabalhofinal.controller.delegate.TabMenuDelegate;
@@ -19,7 +18,7 @@ public class GarcomMenuBuilder implements MenuBuilder {
 		return List.of(new MenuServicosComponent(delegate), new MenuCardapioComponent(delegate));
 	}
 
-	@Override public Pane cardapioMenu(MenuListener listener) {
+	@Override public Pane cardapioMenu(MenuCardapio listener) {
 		return new HBox(new MenuSair(listener));
 	}
 }

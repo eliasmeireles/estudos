@@ -7,7 +7,7 @@ import com.example.trabalhofinal.util.ResourceUtil;
 
 public class MenuSair extends VBox {
 
-	public MenuSair(MenuListener listener) {
+	public MenuSair(MenuActions.MenuSair listener) {
 		setId("menu-item");
 		try {
 			getChildren().add(ResourceUtil.icon("exit", 35, 35));

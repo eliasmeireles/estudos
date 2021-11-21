@@ -43,8 +43,4 @@ public class MesaController implements MesaTabComponent.MesaDelegate {
 	@Override public void editar() {
 
 	}
-
-	@Override public void selecionar() {
-
-	}
 }

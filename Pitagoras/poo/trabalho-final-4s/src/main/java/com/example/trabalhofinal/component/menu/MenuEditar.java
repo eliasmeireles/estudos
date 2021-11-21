@@ -7,7 +7,7 @@ import com.example.trabalhofinal.util.ResourceUtil;
 
 public class MenuEditar extends VBox {
 
-	public MenuEditar(MenuListener listener) {
+	public MenuEditar(MenuActions.MenuEditar listener) {
 		setId("menu-item");
 		try {
 			getChildren().add(ResourceUtil.icon("edit", 35, 35));

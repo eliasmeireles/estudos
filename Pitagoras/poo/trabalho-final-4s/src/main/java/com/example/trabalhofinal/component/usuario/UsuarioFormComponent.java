@@ -55,9 +55,7 @@ public class UsuarioFormComponent extends VBox {
 
 	private void configuraPermisaoComboBox() {
 		permissaoComboBox.setValue(Permissao.CLIENTE);
-		for (Permissao permissao : Permissao.values()) {
-			permissaoComboBox.getItems().add(permissao);
-		}
+		permissaoComboBox.getItems().addAll(Permissao.values());
 	}
 
 	public void width(double width) {
