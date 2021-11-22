@@ -9,7 +9,6 @@ import static com.example.trabalhofinal.util.GenericsClassUtil.ehPk;
 import static com.example.trabalhofinal.util.GenericsClassUtil.findAllCollectionMembers;
 import static com.example.trabalhofinal.util.GenericsClassUtil.findObjectPk;
 import static com.example.trabalhofinal.util.GenericsClassUtil.getGenericTypeClass;
-import static com.example.trabalhofinal.util.GenericsClassUtil.getPkData;
 import static com.example.trabalhofinal.util.GenericsClassUtil.obterValorDoField;
 
 import java.lang.reflect.Constructor;
@@ -38,7 +37,7 @@ import com.example.trabalhofinal.util.GenericsClassUtil;
 	protected final Class<T> tClass;
 	protected final String selectAllQuery;
 	protected final String nomeTable;
-	private final DatabaseConnector connector;
+	protected final DatabaseConnector connector;
 
 	protected BaseRepository() {
 		connector = DatabaseConnector.connector;
@@ -94,6 +93,7 @@ import com.example.trabalhofinal.util.GenericsClassUtil;
 		final StringBuilder params = new StringBuilder(") VALUES (");
 		final Map<Integer, Object> valores = new HashMap<>();
 
+		final List<Field> collectionsField = new ArrayList<>();
 		int contador = 1;
 		for (Field field : objeto.getClass().getDeclaredFields()) {
 			final Property property = field.getAnnotation(Property.class);
@@ -105,13 +105,20 @@ import com.example.trabalhofinal.util.GenericsClassUtil;
 				params.append("?, ");
 
 				contador = atribuiValorDeAtributo(objeto, valores, contador, field);
+			} else if (ehOneToMany(field)) {
+				collectionsField.add(field);
 			}
 		}
 
 		final String queryKeys = insertQuery.substring(0, insertQuery.length() - 2);
 		final String query = queryKeys + params.substring(0, params.length() - 2) + ")";
 
-		return executarInsertUpdateQuerySql(valores, query);
+		ID id = executarInsertUpdateQuerySql(valores, query);
+		for (Field field : collectionsField) {
+			OneToManyRepository oneToManyRepository = new OneToManyRepository(objeto, field);
+			oneToManyRepository.insertInto(id);
+		}
+		return id;
 	}
 
 	public ID atualizar(T objeto) throws Exception {
@@ -121,8 +128,7 @@ import com.example.trabalhofinal.util.GenericsClassUtil;
 
 		final Map<Integer, Object> valores = new HashMap<>();
 
-		String nomePk = "";
-		Object pk = null;
+		GenericsClassUtil.PrimaryKeyData<Object> primaryKeyData = findObjectPk(objeto);
 		int contador = 1;
 		for (Field field : objeto.getClass().getDeclaredFields()) {
 			final Property property = field.getAnnotation(Property.class);
@@ -134,16 +140,12 @@ import com.example.trabalhofinal.util.GenericsClassUtil;
 
 				contador = atribuiValorDeAtributo(objeto, valores, contador, field);
 			}
-
-			if (property != null && property.primaryKey()) {
-				pk = obterValorDoField(field, objeto);
-				nomePk = property.name();
-			}
 		}
 
-		String fullSql = updateSql.substring(0, updateSql.length() - 2) + " WHERE " + nomePk + " = " + pk;
+		String fullSql = updateSql.substring(0, updateSql.length() - 2) + " WHERE " + primaryKeyData.getPkName() + " = " + primaryKeyData.getPkValue();
 		executarInsertUpdateQuerySql(valores, fullSql);
-		return (ID) pk;
+		oneToManyDeleteMode((ID) primaryKeyData.getPkValue(), objeto);
+		return (ID) primaryKeyData.getPkValue();
 	}
 
 	private int atribuiValorDeAtributo(T objeto, Map<Integer, Object> valores, int contador, Field field) throws Exception {
@@ -160,11 +162,20 @@ import com.example.trabalhofinal.util.GenericsClassUtil;
 
 	public void deleteById(ID id) throws Exception {
 		final GenericsClassUtil.PrimaryKeyData<Object> primaryKeyData = findObjectPk(newInstance());
+		deleteById(id, nomeTable, primaryKeyData.getPkName());
+	}
+
+	public void deleteById(ID id, String pkName) throws Exception {
+		deleteById(id, nomeTable, pkName);
+	}
+
+	public void deleteById(ID id, String nomeTable, String pkName) throws Exception {
+
 		oneToManyDeleteMode(id);
 		final StringBuilder query = new StringBuilder("DELETE FROM ")
 				.append(nomeTable)
 				.append(" WHERE ")
-				.append(fieldFilter(primaryKeyData.getPkName()));
+				.append(fieldFilter(pkName));
 
 		delete(query, id);
 	}
@@ -182,8 +193,14 @@ import com.example.trabalhofinal.util.GenericsClassUtil;
 	}
 
 	private void oneToManyDeleteMode(ID id) throws Exception {
-		for (Field field : findAllCollectionMembers(newInstance())) {
-			new OneToManyRepository(tClass, field).collectionDelete(id);
+		oneToManyDeleteMode(id, newInstance());
+	}
+
+	private void oneToManyDeleteMode(ID id, Object parent) throws Exception {
+		for (Field field : findAllCollectionMembers(parent)) {
+			OneToManyRepository oneToManyRepository = new OneToManyRepository(parent, field);
+			oneToManyRepository.collectionDelete(id);
+			oneToManyRepository.insertInto(id);
 		}
 	}
 
@@ -232,8 +249,9 @@ import com.example.trabalhofinal.util.GenericsClassUtil;
 			final OneToOneRepository oneToOneRepository = new OneToOneRepository(field);
 			adicionarValorDoAtributo(newInstance, field, oneToOneRepository.find(value));
 		} else if (ehOneToMany(field) && primaryKeyData != null) {
-			final OneToManyRepository oneToManyRepository = new OneToManyRepository(newInstance.getClass(), field);
-			adicionarValorDoAtributo(newInstance, field, oneToManyRepository.find(primaryKeyData.getPkValue()));
+			final OneToManyRepository oneToManyRepository = new OneToManyRepository(newInstance, field);
+			Object values = oneToManyRepository.find(primaryKeyData.getPkValue());
+			adicionarValorDoAtributo(newInstance, field, values);
 		}
 	}
 
