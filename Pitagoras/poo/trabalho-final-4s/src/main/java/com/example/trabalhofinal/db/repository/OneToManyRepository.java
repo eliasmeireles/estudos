@@ -38,7 +38,7 @@ import com.example.trabalhofinal.db.annotation.OneToMany;
 				.append(" ON ")
 				.append(collectionTableName)
 				.append(".")
-				.append(nomeDaPk)
+				.append(targetPkName)
 				.append(" = ")
 				.append(nomeTable)
 				.append(".")
