@@ -2,6 +2,7 @@ package com.example.trabalhofinal.component.mesa;
 
 import static com.example.trabalhofinal.config.ResourceConfig.bundle;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.layout.HBox;
 
 import com.example.trabalhofinal.App;
@@ -14,19 +15,26 @@ public class MesaTabComponent extends AppTabComponent<Mesa, MesaTabComponent.Mes
 
 	private final MesaDelegate delegate;
 	private final HBox content;
+	private final MesaFormComponent formComponent;
 
 	public MesaTabComponent(MesaDelegate delegate) {
 		super(delegate, String.format("%s -> %s", bundle.getString("label.servicos"), bundle.getString("label.mesa")));
 		this.delegate = delegate;
 		this.content = new HBox();
 		setRoot(content);
+		this.formComponent = new MesaFormComponent(delegate);
 		configuraContent();
 	}
 
 	private void configuraContent() {
 		this.content.setSpacing(25);
+		this.formComponent.setPrefWidth(155);
+		this.formComponent.withWidth(155.0);
+		this.formComponent.setSpacing(8);
+		this.formComponent.setAlignment(Pos.TOP_CENTER);
 		this.content.setPadding(new Insets(16));
 		this.content.setMinHeight(App.mainStage.getHeight() - 86);
+		this.content.getChildren().add(formComponent);
 		this.content.getChildren().add(scrollPane);
 	}
 
@@ -37,6 +45,7 @@ public class MesaTabComponent extends AppTabComponent<Mesa, MesaTabComponent.Mes
 
 	public void listarMesas() {
 		this.content.getChildren().clear();
+		this.content.getChildren().add(formComponent);
 		this.content.getChildren().add(listaComponent);
 	}
 

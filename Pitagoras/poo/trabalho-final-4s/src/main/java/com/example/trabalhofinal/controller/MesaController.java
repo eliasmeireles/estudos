@@ -1,5 +1,7 @@
 package com.example.trabalhofinal.controller;
 
+import static com.example.trabalhofinal.config.ResourceConfig.bundle;
+
 import com.example.trabalhofinal.component.mesa.MesaTabComponent;
 import com.example.trabalhofinal.model.Mesa;
 import com.example.trabalhofinal.service.MesaService;
@@ -20,7 +22,13 @@ public class MesaController implements MesaTabComponent.MesaDelegate {
 	}
 
 	@Override public void cadastrarElemento(Mesa elemento) {
-
+		if (elemento.getNumero() != null) {
+			if (service.salvar(elemento)) {
+				tabComponent.showSuccessAlert(bundle.getString("label.cadastro.salvo.sucesso"));
+			} else {
+				tabComponent.showErrorAlert(bundle.getString("label.cadastro.falha"));
+			}
+		}
 	}
 
 	@Override public void mostrarElemento(Mesa elemento) {
