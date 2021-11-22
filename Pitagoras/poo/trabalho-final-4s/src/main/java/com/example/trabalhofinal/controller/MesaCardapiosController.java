@@ -1,14 +1,10 @@
 package com.example.trabalhofinal.controller;
 
-import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.VBox;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 import com.example.trabalhofinal.component.menu.MenuItemsComponent;
@@ -30,10 +26,12 @@ public class MesaCardapiosController implements MesaCardapiosComponent.MesaCarda
 	private Pedido pedido;
 
 	private final HashMap<Integer, List<Cardapio>> cardapiosSelecionados;
+	private final List<ItemMenu> itemMenus;
 
 	public MesaCardapiosController(Mesa mesa) {
 		this.mesa = mesa;
 		this.cardapiosSelecionados = new HashMap<>();
+		this.itemMenus = new ArrayList<>();
 		this.cardapitoService = new CardapitoService();
 		this.pedidoService = new PedidoService();
 		obterPedidos();
@@ -51,12 +49,61 @@ public class MesaCardapiosController implements MesaCardapiosComponent.MesaCarda
 
 	private void setPedido(Pedido pedido) {
 		this.pedido = pedido;
-		pedido.getCardapios().forEach(this::adcionarCardapios);
+		if (pedido.getCardapios() != null) {
+			cardapiosSelecionados.clear();
+			pedido.getCardapios().forEach(this::adcionarCardapios);
+		}
 	}
 
 	private void adcionarCardapios(Cardapio cardapio) {
 		cardapiosSelecionados.computeIfAbsent(cardapio.getCardapioId(), key -> new ArrayList<>())
 				.add(cardapio);
+	}
+
+	@Override public List<Cardapio> cardapios(CardapioTipo cardapioTipo) {
+		return cardapitoService.listarPorTipo(cardapioTipo);
+	}
+
+	@Override public Optional<Pane> menu(Cardapio cardapio) {
+		MenuItemsComponent component = new MenuItemsComponent(totalSelecionado(cardapio));
+		final ItemMenu itemMenu = new ItemMenu(cardapio, component);
+		this.itemMenus.add(itemMenu);
+		component.build(itemMenu);
+		return Optional.of(component);
+	}
+
+	private void removerCardapio(Cardapio cardapio) {
+		if (cardapiosSelecionados.containsKey(cardapio.getCardapioId())) {
+			cardapiosSelecionados.get(cardapio.getCardapioId()).remove(cardapio);
+		}
+	}
+
+	private int totalSelecionado(Cardapio cardapio) {
+		if (cardapiosSelecionados.containsKey(cardapio.getCardapioId())) {
+			return cardapiosSelecionados.get(cardapio.getCardapioId()).size();
+		}
+		return 0;
+	}
+
+	public void concluir() {
+		List<Cardapio> cardapios = new ArrayList<>();
+		cardapiosSelecionados.forEach((key, value) -> cardapios.addAll(value));
+
+		if (pedido != null) {
+			pedido.setCardapios(cardapios);
+		} else {
+			pedido = new Pedido();
+			pedido.setCardapios(cardapios);
+			pedido.setMesa(mesa);
+		}
+		pedido.setValorTotal(cardapios.stream().mapToDouble(Cardapio::getPreco).sum());
+		pedidoService.salvar(pedido);
+		setPedido(pedido);
+	}
+
+	@Override public void sair() {
+		setPedido(pedido);
+		itemMenus.forEach(ItemMenu::recarregar);
 	}
 
 	@Override public void cadastrarElemento(Cardapio elemento) {
@@ -79,20 +126,6 @@ public class MesaCardapiosController implements MesaCardapiosComponent.MesaCarda
 		return false;
 	}
 
-	@Override public void sair() {
-
-	}
-
-	@Override public List<Cardapio> cardapios(CardapioTipo cardapioTipo) {
-		return cardapitoService.listarPorTipo(cardapioTipo);
-	}
-
-	@Override public Optional<Pane> menu(Cardapio cardapio) {
-		MenuItemsComponent component = new MenuItemsComponent(totalSelecionado(cardapio));
-		component.build(new ItemMenu(cardapio, component));
-		return Optional.of(component);
-	}
-
 	private class ItemMenu implements MenuItemsComponent.MenuItemDelegate {
 
 		private final Cardapio cardapio;
@@ -105,40 +138,17 @@ public class MesaCardapiosController implements MesaCardapiosComponent.MesaCarda
 
 		@Override public void add() {
 			adcionarCardapios(cardapio);
-			component.atualizar(totalSelecionado(cardapio));
+			recarregar();
 		}
 
 		@Override public void remover() {
 			removerCardapio(cardapio);
-			component.atualizar(totalSelecionado(cardapio));
+			recarregar();
 		}
-	}
 
-	private void removerCardapio(Cardapio cardapio) {
-		if (cardapiosSelecionados.containsKey(cardapio.getCardapioId())) {
-			cardapiosSelecionados.get(cardapio.getCardapioId()).remove(cardapio);
+		public void recarregar() {
+			final int total = totalSelecionado(cardapio);
+			component.atualizar(total);
 		}
-	}
-
-	private int totalSelecionado(Cardapio cardapio) {
-		if (cardapiosSelecionados.containsKey(cardapio.getCardapioId())) {
-			return cardapiosSelecionados.get(cardapio.getCardapioId()).size();
-		}
-		return 0;
-	}
-
-	public void concluir() {
-		List<Cardapio> cardapios = new ArrayList<>();
-		cardapiosSelecionados.forEach((key, value) -> cardapios.addAll(value));
-
-		if (pedido != null) {
-			pedido.setCardapios(cardapios);
-		} else  {
-			pedido = new Pedido();
-			pedido.setCardapios(cardapios);
-			pedido.setMesa(mesa);
-		}
-		pedido.setValorTotal(cardapios.stream().mapToDouble(Cardapio::getPreco).sum());
-		pedidoService.salvar(pedido);
 	}
 }

@@ -12,7 +12,6 @@ import java.util.List;
 import com.example.trabalhofinal.component.cardapio.ListaCardapioComponent;
 import com.example.trabalhofinal.model.Cardapio;
 import com.example.trabalhofinal.model.CardapioTipo;
-import com.example.trabalhofinal.model.Mesa;
 
 public class MesaCardapiosComponent extends VBox {
 
@@ -45,6 +44,10 @@ public class MesaCardapiosComponent extends VBox {
 
 	private void recarregar(CardapioTipo cardapioTipo) {
 		cardapioComponent.setElementos(delegate.cardapios(cardapioTipo));
+	}
+
+	public void setValues(List<Cardapio> cardapios) {
+		cardapioComponent.setElementos(cardapios);
 	}
 
 	public interface MesaCardapioDelegate extends ListaCardapioComponent.CardapioDelegate {
