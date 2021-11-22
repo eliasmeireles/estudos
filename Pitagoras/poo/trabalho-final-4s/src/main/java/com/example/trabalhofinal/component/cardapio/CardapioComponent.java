@@ -14,12 +14,14 @@ import com.example.trabalhofinal.model.Cardapio;
 public class CardapioComponent extends CardComponent<HBox> {
 
 	private final Cardapio cardapio;
-	private final VBox userData;
+	private final ListaCardapioComponent.CardapioDelegate delegate;
+	private final VBox dataChildren;
 
-	public CardapioComponent(Cardapio cardapio, CardapioTabComponent.CardapioDelegate delegate) {
+	public CardapioComponent(Cardapio cardapio, ListaCardapioComponent.CardapioDelegate delegate) {
 		super(new HBox());
 		this.cardapio = cardapio;
-		this.userData = new VBox();
+		this.delegate = delegate;
+		this.dataChildren = new VBox();
 		setupComponent();
 		setOnMouseClicked(eH -> delegate.mostrarElemento(this.cardapio));
 	}
@@ -28,10 +30,12 @@ public class CardapioComponent extends CardComponent<HBox> {
 		ImageView imageView = new CircleImageVIew(cardapio.getImagem(), 90, 90, 35);
 		container.getChildren().add(imageView);
 		container.setSpacing(8);
-		container.getChildren().add(userData);
-		userData.setAlignment(Pos.CENTER);
-		userData.setSpacing(5);
-		userData.getChildren().add(new HLabelValorComponent(bundle.getString("label.nome"), cardapio.getNome()));
-		userData.getChildren().add(new HLabelValorComponent(bundle.getString("label.preco"), String.valueOf(cardapio.getPreco())));
+		container.getChildren().add(dataChildren);
+		dataChildren.setAlignment(Pos.CENTER);
+		dataChildren.setSpacing(5);
+		dataChildren.getChildren().add(new HLabelValorComponent(bundle.getString("label.nome"), cardapio.getNome()));
+		dataChildren.getChildren().add(new HLabelValorComponent(bundle.getString("label.preco"), String.valueOf(cardapio.getPreco())));
+
+		delegate.menu(cardapio).ifPresent(pane -> dataChildren.getChildren().add(pane));
 	}
 }

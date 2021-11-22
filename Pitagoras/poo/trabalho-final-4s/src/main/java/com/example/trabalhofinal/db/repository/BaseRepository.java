@@ -208,10 +208,11 @@ import com.example.trabalhofinal.util.GenericsClassUtil;
 		GenericsClassUtil.PrimaryKeyData<Object> primaryKeyData = null;
 
 		for (Field field : newInstance.getClass().getDeclaredFields()) {
-			if (ehPk(field)) {
-				primaryKeyData = getPkData(newInstance, field);
-			}
 			setValorDoAtributo(resultSet, newInstance, primaryKeyData, field);
+			if (ehPk(field)) {
+				String pkName = obterNomeDoAtributoNoBanco(field);
+				primaryKeyData = new GenericsClassUtil.PrimaryKeyData<>(resultSet.getObject(pkName), pkName);
+			}
 		}
 
 		if (primaryKeyData == null) {

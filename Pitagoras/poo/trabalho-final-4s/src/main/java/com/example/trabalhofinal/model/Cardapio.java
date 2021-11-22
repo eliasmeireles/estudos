@@ -67,6 +67,14 @@ public class Cardapio {
 		this.tipo = tipo;
 	}
 
+	@Override public boolean equals(Object o) {
+		if (o != null) {
+			final Cardapio cardapio = (Cardapio) o;
+			return cardapio.getCardapioId() != null && cardapio.getCardapioId().equals(getCardapioId());
+		}
+		return false;
+	}
+
 	@Override public String toString() {
 		return "Cardapio{" +
 				"cardapioId=" + cardapioId +

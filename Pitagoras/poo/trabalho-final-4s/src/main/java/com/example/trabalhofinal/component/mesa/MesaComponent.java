@@ -26,6 +26,13 @@ public class MesaComponent extends CardComponent<HBox> {
 		setOnMouseClicked(eH -> delegate.mostrarElemento(mesa));
 	}
 
+	public MesaComponent(Mesa mesa) {
+		super(new HBox());
+		this.mesa = mesa;
+		this.mesaData = new VBox();
+		setupComponent();
+	}
+
 	private void setupComponent() {
 		try {
 			container.getChildren().add(ResourceUtil.icon("table", 35, 35));

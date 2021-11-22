@@ -4,11 +4,12 @@ import static com.example.trabalhofinal.config.ResourceConfig.bundle;
 
 import com.example.trabalhofinal.authority.UsuarioAuthority;
 import com.example.trabalhofinal.component.cardapio.CardapioTabComponent;
+import com.example.trabalhofinal.component.cardapio.ListaCardapioComponent;
 import com.example.trabalhofinal.model.Cardapio;
 import com.example.trabalhofinal.model.CardapioTipo;
 import com.example.trabalhofinal.service.CardapitoService;
 
-public class CardapioController implements CardapioTabComponent.CardapioDelegate {
+public class CardapioController implements ListaCardapioComponent.CardapioDelegate {
 
 	private final CardapitoService service;
 	private final CardapioTipo tipo;

@@ -10,17 +10,15 @@ import com.example.trabalhofinal.component.ListaComponent;
 import com.example.trabalhofinal.model.Cardapio;
 import com.example.trabalhofinal.model.CardapioTipo;
 
-public class CardapioTabComponent extends AppTabComponent<Cardapio, CardapioTabComponent.CardapioDelegate> {
+public class CardapioTabComponent extends AppTabComponent<Cardapio, ListaCardapioComponent.CardapioDelegate> {
 
-	private final CardapioTipo tipo;
 	private final HBox content;
 	private CardapioFormComponent cardapioFormComponent;
-	private final CardapioDelegate delegate;
+	private final ListaCardapioComponent.CardapioDelegate delegate;
 
-	public CardapioTabComponent(CardapioDelegate delegate, CardapioTipo tipo) {
+	public CardapioTabComponent(ListaCardapioComponent.CardapioDelegate delegate, CardapioTipo tipo) {
 		super(delegate, String.format("%s -> %s", bundle.getString("label.cardapios"), tipo.nome));
 		this.delegate = delegate;
-		this.tipo = tipo;
 		this.content = new HBox();
 		adicionarFormDeEdicao();
 		setRoot(content);
@@ -44,7 +42,7 @@ public class CardapioTabComponent extends AppTabComponent<Cardapio, CardapioTabC
 		}
 	}
 
-	@Override protected ListaComponent<Cardapio> listaComponentBuilder(CardapioDelegate delegate) {
+	@Override protected ListaComponent<Cardapio> listaComponentBuilder(ListaCardapioComponent.CardapioDelegate delegate) {
 		return new ListaCardapioComponent(delegate);
 	}
 
@@ -68,11 +66,5 @@ public class CardapioTabComponent extends AppTabComponent<Cardapio, CardapioTabC
 
 	public void mostrarListaCardapio() {
 		scrollPane.setContent(listaComponent);
-	}
-
-	public interface CardapioDelegate extends CardapioFormComponent.CadapioFormDelegate {
-		boolean temPemissaoAdm();
-
-		void sair();
 	}
 }

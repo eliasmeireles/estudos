@@ -11,58 +11,40 @@ import javafx.scene.layout.VBox;
 import com.example.trabalhofinal.component.menu.MenuActions;
 import com.example.trabalhofinal.component.menu.MenuConcluir;
 import com.example.trabalhofinal.component.menu.MenuSair;
+import com.example.trabalhofinal.controller.MesaCardapiosController;
 import com.example.trabalhofinal.model.CardapioTipo;
 import com.example.trabalhofinal.model.Mesa;
 
 public class MesaDetalhesComponent extends HBox implements MenuActions.MenuConcluir {
 
-	private final Mesa mesa;
-	private final MesaTabComponent.MesaDelegate delegate;
 	private final VBox container;
-	private final Label pedidosLabel;
 	private final VBox mesaLayout;
 	private final Button adicionarPedido;
 	private final MenuSair menuSair;
 	private final MenuConcluir menuConcluir;
-	private final VBox cardapioContainer;
+	private final MesaCardapiosController cardapiosController;
+	private final MesaPedidosComponent pedidosComponent;
 
 	public MesaDetalhesComponent(Mesa mesa, MesaTabComponent.MesaDelegate delegate) {
-		this.mesa = mesa;
-		this.delegate = delegate;
 		this.container = new VBox();
-		this.mesaLayout = new VBox(new MesaComponent(mesa, delegate));
-		this.pedidosLabel = new Label(bundle.getString("label.pedidos"));
+		this.pedidosComponent = new MesaPedidosComponent(mesa);
+		this.mesaLayout = new VBox(new MesaComponent(mesa));
 		this.menuSair = new MenuSair(delegate);
 		this.menuConcluir = new MenuConcluir(this);
-		this.cardapioContainer = new VBox();
+		this.cardapiosController = new MesaCardapiosController(mesa);
 		adicionarPedido = new Button(bundle.getString("label.adicionar.pedido"));
-		configuraCardapioLayout();
 		layoutMesa();
 		configurarLayout();
 	}
 
-	private void configuraCardapioLayout() {
-		final Label label = new Label(bundle.getString("label.cardapios"));
-		label.setId("title-label");
-		final ComboBox<CardapioTipo> comboBox = new ComboBox<>();
-		comboBox.getItems().addAll(CardapioTipo.values());
-		comboBox.setOnAction(eh -> System.out.println(comboBox.getValue()));
-		final HBox hBox = new HBox(label, comboBox);
-		hBox.setSpacing(8);
-		hBox.setAlignment(Pos.CENTER_LEFT);
-		cardapioContainer.getChildren().add(hBox);
-		comboBox.setValue(CardapioTipo.values()[0]);
-	}
-
 	private void configurarLayout() {
 		setSpacing(25);
-		pedidosLabel.setId("title-label");
 		container.setSpacing(16);
 		getChildren().add(mesaLayout);
 		getChildren().add(container);
 		mesaLayout.setAlignment(Pos.TOP_CENTER);
 		mesaLayout.setSpacing(16);
-		container.getChildren().add(pedidosLabel);
+		container.getChildren().add(pedidosComponent);
 		adicionarPedido.setOnMouseClicked(eH -> listarCardapios());
 	}
 
@@ -72,15 +54,17 @@ public class MesaDetalhesComponent extends HBox implements MenuActions.MenuConcl
 	}
 
 	private void listarCardapios() {
-		container.getChildren().remove(pedidosLabel);
+		container.getChildren().remove(pedidosComponent);
 		mesaLayout.getChildren().remove(adicionarPedido);
 		mesaLayout.getChildren().remove(menuSair);
 		mesaLayout.getChildren().add(menuConcluir);
-		container.getChildren().add(cardapioContainer);
+		container.getChildren().add(cardapiosController.getComponent());
 	}
 
 	@Override public void concluir() {
-		pedidosLabel.setText(bundle.getString("label.pedidos"));
+		cardapiosController.concluir();
+		container.getChildren().remove(cardapiosController.getComponent());
+		container.getChildren().add(pedidosComponent);
 		mesaLayout.getChildren().remove(menuConcluir);
 		mesaLayout.getChildren().add(adicionarPedido);
 		mesaLayout.getChildren().add(menuSair);

@@ -13,5 +13,13 @@ public class MenuActions {
 	public interface MenuEditar {
 		void editar();
 	}
+
+	public interface MenuAdd {
+		void add();
+	}
+
+	public interface MenuRemover {
+		void remover();
+	}
 }
 

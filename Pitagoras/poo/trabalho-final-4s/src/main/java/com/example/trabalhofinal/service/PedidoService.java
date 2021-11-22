@@ -1,6 +1,7 @@
 package com.example.trabalhofinal.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import com.example.trabalhofinal.model.Pedido;
 import com.example.trabalhofinal.repository.PedidoRepository;
@@ -23,6 +24,11 @@ public class PedidoService {
 
 	public List<Pedido> findAllByFinalizadoAndMesa(boolean finalizado, int mesaId) {
 		return repository.findByFinalizadoAndMesa(finalizado, mesaId);
+	}
+
+	public Optional<Pedido> findPedidoAtivoDaMesa(int mesaId) {
+		return repository.findByFinalizadoAndMesa(false, mesaId)
+				.stream().findFirst();
 	}
 
 	public List<Pedido> findAllByMesa(int mesaId) {

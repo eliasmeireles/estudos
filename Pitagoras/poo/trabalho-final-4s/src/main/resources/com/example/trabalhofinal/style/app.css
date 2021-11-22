@@ -96,3 +96,8 @@
     -fx-min-width: 275px;
     -fx-text-fill: #333030;
 }
+#label-24-px {
+    -fx-font-size: 24px;
+    -fx-text-fill: #333030;
+    -fx-font-weight: bold;
+}

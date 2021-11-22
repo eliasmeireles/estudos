@@ -16,8 +16,8 @@ public class PedidoRepository extends BaseRepository<Pedido, Integer> {
 
 	public List<Pedido> findByFinalizadoAndMesa(boolean finalizado, int mesaId) {
 		final StringBuilder query = new StringBuilder("WHERE ")
-				.append(fieldFilter("finalizado, "))
-				.append("AND ")
+				.append(fieldFilter("finalizado "))
+				.append(" AND ")
 				.append(fieldFilter("mesa_id"));
 
 		return findAll(query, finalizado, mesaId);

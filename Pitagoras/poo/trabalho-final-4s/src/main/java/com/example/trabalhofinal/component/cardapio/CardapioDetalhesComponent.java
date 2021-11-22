@@ -22,10 +22,10 @@ import com.example.trabalhofinal.model.Usuario;
 public class CardapioDetalhesComponent extends VBox implements MenuBuilder.MenuCardapio {
 
 	private final Cardapio cardapio;
-	private final CardapioTabComponent.CardapioDelegate delegate;
+	private final ListaCardapioComponent.CardapioDelegate delegate;
 	private final VBox cardapioData;
 
-	public CardapioDetalhesComponent(Cardapio cardapio, CardapioTabComponent.CardapioDelegate delegate) {
+	public CardapioDetalhesComponent(Cardapio cardapio, ListaCardapioComponent.CardapioDelegate delegate) {
 		super(new VBox());
 		this.cardapio = cardapio;
 		this.delegate = delegate;
