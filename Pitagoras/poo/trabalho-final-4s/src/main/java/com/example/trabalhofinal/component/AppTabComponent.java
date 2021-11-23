@@ -29,7 +29,6 @@ public abstract class AppTabComponent<T, D extends AppTabComponent.TabMenuDelega
 	}
 
 	public void setElementos(List<T> elementos) {
-		System.out.println(elementos);
 		this.listaComponent.setElementos(elementos);
 	}
 
