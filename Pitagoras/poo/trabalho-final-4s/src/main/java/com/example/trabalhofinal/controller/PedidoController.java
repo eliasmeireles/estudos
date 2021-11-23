@@ -34,4 +34,12 @@ public class PedidoController implements PedidosTabComponent.PedidoDelegate {
 		tabComponent.mostrarDetalhesPedido(elemento);
 	}
 
+	@Override public void encerrarPedido(Pedido pedido) {
+		pedido.setFinalizado(true);
+		pedidoService.atualizar(pedido);
+	}
+
+	@Override public void atualizarListaDepedidos() {
+		tabComponent.setElementos(pedidoService.findAll());
+	}
 }

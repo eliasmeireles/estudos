@@ -32,7 +32,7 @@ public class PedidoComponent extends CardComponent<HBox> {
 	}
 
 	private HLabelValorComponent numeroMesa() {
-		return new HLabelValorComponent(bundle.getString("label.numero"), String.valueOf(pedido.getMesa().getNumero()), 125);
+		return new HLabelValorComponent(bundle.getString("label.numero.pedido"), String.valueOf(pedido.getMesa().getNumero()), 125);
 	}
 
 	private HLabelValorComponent valorPedito() {

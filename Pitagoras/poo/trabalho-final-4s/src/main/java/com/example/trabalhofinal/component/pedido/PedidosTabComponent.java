@@ -53,11 +53,26 @@ public class PedidosTabComponent extends AppTabComponent<Pedido, PedidosTabCompo
 		sairDoDetalhePedido.setPadding(new Insets(8));
 		sairDoDetalhePedido.setOnMouseClicked(eH -> mostrarListaPedidos());
 		final HBox hBox = new HBox(cardapioTitulo, sairDoDetalhePedido);
+		if (!elemento.isFinalizado()) {
+			hBox.getChildren().add(encerrarPedido(elemento));
+		}
 		hBox.setSpacing(16);
 		hBox.setAlignment(Pos.CENTER_LEFT);
 		hBox.setPadding(new Insets(0.0D, 0.0D, 16D, 0.0D));
+
 		final MesaCardapiosComponent mesaCardapiosComponent = new MesaCardapiosComponent(new CardapioDelegate(elemento), hBox);
 		scrollPane.setContent(mesaCardapiosComponent);
+	}
+
+	private Button encerrarPedido(Pedido pedido) {
+		final Button button = new Button(bundle.getString("label.finalizar.pedido"));
+		button.setPadding(new Insets(8));
+		button.setOnMouseClicked(eH -> {
+			delegate.encerrarPedido(pedido);
+			mostrarListaPedidos();
+			delegate.atualizarListaDepedidos();
+		});
+		return button;
 	}
 
 	public void mostrarListaPedidos() {
@@ -65,7 +80,9 @@ public class PedidosTabComponent extends AppTabComponent<Pedido, PedidosTabCompo
 	}
 
 	public interface PedidoDelegate extends TabMenuDelegate<Pedido> {
+		void encerrarPedido(Pedido pedido);
 
+		void atualizarListaDepedidos();
 	}
 
 	private class CardapioDelegate implements MesaCardapiosComponent.MesaCardapioDelegate {
