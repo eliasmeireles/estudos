@@ -1,21 +1,21 @@
 package com.example.trabalhofinal.controller;
 
-import com.example.trabalhofinal.component.pedido.PediosTabComponent;
+import com.example.trabalhofinal.component.pedido.PedidosTabComponent;
 import com.example.trabalhofinal.model.Pedido;
 import com.example.trabalhofinal.service.PedidoService;
 
-public class PedidoController implements PediosTabComponent.PedidoDelegate {
+public class PedidoController implements PedidosTabComponent.PedidoDelegate {
 
-	private final PediosTabComponent tabComponent;
+	private final PedidosTabComponent tabComponent;
 	private final PedidoService pedidoService;
 
 	public PedidoController() {
-		this.tabComponent = new PediosTabComponent(this);
+		this.tabComponent = new PedidosTabComponent(this);
 		this.pedidoService = new PedidoService();
 	}
 
-	public PediosTabComponent getTab() {
-		tabComponent.setPedidos(pedidoService.findAll());
+	public PedidosTabComponent getTab() {
+		tabComponent.setElementos(pedidoService.findAll());
 		return tabComponent;
 	}
 
@@ -24,7 +24,6 @@ public class PedidoController implements PediosTabComponent.PedidoDelegate {
 	}
 
 	@Override public void mostrarElemento(Pedido elemento) {
-
 	}
 
 	@Override public void editarElemento(Pedido elemento) {
@@ -32,6 +31,7 @@ public class PedidoController implements PediosTabComponent.PedidoDelegate {
 	}
 
 	@Override public void selecionarElemento(Pedido elemento) {
-
+		tabComponent.mostrarDetalhesPedido(elemento);
 	}
+
 }

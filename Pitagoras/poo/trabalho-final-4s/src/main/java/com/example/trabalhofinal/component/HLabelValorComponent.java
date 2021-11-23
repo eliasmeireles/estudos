@@ -23,6 +23,10 @@ public class HLabelValorComponent extends HBox {
 		setupComponent();
 	}
 
+	public void setValorId(String id) {
+		this.valor.setId(id);
+	}
+
 	private void setupComponent() {
 		setSpacing(3);
 		getChildren().add(this.label);

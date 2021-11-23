@@ -29,6 +29,7 @@ public abstract class AppTabComponent<T, D extends AppTabComponent.TabMenuDelega
 	}
 
 	public void setElementos(List<T> elementos) {
+		System.out.println(elementos);
 		this.listaComponent.setElementos(elementos);
 	}
 
@@ -63,6 +64,7 @@ public abstract class AppTabComponent<T, D extends AppTabComponent.TabMenuDelega
 
 	protected void resize() {
 		scrollPane.setMinWidth(App.mainStage.getWidth() - 220);
+		scrollPane.setMinHeight(App.mainStage.getHeight() - 220);
 	}
 
 	public final void setRoot(Node node) {
