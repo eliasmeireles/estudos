@@ -28,13 +28,15 @@ public class MesaTabComponent extends AppTabComponent<Mesa, MesaTabComponent.Mes
 
 	private void configuraContent() {
 		this.content.setSpacing(25);
-		this.formComponent.setPrefWidth(155);
-		this.formComponent.withWidth(155.0);
-		this.formComponent.setSpacing(8);
-		this.formComponent.setAlignment(Pos.TOP_CENTER);
 		this.content.setPadding(new Insets(16));
 		this.content.setMinHeight(App.mainStage.getHeight() - 86);
-		this.content.getChildren().add(formComponent);
+		if (delegate.ehAdministrador()) {
+			this.content.getChildren().add(formComponent);
+			this.formComponent.setPrefWidth(155);
+			this.formComponent.withWidth(155.0);
+			this.formComponent.setSpacing(8);
+			this.formComponent.setAlignment(Pos.TOP_CENTER);
+		}
 		this.content.getChildren().add(scrollPane);
 	}
 
@@ -45,7 +47,9 @@ public class MesaTabComponent extends AppTabComponent<Mesa, MesaTabComponent.Mes
 
 	public void listarMesas() {
 		this.content.getChildren().clear();
-		this.content.getChildren().add(formComponent);
+		if (delegate.ehAdministrador()) {
+			this.content.getChildren().add(formComponent);
+		}
 		this.content.getChildren().add(listaComponent);
 	}
 
@@ -54,5 +58,6 @@ public class MesaTabComponent extends AppTabComponent<Mesa, MesaTabComponent.Mes
 	}
 
 	public interface MesaDelegate extends TabMenuDelegate<Mesa>, MenuBuilder.MenuCardapio {
+		boolean ehAdministrador();
 	}
 }
