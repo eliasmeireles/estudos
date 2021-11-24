@@ -132,7 +132,9 @@ public class PedidosTabComponent extends AppTabComponent<Pedido, PedidosTabCompo
 
 		@Override public Optional<Pane> menu(Cardapio cardapio) {
 			final long totalPorCardapio = totalPorCardapio(cardapio);
-			return Optional.of(new VBox(labelQuatidadeCardapio(totalPorCardapio), labelValorPorCardapio(cardapio.getPreco() * totalPorCardapio)));
+			final VBox vBox = new VBox(labelQuatidadeCardapio(totalPorCardapio), labelValorPorCardapio(cardapio.getPreco() * totalPorCardapio));
+			vBox.setSpacing(8);
+			return Optional.of(vBox);
 		}
 
 		private HLabelValorComponent labelQuatidadeCardapio(long totalPorCardapio) {

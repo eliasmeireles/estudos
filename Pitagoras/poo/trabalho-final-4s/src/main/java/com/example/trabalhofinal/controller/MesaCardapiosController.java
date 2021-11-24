@@ -102,7 +102,6 @@ public class MesaCardapiosController implements MesaCardapiosComponent.MesaCarda
 	}
 
 	@Override public void sair() {
-		setPedido(pedido);
 		itemMenus.forEach(ItemMenu::recarregar);
 	}
 

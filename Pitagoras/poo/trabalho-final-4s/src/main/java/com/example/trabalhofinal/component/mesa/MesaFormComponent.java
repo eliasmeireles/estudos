@@ -36,12 +36,16 @@ public class MesaFormComponent extends VBox {
 	}
 
 	private void salvarMenas() {
-		final Mesa mesa = new Mesa();
-		mesa.setNumero(Integer.valueOf(numeroMesa.getText()));
-		mesa.setDisponivel(comboBoxDisponibilidade.getValue().equals(bundle.getString("label.disponivel")));
-		delegate.cadastrarElemento(mesa);
-		numeroMesa.setText("");
-		comboBoxDisponibilidade.setValue(bundle.getString("label.disponivel"));
+		try {
+			final Mesa mesa = new Mesa();
+			mesa.setNumero(Integer.valueOf(numeroMesa.getText()));
+			mesa.setDisponivel(comboBoxDisponibilidade.getValue().equals(bundle.getString("label.disponivel")));
+			delegate.cadastrarElemento(mesa);
+			numeroMesa.setText("");
+			comboBoxDisponibilidade.setValue(bundle.getString("label.disponivel"));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	private void configuraNumeroMesaField() {

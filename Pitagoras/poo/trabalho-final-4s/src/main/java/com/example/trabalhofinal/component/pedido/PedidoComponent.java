@@ -26,7 +26,7 @@ public class PedidoComponent extends CardComponent<HBox> {
 		container.setAlignment(Pos.CENTER_LEFT);
 		final VBox vBox = new VBox(numeroMesa(), statusPedido(), valorPedito());
 		vBox.setAlignment(Pos.CENTER_LEFT);
-		vBox.setSpacing(6);
+		vBox.setSpacing(8);
 		container.getChildren().add(vBox);
 		setOnMouseClicked(eH -> delegate.selecionarElemento(pedido));
 	}
