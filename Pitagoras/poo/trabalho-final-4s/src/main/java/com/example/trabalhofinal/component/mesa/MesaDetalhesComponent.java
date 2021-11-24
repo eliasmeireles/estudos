@@ -9,6 +9,7 @@ import javafx.scene.layout.VBox;
 import com.example.trabalhofinal.component.menu.MenuActions;
 import com.example.trabalhofinal.component.menu.MenuConcluir;
 import com.example.trabalhofinal.component.menu.MenuSair;
+import com.example.trabalhofinal.component.pedido.PedidosTabComponent;
 import com.example.trabalhofinal.controller.MesaCardapiosController;
 import com.example.trabalhofinal.model.Mesa;
 
@@ -22,9 +23,9 @@ public class MesaDetalhesComponent extends HBox implements MenuActions.MenuConcl
 	private final MesaCardapiosController cardapiosController;
 	private final MesaPedidosComponent pedidosComponent;
 
-	public MesaDetalhesComponent(Mesa mesa, MesaTabComponent.MesaDelegate delegate) {
+	public MesaDetalhesComponent(Mesa mesa, MesaTabComponent.MesaDelegate delegate, PedidosTabComponent.PedidoDelegate pedidoDelegate) {
 		this.container = new VBox();
-		this.pedidosComponent = new MesaPedidosComponent(mesa);
+		this.pedidosComponent = new MesaPedidosComponent(mesa, pedidoDelegate);
 		this.mesaLayout = new VBox(new MesaComponent(mesa));
 		this.menuSair = new MenuSair(delegate);
 		this.menusListaCardapios = new HBox(new MenuConcluir(this), new MenuSair(this::sairListaCardapios));
@@ -72,4 +73,5 @@ public class MesaDetalhesComponent extends HBox implements MenuActions.MenuConcl
 		mesaLayout.getChildren().add(adicionarPedido);
 		mesaLayout.getChildren().add(menuSair);
 	}
+
 }

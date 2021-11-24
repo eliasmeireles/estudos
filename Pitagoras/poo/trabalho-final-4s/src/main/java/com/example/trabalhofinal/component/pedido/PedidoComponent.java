@@ -22,6 +22,11 @@ public class PedidoComponent extends CardComponent<HBox> {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+
+		if (!pedido.isFinalizado()) {
+			container.setId("card-container-destaque");
+		}
+
 		container.setSpacing(16);
 		container.setAlignment(Pos.CENTER_LEFT);
 		final VBox vBox = new VBox(numeroMesa(), statusPedido(), valorPedito());

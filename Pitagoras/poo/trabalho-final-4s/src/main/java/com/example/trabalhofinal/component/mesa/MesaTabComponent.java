@@ -9,17 +9,20 @@ import com.example.trabalhofinal.App;
 import com.example.trabalhofinal.component.AppTabComponent;
 import com.example.trabalhofinal.component.ListaComponent;
 import com.example.trabalhofinal.component.facoty.MenuBuilder;
+import com.example.trabalhofinal.component.pedido.PedidosTabComponent;
 import com.example.trabalhofinal.model.Mesa;
 
 public class MesaTabComponent extends AppTabComponent<Mesa, MesaTabComponent.MesaDelegate> {
 
 	private final MesaDelegate delegate;
+	private PedidosTabComponent.PedidoDelegate pedidoDelegate;
 	private final HBox content;
 	private final MesaFormComponent formComponent;
 
-	public MesaTabComponent(MesaDelegate delegate) {
+	public MesaTabComponent(MesaDelegate delegate, PedidosTabComponent.PedidoDelegate pedidoDelegate) {
 		super(delegate, String.format("%s -> %s", bundle.getString("label.servicos"), bundle.getString("label.mesa")));
 		this.delegate = delegate;
+		this.pedidoDelegate = pedidoDelegate;
 		this.content = new HBox();
 		setRoot(content);
 		this.formComponent = new MesaFormComponent(delegate);
@@ -42,7 +45,7 @@ public class MesaTabComponent extends AppTabComponent<Mesa, MesaTabComponent.Mes
 
 	public void mesaDetalhes(Mesa mesa) {
 		this.content.getChildren().clear();
-		this.content.getChildren().add(new MesaDetalhesComponent(mesa, delegate));
+		this.content.getChildren().add(new MesaDetalhesComponent(mesa, delegate, pedidoDelegate));
 	}
 
 	public void listarMesas() {

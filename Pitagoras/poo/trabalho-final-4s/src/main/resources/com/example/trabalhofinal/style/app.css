@@ -14,6 +14,14 @@
     -fx-background-color: #e0e0e0;
 }
 
+#card-component > #card-container-destaque:hover {
+    -fx-background-color: #e0e0e0;
+}
+
+#card-component > #card-container-destaque {
+    -fx-background-color: #ffd180;
+}
+
 #menu-item:hover {
     -fx-background-color: #9e9e9e;
 }
@@ -101,3 +109,4 @@
     -fx-text-fill: #333030;
     -fx-font-weight: bold;
 }
+

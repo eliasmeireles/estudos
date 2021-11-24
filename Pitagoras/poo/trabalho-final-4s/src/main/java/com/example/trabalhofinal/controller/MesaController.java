@@ -11,10 +11,12 @@ public class MesaController implements MesaTabComponent.MesaDelegate {
 
 	private final MesaService service;
 	private final MesaTabComponent tabComponent;
+	private final PedidoController pedidoController;
 
 	public MesaController() {
+		this.pedidoController = new PedidoController();
 		this.service = new MesaService();
-		this.tabComponent = new MesaTabComponent(this);
+		this.tabComponent = new MesaTabComponent(this, pedidoController);
 	}
 
 	public MesaTabComponent getTab() {
@@ -33,6 +35,7 @@ public class MesaController implements MesaTabComponent.MesaDelegate {
 	}
 
 	@Override public void mostrarElemento(Mesa elemento) {
+		pedidoController.setMesa(elemento);
 		tabComponent.mesaDetalhes(elemento);
 	}
 

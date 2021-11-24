@@ -18,15 +18,21 @@ public class PedidoRepository extends BaseRepository<Pedido, Integer> {
 		final StringBuilder query = new StringBuilder("WHERE ")
 				.append(fieldFilter("finalizado "))
 				.append(" AND ")
-				.append(fieldFilter("mesa_id"));
+				.append(fieldFilter("mesa_id"))
+				.append(orderByFinalizado());
 
 		return findAll(query, finalizado, mesaId);
 	}
 
 	public List<Pedido> findByMesa(int mesaId) {
 		final StringBuilder query = new StringBuilder("WHERE ")
-				.append(fieldFilter("mesa_id"));
+				.append(fieldFilter("mesa_id"))
+				.append(orderByFinalizado());
 
 		return findAll(query, mesaId);
+	}
+
+	private String orderByFinalizado() {
+		return " ORDER BY finalizado ASC";
 	}
 }

@@ -1,21 +1,32 @@
 package com.example.trabalhofinal.controller;
 
+import javafx.scene.layout.Pane;
+
+import java.util.List;
+
 import com.example.trabalhofinal.component.pedido.PedidosTabComponent;
+import com.example.trabalhofinal.model.Mesa;
 import com.example.trabalhofinal.model.Pedido;
 import com.example.trabalhofinal.service.PedidoService;
 
 public class PedidoController implements PedidosTabComponent.PedidoDelegate {
 
+	private Mesa mesa;
 	private final PedidosTabComponent tabComponent;
 	private final PedidoService pedidoService;
 
 	public PedidoController() {
+		this.mesa = null;
 		this.tabComponent = new PedidosTabComponent(this);
 		this.pedidoService = new PedidoService();
 	}
 
+	public void setMesa(Mesa mesa) {
+		this.mesa = mesa;
+	}
+
 	public PedidosTabComponent getTab() {
-		tabComponent.setElementos(pedidoService.findAll());
+		tabComponent.setElementos(getAllPedidos());
 		return tabComponent;
 	}
 
@@ -40,6 +51,17 @@ public class PedidoController implements PedidosTabComponent.PedidoDelegate {
 	}
 
 	@Override public void atualizarListaDepedidos() {
-		tabComponent.setElementos(pedidoService.findAll());
+		tabComponent.setElementos(getAllPedidos());
+	}
+
+	private List<Pedido> getAllPedidos() {
+		if (mesa != null) {
+			return pedidoService.findAllByMesa(mesa.getMesaId());
+		}
+		return pedidoService.findAll();
+	}
+
+	@Override public Pane getRootView() {
+		return getTab().getRootView();
 	}
 }
