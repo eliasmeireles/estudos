@@ -7,9 +7,14 @@ import com.example.trabalhofinal.model.Pedido;
 
 public class PedidoRepository extends BaseRepository<Pedido, Integer> {
 
+	@Override public List<Pedido> findAll() {
+		return super.findAll(new StringBuilder(orderByFinalizado()));
+	}
+
 	public List<Pedido> findByFinalizado(boolean finalizado) {
 		final StringBuilder query = new StringBuilder("WHERE ")
-				.append(fieldFilter("finalizado"));
+				.append(fieldFilter("finalizado"))
+				.append(orderByFinalizado());
 
 		return findAll(query, finalizado);
 	}

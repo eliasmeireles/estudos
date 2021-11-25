@@ -56,5 +56,7 @@ public class PedidosTabComponent extends AppTabComponent<Pedido, PedidosTabCompo
 		void atualizarListaDepedidos();
 
 		Pane getRootView();
+
+		void sairDetalhesPedido();
 	}
 }

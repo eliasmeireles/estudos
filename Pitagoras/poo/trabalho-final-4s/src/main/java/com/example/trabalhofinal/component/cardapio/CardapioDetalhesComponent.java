@@ -39,7 +39,6 @@ public class CardapioDetalhesComponent extends VBox implements MenuBuilder.MenuC
 		App.mainStage.heightProperty().addListener((observableValue, number, t1) -> Platform.runLater(this::setupComponent));
 	}
 
-	@SuppressWarnings("DuplicatedCode")
 	private void setupComponent() {
 		getChildren().clear();
 		cardapioData.getChildren().clear();

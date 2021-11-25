@@ -64,4 +64,8 @@ public class PedidoController implements PedidosTabComponent.PedidoDelegate {
 	@Override public Pane getRootView() {
 		return getTab().getRootView();
 	}
+
+	@Override public void sairDetalhesPedido() {
+		tabComponent.sairDetalhesPedido();
+	}
 }

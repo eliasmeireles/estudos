@@ -5,15 +5,12 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 
 import com.example.trabalhofinal.component.pedido.PedidosTabComponent;
-import com.example.trabalhofinal.model.Mesa;
 
 public class MesaPedidosComponent extends VBox {
 
-	private final Mesa mesa;
 	private final PedidosTabComponent.PedidoDelegate delegate;
 
-	public MesaPedidosComponent(Mesa mesa, PedidosTabComponent.PedidoDelegate delegate) {
-		this.mesa = mesa;
+	public MesaPedidosComponent(PedidosTabComponent.PedidoDelegate delegate) {
 		this.delegate = delegate;
 		Label pedidosLabel = new Label(bundle.getString("label.pedidos"));
 		pedidosLabel.setId("title-label");

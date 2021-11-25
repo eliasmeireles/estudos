@@ -19,13 +19,13 @@ public class MesaTabComponent extends AppTabComponent<Mesa, MesaTabComponent.Mes
 	private final HBox content;
 	private final MesaFormComponent formComponent;
 
-	public MesaTabComponent(MesaDelegate delegate, PedidosTabComponent.PedidoDelegate pedidoDelegate) {
-		super(delegate, String.format("%s -> %s", bundle.getString("label.servicos"), bundle.getString("label.mesa")));
-		this.delegate = delegate;
+	public MesaTabComponent(MesaDelegate mesaDelegate, PedidosTabComponent.PedidoDelegate pedidoDelegate) {
+		super(mesaDelegate, String.format("%s -> %s", bundle.getString("label.servicos"), bundle.getString("label.mesa")));
+		this.delegate = mesaDelegate;
 		this.pedidoDelegate = pedidoDelegate;
 		this.content = new HBox();
 		setRoot(content);
-		this.formComponent = new MesaFormComponent(delegate);
+		this.formComponent = new MesaFormComponent(mesaDelegate);
 		configuraContent();
 	}
 
@@ -45,7 +45,7 @@ public class MesaTabComponent extends AppTabComponent<Mesa, MesaTabComponent.Mes
 
 	public void mesaDetalhes(Mesa mesa) {
 		this.content.getChildren().clear();
-		this.content.getChildren().add(new MesaDetalhesComponent(mesa, delegate, pedidoDelegate));
+		this.content.getChildren().add(new MesaDetalhesComponent(mesa, delegate.detalhesMesaDelegate(mesa), delegate, pedidoDelegate));
 	}
 
 	public void listarMesas() {
@@ -62,5 +62,7 @@ public class MesaTabComponent extends AppTabComponent<Mesa, MesaTabComponent.Mes
 
 	public interface MesaDelegate extends TabMenuDelegate<Mesa>, MenuBuilder.MenuCardapio {
 		boolean ehAdministrador();
+
+		MesaDetalhesComponent.DetalhesMesaDelegate detalhesMesaDelegate(Mesa mesa);
 	}
 }

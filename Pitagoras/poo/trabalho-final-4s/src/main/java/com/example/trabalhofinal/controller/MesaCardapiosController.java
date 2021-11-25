@@ -9,6 +9,7 @@ import java.util.Optional;
 
 import com.example.trabalhofinal.component.menu.MenuItemsComponent;
 import com.example.trabalhofinal.component.mesa.MesaCardapiosComponent;
+import com.example.trabalhofinal.component.mesa.MesaDetalhesComponent;
 import com.example.trabalhofinal.model.Cardapio;
 import com.example.trabalhofinal.model.CardapioTipo;
 import com.example.trabalhofinal.model.Mesa;
@@ -16,13 +17,11 @@ import com.example.trabalhofinal.model.Pedido;
 import com.example.trabalhofinal.service.CardapitoService;
 import com.example.trabalhofinal.service.PedidoService;
 
-public class MesaCardapiosController implements MesaCardapiosComponent.MesaCardapioDelegate {
-
-	private final MesaCardapiosComponent component;
+public class MesaCardapiosController implements MesaCardapiosComponent.MesaCardapioDelegate, MesaDetalhesComponent.DetalhesMesaDelegate {
 
 	private final CardapitoService cardapitoService;
 	private final PedidoService pedidoService;
-	private final Mesa mesa;
+	private Mesa mesa;
 	private Pedido pedido;
 
 	private final HashMap<Integer, List<Cardapio>> cardapiosSelecionados;
@@ -35,11 +34,10 @@ public class MesaCardapiosController implements MesaCardapiosComponent.MesaCarda
 		this.cardapitoService = new CardapitoService();
 		this.pedidoService = new PedidoService();
 		obterPedidos();
-		component = new MesaCardapiosComponent(this);
 	}
 
 	public MesaCardapiosComponent getComponent() {
-		return component;
+		return new MesaCardapiosComponent(this);
 	}
 
 	private void obterPedidos() {
@@ -85,7 +83,7 @@ public class MesaCardapiosController implements MesaCardapiosComponent.MesaCarda
 		return 0;
 	}
 
-	public void concluir() {
+	@Override public void concluir() {
 		List<Cardapio> cardapios = new ArrayList<>();
 		cardapiosSelecionados.forEach((key, value) -> cardapios.addAll(value));
 
@@ -99,6 +97,12 @@ public class MesaCardapiosController implements MesaCardapiosComponent.MesaCarda
 		pedido.setValorTotal(cardapios.stream().mapToDouble(Cardapio::getPreco).sum());
 		pedidoService.salvar(pedido);
 		setPedido(pedido);
+	}
+
+	@Override public Pane getComponent(Mesa mesa) {
+		this.mesa = mesa;
+		obterPedidos();
+		return new MesaCardapiosComponent(this);
 	}
 
 	@Override public void sair() {

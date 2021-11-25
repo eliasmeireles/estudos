@@ -3,6 +3,7 @@ package com.example.trabalhofinal.controller;
 import static com.example.trabalhofinal.config.ResourceConfig.bundle;
 
 import com.example.trabalhofinal.authority.UsuarioAuthority;
+import com.example.trabalhofinal.component.mesa.MesaDetalhesComponent;
 import com.example.trabalhofinal.component.mesa.MesaTabComponent;
 import com.example.trabalhofinal.model.Mesa;
 import com.example.trabalhofinal.service.MesaService;
@@ -58,5 +59,9 @@ public class MesaController implements MesaTabComponent.MesaDelegate {
 
 	@Override public boolean ehAdministrador() {
 		return UsuarioAuthority.ehAdm();
+	}
+
+	@Override public MesaDetalhesComponent.DetalhesMesaDelegate detalhesMesaDelegate(Mesa mesa) {
+		return new MesaCardapiosController(mesa);
 	}
 }
