@@ -13,14 +13,16 @@
     </padding>
     <Label id="title-label" text="%label.login"/>
 
-    <VBox alignment="CENTER" maxWidth="215" spacing="12">
-        <VBox spacing="5">
-            <Label text="%label.usuario"/>
-            <TextField fx:id="username"/>
-        </VBox>
-        <VBox spacing="5">
-            <Label text="%label.senha"/>
-            <PasswordField fx:id="password"/>
+    <VBox alignment="CENTER" maxWidth="455" spacing="12">
+        <VBox maxWidth="170" spacing="12" alignment="CENTER">
+            <VBox spacing="5">
+                <Label text="%label.usuario"/>
+                <TextField fx:id="username"/>
+            </VBox>
+            <VBox spacing="5">
+                <Label text="%label.senha"/>
+                <PasswordField fx:id="password"/>
+            </VBox>
         </VBox>
         <Label text="%label.mensagem.falha" visible="false" fx:id="loginFailed" id="login-failed"/>
         <Button fx:id="login" text="%label.login" onAction="#login"/>

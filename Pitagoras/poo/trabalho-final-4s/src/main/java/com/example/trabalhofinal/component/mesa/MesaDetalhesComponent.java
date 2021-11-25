@@ -56,6 +56,7 @@ public class MesaDetalhesComponent extends HBox implements MenuActions.MenuConcl
 		getChildren().add(container);
 		mesaLayout.setAlignment(Pos.TOP_CENTER);
 		mesaLayout.setSpacing(16);
+		mesaLayout.setMinWidth(215);
 		container.getChildren().add(pedidosComponent);
 		adicionarPedido.setOnMouseClicked(eH -> listarCardapios());
 	}

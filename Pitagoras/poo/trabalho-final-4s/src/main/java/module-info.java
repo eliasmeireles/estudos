@@ -25,5 +25,6 @@ module com.example.trabalhofinal {
 	exports com.example.trabalhofinal.component.mesa;
 	exports com.example.trabalhofinal.component.menu;
 	exports com.example.trabalhofinal.component.pedido;
+	exports com.example.trabalhofinal.component.logout;
 
 }
