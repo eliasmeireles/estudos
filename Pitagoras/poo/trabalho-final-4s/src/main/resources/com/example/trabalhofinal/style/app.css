@@ -1,0 +1,112 @@
+/*#root-view {*/
+/*    -fx-background-color: #efefef;*/
+/*}*/
+
+/*.menu-bar {*/
+/*    -fx-background-color: #8f8f8d;*/
+/*}*/
+
+#card-component > #card-container {
+    -fx-background-color: #eeeeee;
+}
+
+#card-component > #card-container:hover {
+    -fx-background-color: #e0e0e0;
+}
+
+#card-component > #card-container-destaque:hover {
+    -fx-background-color: #e0e0e0;
+}
+
+#card-component > #card-container-destaque {
+    -fx-background-color: #ffd180;
+}
+
+#menu-item:hover {
+    -fx-background-color: #9e9e9e;
+}
+
+.scroll-pane {
+    -fx-background-color: transparent;
+}
+
+#transparent-background {
+    -fx-background-color: transparent;
+}
+
+#test-color {
+    -fx-background-color: #000000;
+}
+
+#success-alert {
+    -fx-background-color: #4cb42f;
+}
+
+#error-alert {
+    -fx-background-color: #b42f2f;
+}
+
+#success-text {
+    -fx-text-fill: #4cb42f;
+}
+
+#warning-text {
+    -fx-text-fill: #b24f13;
+}
+
+#error-alert > #mensagem-alert, #success-alert > #mensagem-alert {
+    -fx-text-fill: #FFFFFF;
+}
+
+#error-alert > #remover-alert, #success-alert > #remover-alert {
+    -fx-font-weight: bold;
+    -fx-text-fill: #000000;
+}
+
+.menu-item > .label, .menu > .label {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+}
+
+#title-label {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #161616;
+}
+
+#login-failed {
+    -fx-font-weight: bold;
+    -fx-text-fill: #a22f2f;
+}
+
+.label {
+    -fx-font-size: 16px;
+    -fx-text-fill: #333030;
+}
+
+.button {
+    -fx-min-width: 85px;
+    -fx-min-height: 16px;
+    -fx-font-size: 16px;
+    -fx-text-fill: #333030;
+}
+
+#menu-sair > .label {
+    -fx-graphic: url("../icons/exit.png");
+}
+
+#mniOpen .accelerator-text {
+    -fx-graphic: none;
+}
+
+.tab-label {
+    -fx-font-size: 16px;
+    -fx-min-width: 275px;
+    -fx-text-fill: #333030;
+}
+#label-24-px {
+    -fx-font-size: 24px;
+    -fx-text-fill: #333030;
+    -fx-font-weight: bold;
+}
+
