@@ -1,5 +1,7 @@
 # Go
 
+- Update dependencies `go mod tidy`
+
 ## [Environment variables in Golang](https://www.loginradius.com/blog/async/environment-variables-in-golang/)
 
 ````go

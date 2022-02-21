@@ -1,0 +1,10 @@
+env:
+  - name: OAUTH_SERVICE
+    value: "http://localhost:8080/oauth-service/api/v1/"
+  - name: MONGO_DB_USER_NAME
+    value: userDb
+  - name: MONGO_DB_PASSWORD
+    value: password
+  - name: LONG_TEXT
+    value: "A free, Open Source, multi-platform library for
+    opening a window, creating an OpenGL context and managing input"
