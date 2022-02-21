@@ -32,47 +32,21 @@ type Env struct {
 }
 
 func (env *Env) loadYamlEnv() *Env {
-	yamlFile, err := ioutil.ReadFile(yamlFilePath())
+	dir, err := os.Getwd()
 	if err != nil {
-		log.Printf("yamlFile.Get err   #%v ", err)
+		log.Fatal(err)
+	}
+	yamlFile, err := ioutil.ReadFile(dir + "/values.yaml")
+
+	if err != nil {
+		log.Printf("%v", err)
+		os.Exit(1)
 	}
 	err = yaml.Unmarshal(yamlFile, env)
 	if err != nil {
 		log.Fatalf("Unmarshal: %v", err)
 	}
 	return env
-}
-
-// exists returns whether the given file or directory exists
-func exists(path string) (bool, error) {
-	_, err := os.Stat(path)
-	if err == nil {
-		return true, nil
-	}
-	if os.IsNotExist(err) {
-		return false, nil
-	}
-	return false, err
-}
-
-func yamlFilePath() string {
-	dir, err := os.Getwd()
-	if err != nil {
-		log.Fatal(err)
-	}
-	return dir + "/values.yaml"
-}
-
-func getArgs() {
-	args := os.Args
-	fmt.Println(args[0])
-
-	for position, arg := range args {
-		if arg == "-p" {
-			path := args[position+1]
-			fmt.Println(path)
-		}
-	}
 }
 
 func main() {
@@ -87,7 +61,8 @@ func main() {
 		os.Exit(1)
 	} else {
 		fmt.Println("")
-		fmt.Println("Env loaded successful")
+		fmt.Println("Paste clipboard values is ready")
+		fmt.Println("")
 		fmt.Println(env.ToString())
 	}
 }
