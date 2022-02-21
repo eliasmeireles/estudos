@@ -1,0 +1,4 @@
+https://random-status-code.herokuapp.com
+https://www.alura.com
+https://www.caelum.com
+https://www.casadocodigo.com
