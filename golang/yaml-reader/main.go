@@ -5,13 +5,20 @@ import (
 	"io/ioutil"
 	"log"
 	"os"
+	"regexp"
 
 	"github.com/atotto/clipboard"
 	"gopkg.in/yaml.v2"
 )
 
 func (eE EnvEntry) ToString() string {
-	return "-D" + eE.Name + "=" + eE.Value + "\n"
+	pattern := regexp.MustCompile("http[s]?://[a-z]*:[0-9]*")
+	findString := pattern.FindString(eE.Value)
+	if findString != "" {
+		fmt.Println(findString)
+	}
+	value := pattern.ReplaceAllString(eE.Value, "https://google.com.br")
+	return "-D" + eE.Name + "=" + value + "\n"
 }
 
 func (env Env) ToString() string {
