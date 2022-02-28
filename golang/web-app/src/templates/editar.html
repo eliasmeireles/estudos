@@ -1,0 +1,59 @@
+{{define "Edit"}}
+
+{{template "_head"}}
+{{template "_menu"}}
+<body>
+
+<div class="container">
+
+    <div class="jumbotron jumbotron-fluid">
+        <div class="container">
+            <h1 class="display-5">Editando produto</h1>
+        </div>
+    </div>
+    <form action="update" method="POST">
+        <label>
+            <input class="invisible" name="produtoId" type="number" value="{{.ProdutoId}}">
+        </label>
+
+        <div class="row">
+            <div class="col-sm-8">
+                <div class="form-group">
+                    <label for="nome">Nome:</label>
+                    <input class="form-control" id="nome" name="nome" type="text" value="{{.Nome}}">
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-8">
+                <div class="form-group">
+                    <label for="descricao">Descrição:</label>
+                    <input class="form-control" id="descricao" name="descricao" type="text" value="{{.Descricao}}">
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-2">
+                <div class="form-group">
+                    <label for="preco">Preço:</label>
+                    <input class="form-control" id="preco" name="preco" step="0.01" type="number" value="{{.Preco}}">
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-2">
+                <div class="form-group">
+                    <label for="quantidade">Quantidade:</label>
+                    <input class="form-control" id="quantidade" name="quantidade" type="number" value="{{.Quantidade}}">
+                </div>
+            </div>
+        </div>
+        <button class="btn btn-success" type="submit" value="salvar">Atualizar</button>
+        <a class="btn btn-info" href="/">Voltar</a>
+    </form>
+</div>
+</body>
+</html>
+
+{{end}}

@@ -1,0 +1,13 @@
+version: '3'
+
+services:
+  alura-store-database:
+    build:
+      dockerfile: Dockerfile
+      context: database
+    image: alura-store-database
+    container_name: alura-store-database
+    volumes:
+      - ~/.local_database/alura_store/postgresql/data/:/var/lib/postgresql/data:rw
+    ports:
+      - "5434:5432"
