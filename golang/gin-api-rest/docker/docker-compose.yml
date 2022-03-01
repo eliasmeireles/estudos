@@ -1,0 +1,13 @@
+version: '3'
+
+services:
+  alura-gin-api-rest-database:
+    build:
+      dockerfile: Dockerfile
+      context: database
+    image: alura-gin-api-rest-database
+    container_name: alura-gin-api-rest-database
+    volumes:
+      - ~/.local_database/alura_gin_api_rest/postgresql/data/:/var/lib/postgresql/data:rw
+    ports:
+      - "5435:5432"
