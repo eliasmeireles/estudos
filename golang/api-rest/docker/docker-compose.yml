@@ -1,0 +1,13 @@
+version: '3'
+
+services:
+  alura-go-api-rest-database:
+    build:
+      dockerfile: Dockerfile
+      context: database
+    image: alura-go-api-rest-database
+    container_name: alura-go-api-rest-database
+    volumes:
+      - ~/.local_database/alura_go_api_rest/postgresql/data/:/var/lib/postgresql/data:rw
+    ports:
+      - "5435:5432"
