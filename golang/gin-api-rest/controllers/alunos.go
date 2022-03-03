@@ -62,6 +62,10 @@ func CriaNovoAluno(c *gin.Context) {
 			"error": err.Error(),
 		})
 	}
+	if err := aluno.Valida(); err != nil {
+		c.JSONP(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
 	database.DB.Create(&aluno)
 	c.JSONP(http.StatusCreated, aluno)
 }

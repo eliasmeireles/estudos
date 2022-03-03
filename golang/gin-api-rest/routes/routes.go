@@ -1,18 +1,13 @@
 package routes
 
 import (
+	"gin-api-rest/controllers"
 	"github.com/gin-gonic/gin"
 )
 
-func HandleRequests() {
+func HandleRequests() *gin.Engine {
 	var engine = gin.Default()
+	engine.GET("/:nome", controllers.Suadacao)
 	alunosRequests(engine)
-	serverRun(engine)
-}
-
-func serverRun(r *gin.Engine) {
-	err := r.Run(":8000")
-	if err != nil {
-		panic(err.Error())
-	}
+	return engine
 }
