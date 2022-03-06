@@ -12,4 +12,5 @@ func alunosRequests(r *gin.Engine) {
 	r.DELETE(alunosController.AlunoPathId, alunosController.DeletaAluno)
 	r.PUT(alunosController.AlunoPathId, alunosController.EditarAluno)
 	r.POST(alunosController.AlunosPath, alunosController.CriaNovoAluno)
+	r.GET("/", alunosController.Home)
 }

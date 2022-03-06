@@ -12,7 +12,7 @@ const (
 	AlunoId      = "id"
 	AlunoCpf     = "cpf"
 	AlunoPathId  = AlunosPath + "/:" + AlunoId
-	AlunoPathCpf = AlunosPath + "/cpf/:" + AlunoCpf
+	AlunoPathCpf = AlunosPath + "/" + AlunoCpf + "/:" + AlunoCpf
 )
 
 func ExibeTodosOsAlunos(c *gin.Context) {
@@ -88,4 +88,12 @@ func EditarAluno(c *gin.Context) {
 
 	database.DB.Save(&aluno)
 	c.JSONP(http.StatusOK, aluno)
+}
+
+func Home(c *gin.Context) {
+	var alunos []models.Aluno
+	database.DB.Find(&alunos)
+	c.HTML(http.StatusOK, "index.html", gin.H{
+		"alunos": alunos,
+	})
 }
