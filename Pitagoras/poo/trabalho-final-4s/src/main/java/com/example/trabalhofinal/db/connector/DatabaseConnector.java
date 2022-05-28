@@ -21,7 +21,7 @@ public class DatabaseConnector {
 	public Connection getConnection() throws SQLException, ClassNotFoundException {
 		Class.forName("com.mysql.cj.jdbc.Driver");
 		if (connection == null) {
-			String url = "jdbc:mysql://192.168.0.200:3306/isto_e_aquilo";
+			String url = "jdbc:mysql://127.0.0.1:3306/isto_e_aquilo";
 			String username = "root";
 			String password = "5hmkC7GCZfv2";
 

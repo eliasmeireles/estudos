@@ -2,14 +2,14 @@ version: '3.1'
 
 services:
 
-  mysqldatabase:
+  dbistoeaquilo:
     build:
       context: dockerfiles
       dockerfile: Dockerfile
     restart: always
     image: mysq8
-    container_name: mysql-db-local
+    container_name: db-isto-e-aquilo
     volumes:
-      - ~/.local_database/mysql8db/mysqlfordev:/var/lib/mysql
+      - ~/.local_database/isto_e_aquilo_db/mysql8db/mysqlfordev:/var/lib/mysql
     ports:
-      - 3306:3306
+      - "3306:3306"
