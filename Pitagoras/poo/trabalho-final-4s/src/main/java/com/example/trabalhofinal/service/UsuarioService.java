@@ -2,11 +2,14 @@ package com.example.trabalhofinal.service;
 
 import static com.example.trabalhofinal.config.ResourceConfig.bundle;
 
-import java.sql.SQLIntegrityConstraintViolationException;
+//import java.sql.SQLIntegrityConstraintViolationException;
+//import java.util.List;
+
 import java.util.List;
 
 import com.example.trabalhofinal.authority.UsuarioAuthority;
 import com.example.trabalhofinal.exception.DadosUsuarioInvalido;
+import com.example.trabalhofinal.model.Permissao;
 import com.example.trabalhofinal.model.ServiceResponse;
 import com.example.trabalhofinal.model.Usuario;
 import com.example.trabalhofinal.repository.UsuarioRepository;
@@ -17,6 +20,14 @@ public class UsuarioService {
 
 	public UsuarioService() {
 		this.repository = UsuarioRepository.getInstance();
+		try {
+			List<Usuario> all = repository.findAll();
+			if (all.isEmpty()) {
+				repository.salvar(new Usuario(null, "Elias", "123456", "root", Permissao.ADM));
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	public List<Usuario> findAll() {
@@ -70,7 +81,8 @@ public class UsuarioService {
 	}
 
 	private boolean ehViolacaoDeUniqueConstraint(Exception exception) {
-		return exception instanceof SQLIntegrityConstraintViolationException;
+		return true;
+//		return exception instanceof SQLIntegrityConstraintViolationException;
 	}
 
 	private boolean validaUsuario(Usuario usuario) throws DadosUsuarioInvalido {
