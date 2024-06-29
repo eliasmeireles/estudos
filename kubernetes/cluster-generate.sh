@@ -1,84 +1,149 @@
 #!/bin/bash
 
-# Function to install Docker, containerd, and configure Kubernetes prerequisites
-install_docker_and_containerd() {
+# Default values
+DEFAULT_MASTER_MEM=2G
+DEFAULT_MASTER_CPUS=1
+DEFAULT_MASTER_DISK=22G
+DEFAULT_WORKER_MEM=4G
+DEFAULT_WORKER_CPUS=2
+DEFAULT_WORKER_DISK=32G
+
+# Function to display help
+display_help() {
+    echo "Usage: $0 [options]"
+    echo
+    echo "Options:"
+    echo "  --base-name          Base name for the cluster"
+    echo "  --cluster-version    Kubernetes cluster version (e.g., v1.27)"
+    echo "  --num-masters        Number of master nodes"
+    echo "  --num-workers        Number of worker nodes"
+    echo "  --master-mem         Memory for master nodes (default: $DEFAULT_MASTER_MEM)"
+    echo "  --master-cpus        CPUs for master nodes (default: $DEFAULT_MASTER_CPUS)"
+    echo "  --master-disk        Disk size for master nodes (default: $DEFAULT_MASTER_DISK)"
+    echo "  --worker-mem         Memory for worker nodes (default: $DEFAULT_WORKER_MEM)"
+    echo "  --worker-cpus        CPUs for worker nodes (default: $DEFAULT_WORKER_CPUS)"
+    echo "  --worker-disk        Disk size for worker nodes (default: $DEFAULT_WORKER_DISK)"
+    echo "  --help               Display this help message"
+    exit 0
+}
+
+# Function to copy and run the kub-config.sh script on an instance
+copy_and_run_kub_config() {
     local node=$1
-    multipass exec $node -- bash -c "
-        sudo apt-get update && sudo apt-get install -y \
-        apt-transport-https \
-        ca-certificates \
-        curl \
-        gnupg \
-        lsb-release &&
-        curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg &&
-        echo \"deb [arch=\$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu \$(lsb_release -cs) stable\" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null &&
-        sudo apt-get update && sudo apt-get install -y docker-ce docker-ce-cli containerd.io &&
-        
-        # Load necessary kernel modules
-        cat <<EOF | sudo tee /etc/modules-load.d/containerd.conf
-overlay
-br_netfilter
-EOF
-        sudo modprobe overlay
-        sudo modprobe br_netfilter
-        
-        # Set up sysctl parameters
-        cat <<EOF | sudo tee /etc/sysctl.d/99-kubernetes-cri.conf
-net.bridge.bridge-nf-call-iptables  = 1
-net.ipv4.ip_forward                 = 1
-net.bridge.bridge-nf-call-ip6tables = 1
-EOF
-        sudo sysctl --system
-        
-        # Configure containerd
-        sudo mkdir -p /etc/containerd && containerd config default | sudo tee /etc/containerd/config.toml
-        sudo sed -i 's/SystemdCgroup = false/SystemdCgroup = true/g' /etc/containerd/config.toml
-        sudo systemctl restart containerd
-        
-        # Install Kubernetes components
-        sudo apt-get update &&
-        sudo apt-get install -y apt-transport-https ca-certificates curl &&
-        curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.27/deb/Release.key | sudo gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg &&
-        echo 'deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.27/deb/ /' | sudo tee /etc/apt/sources.list.d/kubernetes.list &&
-        sudo apt-get update &&
-        sudo apt-get install -y kubelet kubeadm kubectl &&
-        sudo apt-mark hold kubelet kubeadm kubectl
-    "
+    multipass transfer kub-config.sh $node:/home/ubuntu/kub-config.sh
+    multipass exec $node -- bash -c "chmod +x /home/ubuntu/kub-config.sh && sudo /home/ubuntu/kub-config.sh"
 }
 
-# Function to configure HAProxy
-configure_haproxy() {
-    local haproxy_node=$1
-    shift
-    local master_ips=("$@")
-    
-    # Generate HAProxy configuration
-    cat <<EOF | multipass exec $haproxy_node -- sudo tee /etc/haproxy/haproxy.cfg > /dev/null
-frontend kubernetes
-    mode tcp
-    bind :6443
-    option tcplog
-    default_backend k8s-masters
+# Function to get the IP address of an instance
+get_ip_address() {
+    local instance_name=$1
+    local ip_address=$(multipass info $instance_name | grep "IPv4" | awk '{print $2}')
+    if [ -z "$ip_address" ]; then
+        echo "No IP address found for instance: $instance_name"
+        exit 1
+    fi
+    echo $ip_address
+}
 
-backend k8s-masters
-    mode tcp
-    balance roundrobin
-    option tcp-check
-EOF
+# Function to generate HAProxy master server configuration
+config_master_ip_address() {
+    local ip_address=$1
+    local index=$2
+    echo "    server k8s-master-${index} ${ip_address}:6443 check fall 3 rise 2"
+}
 
-    for ((i=0; i<${#master_ips[@]}; i++)); do
-        echo "    server k8s-master-${i} ${master_ips[i]}:6443 check fall 3 rise 2" | multipass exec $haproxy_node -- sudo tee -a /etc/haproxy/haproxy.cfg > /dev/null
+# Function to generate HAProxy bind configuration
+config_haproxy_ip_address() {
+    local ip_address=$1
+    echo "    bind ${ip_address}:6443"
+}
+
+# Function to read and validate user input
+read_and_validate() {
+    local prompt=$1
+    local var_name=$2
+    local validation_regex=$3
+    local example_message=$4
+
+    while true; do
+        read -p "$prompt" input
+        if [ -z "$input" ]; then
+            echo "\n\tInput is required. $example_message\n"
+        elif ! echo "$input" | grep -qE "$validation_regex"; then
+            echo "Invalid input. $example_message"
+        else
+            eval $var_name="'$input'"
+            break
+        fi
     done
-
-    # Restart HAProxy
-    multipass exec $haproxy_node -- sudo systemctl restart haproxy
 }
 
-# Request base name, cluster version, number of masters and workers
-read -p "Enter base name for the cluster: " BASE_NAME
-read -p "Enter Kubernetes cluster version: " CLUSTER_VERSION
-read -p "Enter number of master nodes: " NUM_MASTERS
-read -p "Enter number of worker nodes: " NUM_WORKERS
+# Parse command-line arguments
+while [ $# -gt 0 ]; do
+    case "$1" in
+        --base-name)
+            BASE_NAME="$2"
+            shift 2
+            ;;
+        --cluster-version)
+            CLUSTER_VERSION="$2"
+            shift 2
+            ;;
+        --num-masters)
+            NUM_MASTERS="$2"
+            shift 2
+            ;;
+        --num-workers)
+            NUM_WORKERS="$2"
+            shift 2
+            ;;
+        --master-mem)
+            MASTER_MEM="$2"
+            shift 2
+            ;;
+        --master-cpus)
+            MASTER_CPUS="$2"
+            shift 2
+            ;;
+        --master-disk)
+            MASTER_DISK="$2"
+            shift 2
+            ;;
+        --worker-mem)
+            WORKER_MEM="$2"
+            shift 2
+            ;;
+        --worker-cpus)
+            WORKER_CPUS="$2"
+            shift 2
+            ;;
+        --worker-disk)
+            WORKER_DISK="$2"
+            shift 2
+            ;;
+        --help)
+            display_help
+            ;;
+        *)
+            echo "Unknown option: $1"
+            display_help
+            ;;
+    esac
+done
+
+# Validate required inputs
+[ -z "$BASE_NAME" ] && read_and_validate "Enter base name for the cluster: " BASE_NAME "^[a-zA-Z0-9_-]+$" "Example: k8s-cluster"
+[ -z "$CLUSTER_VERSION" ] && read_and_validate "Enter Kubernetes cluster version: " CLUSTER_VERSION "^[vV]?[0-9]+(\.[0-9]+)*$" "Example: v1.27"
+[ -z "$NUM_MASTERS" ] && read_and_validate "Enter number of master nodes: " NUM_MASTERS "^[0-9]+$" "Example: 3"
+[ -z "$NUM_WORKERS" ] && read_and_validate "Enter number of worker nodes: " NUM_WORKERS "^[0-9]+$" "Example: 3"
+
+# Use default values if not provided
+MASTER_MEM=${MASTER_MEM:-$DEFAULT_MASTER_MEM}
+MASTER_CPUS=${MASTER_CPUS:-$DEFAULT_MASTER_CPUS}
+MASTER_DISK=${MASTER_DISK:-$DEFAULT_MASTER_DISK}
+WORKER_MEM=${WORKER_MEM:-$DEFAULT_WORKER_MEM}
+WORKER_CPUS=${WORKER_CPUS:-$DEFAULT_WORKER_CPUS}
+WORKER_DISK=${WORKER_DISK:-$DEFAULT_WORKER_DISK}
 
 # Arrays to hold master and worker node names
 MASTER_NODES=()
@@ -88,31 +153,61 @@ WORKER_NODES=()
 for i in $(seq 1 $NUM_MASTERS); do
     MASTER_NAME="${BASE_NAME}-master-${i}-${CLUSTER_VERSION}"
     echo "Creating master node: $MASTER_NAME"
-    multipass launch --name $MASTER_NAME --mem 2G --cpus 1 --disk 22G
-    MASTER_NODES+=($(multipass info $MASTER_NAME --format=json | jq -r '.info.'$MASTER_NAME'.ipv4[0]'))
-    install_docker_and_containerd $MASTER_NAME
+    multipass launch --name $MASTER_NAME --memory $MASTER_MEM --cpus $MASTER_CPUS --disk $MASTER_DISK
+    MASTER_NODES+=($MASTER_NAME)
+    copy_and_run_kub_config $MASTER_NAME
 done
 
 # Create worker nodes
 for i in $(seq 1 $NUM_WORKERS); do
     WORKER_NAME="${BASE_NAME}-worker-${i}-${CLUSTER_VERSION}"
     echo "Creating worker node: $WORKER_NAME"
-    multipass launch --name $WORKER_NAME --mem 6G --cpus 2 --disk 44G
-    WORKER_NODES+=($(multipass info $WORKER_NAME --format=json | jq -r '.info.'$WORKER_NAME'.ipv4[0]'))
-    install_docker_and_containerd $WORKER_NAME
+    multipass launch --name $WORKER_NAME --memory $WORKER_MEM --cpus $WORKER_CPUS --disk $WORKER_DISK
+    WORKER_NODES+=($WORKER_NAME)
+    copy_and_run_kub_config $WORKER_NAME
 done
 
 # Create HAProxy node
 HAPROXY_NAME="${BASE_NAME}-haproxy-${CLUSTER_VERSION}"
 echo "Creating HAProxy node: $HAPROXY_NAME"
-multipass launch --name $HAPROXY_NAME --mem 2G --cpus 1 --disk 22G
+multipass launch --name $HAPROXY_NAME --memory 1G --cpus 1 --disk 22G
 
 # Install HAProxy
 multipass exec $HAPROXY_NAME -- bash -c "
     sudo apt-get update && sudo apt-get install -y haproxy
 "
 
-# Configure HAProxy with master node IPs
-configure_haproxy $HAPROXY_NAME "${MASTER_NODES[@]}"
+# Get HAProxy IP address
+HAPROXY_IP=$(get_ip_address $HAPROXY_NAME)
+
+# Generate HAProxy configuration
+cat <<EOF | multipass exec $HAPROXY_NAME -- sudo tee /etc/haproxy/haproxy.cfg >> /dev/null
+
+# K8s config
+frontend kubernetes
+    mode tcp
+$(config_haproxy_ip_address $HAPROXY_IP)
+    option tcplog
+    default_backend k8s-masters
+
+backend k8s-masters
+    mode tcp
+    balance roundrobin
+    option tcp-check
+EOF
+
+# Add master nodes to HAProxy configuration
+for i in "${!MASTER_NODES[@]}"; do
+    MASTER_IP=$(get_ip_address ${MASTER_NODES[$i]})
+    config_master_ip_address $MASTER_IP $i | multipass exec $HAPROXY_NAME -- sudo tee -a /etc/haproxy/haproxy.cfg > /dev/null
+done
+
+# Update /etc/hosts for all nodes
+for node in "${MASTER_NODES[@]}" "${WORKER_NODES[@]}"; do
+    multipass exec $node -- bash -c "echo '${HAPROXY_IP} ${HAPROXY_NAME}' | sudo tee -a /etc/hosts"
+done
+
+# Restart HAProxy to apply the new configuration
+multipass exec $HAPROXY_NAME -- sudo systemctl restart haproxy
 
 echo "Cluster setup is complete."
